@@ -1,26 +1,26 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-ink-950: #0c0a09;
-  --color-ink-900: #151210;
-  --color-ink-800: #1e1a17;
-  --color-ink-700: #2a2520;
-  --color-ink-600: #3d3630;
-  --color-ink-500: #5c534b;
-  --color-ink-400: #7d7268;
-  --color-ink-300: #a69a8e;
-  --color-ink-200: #ccc2b6;
-  --color-ink-100: #e8e1d9;
-  --color-ink-50: #f5f0eb;
+  --color-ink-950: #0d1117;
+  --color-ink-900: #141720;
+  --color-ink-800: #1f2533;
+  --color-ink-700: #2a3145;
+  --color-ink-600: #353d57;
+  --color-ink-500: #4a5270;
+  --color-ink-400: #6b7394;
+  --color-ink-300: #8e96b5;
+  --color-ink-200: #b4bbd4;
+  --color-ink-100: #d6dae8;
+  --color-ink-50: #ebeef5;
 
-  --color-gold-600: #b8863a;
-  --color-gold-500: #d4a574;
-  --color-gold-400: #e2bf8a;
-  --color-gold-300: #f0d9a8;
+  --color-gold-600: #7a00df;
+  --color-gold-500: #9333ea;
+  --color-gold-400: #ab1dfe;
+  --color-gold-300: #c084fc;
 
-  --color-sage-600: #5a9a6b;
-  --color-sage-500: #7db88f;
-  --color-sage-400: #9acca8;
+  --color-sage-600: #0d9488;
+  --color-sage-500: #2dd4bf;
+  --color-sage-400: #34e2e4;
 
   --color-coral-600: #b85a4a;
   --color-coral-500: #c47b7b;

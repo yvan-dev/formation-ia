@@ -1,0 +1,208 @@
+{
+  "title": "IA Appliquée aux Métiers Tech",
+  "description": "Formation complète pour intégrer l'IA dans son quotidien professionnel : des fondamentaux aux agents, en passant par le prompt engineering et la sécurité.",
+  "image": "/formation-ia/images/course-ia.svg",
+  "publicCible": "Tout profil technique ou fonctionnel : développeurs, DevOps, architectes, testeurs QA, chefs de projet, analystes fonctionnels, product owners",
+  "prerequis": "Aucun prérequis en IA. Une familiarité avec les outils numériques est suffisante. Les modules avancés (5, 6, 7) s'adressent plus spécifiquement aux profils techniques.",
+  "format": "Présentiel ou distanciel, alternance théorie / ateliers pratiques",
+  "livrableFinal": "Un AGENT.md ou un guide de prompts opérationnel adapté au rôle de l'apprenant",
+  "objectifsGlobaux": [
+    "Comprendre le fonctionnement des LLMs et leurs limites",
+    "Utiliser efficacement les outils IA dans son quotidien de développeur",
+    "Rédiger des prompts et des instructions agents de qualité professionnelle",
+    "Intégrer l'IA dans un workflow de développement structuré (spec-driven)",
+    "Identifier les risques de sécurité et adopter un usage responsable"
+  ],
+  "modules": [
+    {
+      "title": "Fondations et Mindset",
+      "public": "tous",
+      "objectifs": [
+        "Comprendre pourquoi l'IA transforme le métier d'ingénieur",
+        "Positionner son niveau actuel sur l'échelle des 5 niveaux",
+        "Distinguer le vibe coder du développeur argumenté"
+      ],
+      "livrable": "Auto-évaluation de niveau + définition d'un objectif personnel pour la formation",
+      "lessons": [
+        { "slug": "panorama-ia", "title": "Panorama de l'IA en 2024-2025" },
+        { "slug": "niveaux-maturite", "title": "Les 5 niveaux de maturité IA" },
+        {
+          "slug": "mindset-ia",
+          "title": "L'IA comme co-pilote, pas comme remplaçant"
+        },
+        {
+          "slug": "bon-ingenieur-ia",
+          "title": "Ce qui différencie un bon ingénieur IA"
+        }
+      ]
+    },
+    {
+      "title": "Comprendre les LLMs",
+      "public": "tous",
+      "objectifs": [
+        "Comprendre comment un LLM fonctionne (sans les maths)",
+        "Savoir ce qu'est la fenêtre de contexte et pourquoi c'est critique",
+        "Anticiper et réduire les hallucinations"
+      ],
+      "exercices": [
+        "Induire volontairement des hallucinations sur un modèle, puis appliquer les contre-mesures"
+      ],
+      "lessons": [
+        { "slug": "fonctionnement-llm", "title": "Comment fonctionne un LLM" },
+        {
+          "slug": "memoire-llm",
+          "title": "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
+        },
+        {
+          "slug": "hallucinations",
+          "title": "Les hallucinations : causes, détection et réduction"
+        }
+      ]
+    },
+    {
+      "title": "Prompt Engineering",
+      "public": "tous",
+      "objectifs": [
+        "Écrire des prompts clairs, structurés et efficaces",
+        "Maîtriser les system prompts",
+        "Itérer et affiner ses prompts méthodiquement"
+      ],
+      "exercices": [
+        "Réécrire 5 mauvais prompts fournis en exercice",
+        "Créer son premier system prompt pour son contexte métier",
+        "Atelier Chain of Thought sur un problème d'architecture"
+      ],
+      "lessons": [
+        { "slug": "bases-prompt", "title": "Les bases du prompt" },
+        { "slug": "system-prompts", "title": "System Prompts" },
+        {
+          "slug": "techniques-avancees-prompt",
+          "title": "Techniques avancées de prompting"
+        },
+        {
+          "slug": "prompting-dev",
+          "title": "L'art du prompting en développement"
+        }
+      ]
+    },
+    {
+      "title": "Outils et Stack",
+      "public": "tous",
+      "objectifs": [
+        "Naviguer dans l'écosystème des outils IA sans se perdre",
+        "Comprendre la stratégie de sélection d'une stack",
+        "Adopter une posture de veille"
+      ],
+      "lessons": [
+        { "slug": "ecosysteme-outils", "title": "L'écosystème des outils IA" },
+        { "slug": "stack-retenue", "title": "La stack retenue pour ce projet" },
+        {
+          "slug": "veille-technologique",
+          "title": "Maintenir sa veille technologique"
+        },
+        {
+          "slug": "frameworks-agentiques",
+          "title": "Frameworks agentiques — Vue d'ensemble"
+        }
+      ]
+    },
+    {
+      "title": "Sécurité et Limites",
+      "public": "tous",
+      "objectifs": [
+        "Identifier les risques liés à l'utilisation de l'IA en contexte professionnel",
+        "Protéger les données sensibles",
+        "Comprendre les vecteurs d'attaque spécifiques aux agents"
+      ],
+      "exercices": [
+        "Audit de sécurité sur un workflow IA fictif — identifier les vulnérabilités"
+      ],
+      "lessons": [
+        {
+          "slug": "donnees-sensibles",
+          "title": "Données sensibles — Ce qu'on ne met PAS dans un prompt"
+        },
+        { "slug": "prompt-injection", "title": "Prompt Injection" },
+        {
+          "slug": "hallucinations-critiques",
+          "title": "Hallucinations dans un contexte critique"
+        },
+        {
+          "slug": "biais-limitations",
+          "title": "Biais et limitations des modèles"
+        },
+        {
+          "slug": "responsabilite-legal",
+          "title": "Responsabilité et cadre légal"
+        }
+      ]
+    },
+    {
+      "title": "Approche Spec-Driven et Plan First",
+      "public": "profils techniques",
+      "objectifs": [
+        "Comprendre pourquoi commencer par un plan améliore radicalement la qualité",
+        "Maîtriser l'approche spec-driven avec l'IA",
+        "Utiliser l'approche OpenSpec pour les projets complexes"
+      ],
+      "exercices": [
+        "Rédiger le plan complet d'une petite feature sur son propre projet, en utilisant l'IA comme assistant de planification"
+      ],
+      "lessons": [
+        { "slug": "plan-first", "title": "Le principe Plan First" },
+        {
+          "slug": "spec-driven-dev",
+          "title": "Spec-Driven Development avec l'IA"
+        },
+        { "slug": "workflow-complet", "title": "Exemple de workflow complet" },
+        { "slug": "approche-sommaire", "title": "Approche par sommaire" }
+      ]
+    },
+    {
+      "title": "Développement Agentique Guidé",
+      "public": "profils techniques",
+      "objectifs": [
+        "Passer du niveau 2 (copilote) au niveau 3 (agentique guidé)",
+        "Comprendre la supervision Human in the Loop",
+        "Concevoir des agents bien délimités"
+      ],
+      "exercices": [
+        "Concevoir un mini-agent pour une tâche concrète du projet, avec ses garde-fous"
+      ],
+      "lessons": [
+        { "slug": "assistant-vs-agent", "title": "De l'assistant à l'agent" },
+        { "slug": "concevoir-agent", "title": "Concevoir un bon agent" },
+        { "slug": "human-in-the-loop", "title": "Human in the Loop" }
+      ]
+    },
+    {
+      "title": "Projet : Construire son AGENT.md",
+      "public": "profils techniques",
+      "objectifs": [
+        "Produire un AGENT.md professionnel et opérationnel",
+        "Structurer ses fichiers de règles IA",
+        "Appliquer toutes les bonnes pratiques vues en formation"
+      ],
+      "livrable": "Un AGENT.md individuel opérationnel, validé par peer review",
+      "exercices": [
+        "Rédiger son AGENT.md individuel sur son projet réel",
+        "Peer review croisé entre apprenants",
+        "Itération finale et validation"
+      ],
+      "lessons": [
+        {
+          "slug": "regles-agent-md",
+          "title": "Règles de construction d'un AGENT.md efficace"
+        },
+        {
+          "slug": "structure-agent-md",
+          "title": "Structure recommandée d'un AGENT.md"
+        },
+        {
+          "slug": "bonnes-pratiques-agent-md",
+          "title": "Bonnes pratiques et exemples"
+        }
+      ]
+    }
+  ]
+}

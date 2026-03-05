@@ -3,7 +3,7 @@ interface Props {
   slug: string;
   title: string;
   description: string;
-  level: string;
+  level?: string;
   lessonCount: number;
 }
 
@@ -34,7 +34,7 @@ const levelConfig: Record<
   },
 };
 
-const cfg = levelConfig[level] || levelConfig.Débutant;
+const cfg = level ? levelConfig[level] || levelConfig.Débutant : null;
 ---
 
 <a
@@ -61,18 +61,22 @@ const cfg = levelConfig[level] || levelConfig.Débutant;
       <div class="relative">
         <span
           class="font-display text-ink-600/40 group-hover:text-gold-500/20 text-6xl font-bold transition-colors duration-500"
-          >{cfg.icon}</span
+          >{cfg ? cfg.icon : '00'}</span
         >
       </div>
     </div>
-    <!-- Level badge overlaid -->
-    <div class="absolute top-4 left-4">
-      <span
-        class={`text-xs font-semibold px-2.5 py-1 rounded-lg border ${cfg.bg} ${cfg.color} ${cfg.border}`}
-      >
-        {level}
-      </span>
-    </div>
+    <!-- Level badge overlaid (only if level exists) -->
+    {
+      level && cfg && (
+        <div class="absolute top-4 left-4">
+          <span
+            class={`rounded-lg border px-2.5 py-1 text-xs font-semibold ${cfg.bg} ${cfg.color} ${cfg.border}`}
+          >
+            {level}
+          </span>
+        </div>
+      )
+    }
   </div>
 
   <div class="p-6">
