@@ -91,4 +91,149 @@ nextLesson:
 
 ## Spec-Driven Development avec l'IA
 
-Contenu à venir.
+Le Spec-Driven Development consiste à rédiger une spécification claire et complète avant de demander du code à l'IA. C'est la version structurée du Plan First : au lieu d'un plan libre, on fournit un document formel qui décrit exactement ce qu'on attend.
+
+### Ce qu'une bonne spec contient
+
+Une spec incomplète produit du code incomplet. Voici les éléments qui font la différence :
+
+| Élément | Rôle | Exemple |
+|---------|------|---------|
+| **Objectif** | Pourquoi cette fonctionnalité existe | "Permettre aux utilisateurs de réinitialiser leur mot de passe" |
+| **Contraintes** | Ce qui est imposé par le contexte | "Doit fonctionner sans service email (lien en console pour la v1)" |
+| **Critères d'acceptation** | Comment on vérifie que c'est bon | "Le token expire après 15 minutes. Un token utilisé est invalidé." |
+| **Interface** | Les entrées/sorties attendues | Signature de l'endpoint, format de la réponse |
+| **Cas limites** | Les scénarios non-nominaux | "Que se passe-t-il si l'email n'existe pas ?" |
+
+### Fournir un "skill" de contexte
+
+L'IA ne connaît pas votre projet. Elle ne sait pas quels patterns vous utilisez, quel ORM, quelle convention de nommage. Un "skill" est un bloc de contexte que vous injectez dans votre prompt pour combler ce manque.
+
+```text
+Contexte projet (à inclure dans le prompt) :
+- Stack : Node.js, Express, TypeScript, Prisma, PostgreSQL
+- Architecture : controllers/services/repositories
+- Convention : camelCase pour les variables, kebab-case pour les URLs
+- Auth existante : JWT avec middleware authRequired
+- Validation : Zod pour les schémas d'entrée
+- Tests : Vitest avec supertest pour les tests d'intégration
+```
+
+Ce bloc de contexte peut être réutilisé d'un prompt à l'autre. Il évite que l'IA réinvente des conventions à chaque requête.
+
+### Exemple : spécifier un endpoint API
+
+Voici une spec complète pour un endpoint de reset de mot de passe :
+
+```text
+## Spec : POST /api/auth/reset-password
+
+### Objectif
+Permettre à un utilisateur de demander un lien de réinitialisation
+de mot de passe.
+
+### Entrée
+{
+  "email": "string (format email, requis)"
+}
+
+### Sortie (succès - 200)
+{
+  "message": "Si un compte existe avec cet email, un lien a été envoyé."
+}
+
+Note : toujours renvoyer 200, même si l'email n'existe pas (sécurité).
+
+### Sortie (erreur - 400)
+{
+  "error": "INVALID_EMAIL",
+  "message": "Format d'email invalide"
+}
+
+### Comportement
+1. Valider le format de l'email avec le schéma Zod
+2. Chercher l'utilisateur en base (Prisma)
+3. Si trouvé : générer un token crypto aléatoire (32 bytes, hex)
+4. Stocker le token en base avec expiration (15 min)
+5. Logger le lien en console (pas de service email en v1)
+6. Renvoyer la réponse générique
+
+### Critères d'acceptation
+- Un email invalide retourne 400
+- Un email inexistant retourne 200 (pas de fuite d'information)
+- Le token expire après 15 minutes
+- Un ancien token est invalidé si on en redemande un
+- Le endpoint est rate-limité à 3 requêtes par minute par IP
+
+### Fichiers à créer/modifier
+- src/controllers/auth.controller.ts (nouveau handler)
+- src/services/auth.service.ts (logique métier)
+- prisma/schema.prisma (table PasswordResetToken)
+- src/schemas/auth.schema.ts (schéma Zod)
+- tests/integration/reset-password.test.ts
+```
+
+Avec cette spec, l'IA produit exactement ce que vous attendez. Sans elle, l'IA aurait fait des choix différents sur la gestion d'erreurs, la sécurité, le format de réponse, et la structure de fichiers.
+
+### OpenSpec : approche avancée pour les specs structurées
+
+OpenSpec est une approche de spécification qui formalise encore davantage le processus. L'idée est de définir un format standard pour vos specs, réutilisable sur tous vos projets.
+
+Un template OpenSpec typique :
+
+```yaml
+spec:
+  name: "reset-password"
+  version: "1.0"
+  status: "draft"
+
+context:
+  domain: "authentication"
+  dependencies: ["user-service", "token-service"]
+
+requirements:
+  functional:
+    - id: "REQ-001"
+      description: "L'utilisateur peut demander un reset via email"
+      priority: "must"
+    - id: "REQ-002"
+      description: "Le token expire après 15 minutes"
+      priority: "must"
+  non_functional:
+    - id: "NFR-001"
+      description: "Rate limiting de 3 req/min par IP"
+      priority: "should"
+
+acceptance_criteria:
+  - given: "Un email valide d'un utilisateur existant"
+    when: "POST /api/auth/reset-password"
+    then: "Un token est créé et le lien est loggé"
+```
+
+L'avantage d'OpenSpec est la reproductibilité. Une fois votre template défini, chaque nouvelle feature suit le même format. L'IA s'y habitue et produit des résultats de plus en plus cohérents.
+
+### La spec comme documentation vivante
+
+Un bénéfice souvent sous-estimé : la spec, une fois le code implémenté, devient la documentation de référence. Elle décrit le comportement attendu, les cas limites, et les décisions prises.
+
+Trois pratiques pour en tirer le maximum :
+
+1. **Versionner les specs** avec le code : elles vivent dans le repo, pas dans un Google Doc
+2. **Mettre à jour la spec** quand le comportement change : si le code diverge de la spec, c'est la spec qui fait autorité
+3. **Référencer la spec** dans les tests : chaque critère d'acceptation correspond à un test
+
+```typescript
+// tests/integration/reset-password.test.ts
+
+// REQ-001 : L'utilisateur peut demander un reset via email
+it("should create a reset token for existing user", async () => {
+  // ...
+});
+
+// NFR-001 : Rate limiting de 3 req/min par IP
+it("should return 429 after 3 requests per minute", async () => {
+  // ...
+});
+```
+
+La spec n'est pas un document qu'on écrit puis qu'on oublie. C'est la source de vérité du comportement attendu de votre système.

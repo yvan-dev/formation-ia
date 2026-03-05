@@ -91,4 +91,93 @@ nextLesson:
 
 ## La stack retenue pour ce projet
 
-Contenu à venir.
+Pour cette formation, on a fait des choix. Pas parce que ce sont les seuls outils valides, mais parce qu'il faut bien en choisir pour avancer. Voici ce qu'on utilise et pourquoi.
+
+### Les outils choisis
+
+**Claude (Anthropic)** comme modèle principal, et **Claude Code** comme interface CLI agentique.
+
+C'est tout. Deux outils. La simplicité est volontaire : on se concentre sur les compétences, pas sur la multiplication des outils.
+
+### Pourquoi Claude ?
+
+Plusieurs raisons concrètes ont guidé ce choix.
+
+**Qualité de raisonnement.** Claude excelle sur les taches qui demandent de la réflexion structurée : analyse de code, rédaction technique, résolution de problèmes multi-étapes. Pour une formation orientée métiers tech, c'est le critère numéro un.
+
+**Fenêtre de contexte large.** Claude peut traiter des documents longs (200K tokens). Vous pouvez lui donner un fichier de spec complet, un README entier, ou plusieurs fichiers source d'un coup.
+
+**Politique de confidentialité.** Via l'API, Anthropic ne conserve pas vos données et ne les utilise pas pour l'entrainement. C'est un point critique pour travailler sur du code professionnel.
+
+**API robuste.** L'API est bien documentée, stable, et supporte le streaming. Si vous voulez aller au-delà de l'interface chat, tout est accessible programmatiquement.
+
+### Pourquoi Claude Code ?
+
+Claude Code est un outil CLI (ligne de commande) qui transforme Claude en agent capable d'agir sur votre système de fichiers.
+
+Ce qui le distingue d'un simple chatbot :
+
+- **Accès au filesystem.** Il lit et modifie vos fichiers directement, sans copier-coller.
+- **Exécution de commandes.** Il peut lancer vos tests, votre build, vos scripts.
+- **Mode agentique.** Il planifie, exécute, vérifie, et itère de façon autonome.
+- **Contexte du projet.** Il comprend la structure de votre codebase, pas juste le fichier courant.
+
+### Prise en main rapide
+
+L'installation de Claude Code se fait en quelques étapes.
+
+```bash
+# Installation
+npm install -g @anthropic-ai/claude-code
+
+# Lancement dans un projet
+cd votre-projet
+claude
+```
+
+Au premier lancement, Claude Code vous demande une clé API Anthropic. Vous pouvez la générer sur [console.anthropic.com](https://console.anthropic.com).
+
+Quelques commandes utiles pour démarrer :
+
+```bash
+# Poser une question sur le codebase
+claude "explique la structure de ce projet"
+
+# Demander une modification
+claude "ajoute une validation email dans le formulaire d'inscription"
+
+# Mode conversation
+claude
+> quels sont les tests qui échouent ?
+> corrige-les
+```
+
+### Cas d'usage principaux
+
+Voici comment on utilise Claude dans cette formation.
+
+| Cas d'usage | Outil | Exemple |
+|------------|-------|---------|
+| Comprendre du code | Claude (chat) | "Explique ce que fait cette fonction" |
+| Générer du code | Claude Code | "Crée un endpoint REST pour les utilisateurs" |
+| Refactorer | Claude Code | "Extrais cette logique dans un service dédié" |
+| Debugger | Claude Code | "Les tests échouent, trouve et corrige le bug" |
+| Rédiger des specs | Claude (chat) | "Rédige une spec technique pour cette feature" |
+| Revoir du code | Claude (chat) | "Review ce diff et suggère des améliorations" |
+
+### L'approche est transférable
+
+Tout ce que vous apprendrez avec Claude s'applique aux autres outils. Les principes sont les mêmes :
+
+- Un bon prompt reste un bon prompt, quel que soit le modèle
+- La décomposition de taches complexes fonctionne partout
+- L'évaluation critique des sorties est universelle
+- Le workflow spec-first est indépendant de l'outil
+
+Si demain vous passez à GPT-5, à Gemini, ou à un modèle qui n'existe pas encore, vos compétences restent. L'outil est un véhicule, pas la destination.
+
+### En résumé
+
+- On utilise Claude + Claude Code pour la formation : qualité de raisonnement, confidentialité, et capacités agentiques.
+- L'installation prend 5 minutes. La prise en main est progressive.
+- Les compétences acquises sont transférables à tout autre outil IA.

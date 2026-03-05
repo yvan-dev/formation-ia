@@ -89,6 +89,147 @@ nextLesson:
   title: "Prompt Injection"
 ---
 
-## Données sensibles — Ce qu'on ne met PAS dans un prompt
+## Données sensibles : ce qu'on ne met PAS dans un prompt
 
-Contenu à venir.
+Chaque prompt envoyé à un LLM cloud traverse un réseau, arrive sur un serveur tiers, et peut être stocké, loggé, ou utilisé pour l'entraînement. La règle est simple : **traitez chaque prompt comme un message potentiellement public**.
+
+Cette leçon couvre les types de données à ne jamais inclure dans un prompt, les techniques pour contourner le problème, et les implications selon que vous utilisez un modèle cloud ou local.
+
+## Les catégories de données à protéger
+
+### Données personnelles (PII)
+
+Le RGPD définit comme données personnelles toute information permettant d'identifier directement ou indirectement une personne. En pratique, voici ce que vous ne devez jamais coller dans un prompt :
+
+- **Identifiants directs** : noms, emails, numéros de téléphone, adresses
+- **Identifiants indirects** : numéros de sécurité sociale, identifiants internes, adresses IP
+- **Données sensibles RGPD** : données de santé, opinions politiques, orientation sexuelle, données biométriques
+
+Exemple concret : vous debuggez une requête SQL qui remonte des données patients. Vous collez la requête avec ses résultats dans ChatGPT pour comprendre un bug. Ces données patients viennent de quitter votre SI pour atterrir sur les serveurs d'OpenAI. Vous venez de violer le RGPD.
+
+### Secrets techniques
+
+Les credentials et secrets sont la deuxième catégorie critique :
+
+- **Clés API et tokens** : clés AWS, tokens JWT, clés Stripe
+- **Credentials de base de données** : connection strings, mots de passe
+- **Certificats et clés privées** : clés SSH, certificats TLS
+- **Variables d'environnement** : fichiers `.env`, configs de déploiement
+
+Le risque est double. D'abord, la fuite directe : le fournisseur du LLM ou un attaquant qui compromet leurs systèmes récupère vos secrets. Ensuite, la fuite indirecte : certains modèles peuvent régurgiter des données d'entraînement, y compris des secrets inclus dans des prompts passés.
+
+En 2023, des chercheurs ont réussi à faire régurgiter des données d'entraînement à ChatGPT en répétant certains mots-clés. Des numéros de téléphone, des adresses email et des fragments de code sont apparus dans les réponses.
+
+### Code propriétaire et données métier
+
+La troisième catégorie concerne la propriété intellectuelle :
+
+- **Code source propriétaire** : algorithmes métier, logique business critique
+- **Données clients** : contrats, factures, échanges commerciaux
+- **Documents stratégiques** : roadmaps, plans de pricing, données financières non publiées
+- **Datasets internes** : données d'entraînement propriétaires, modèles internes
+
+## La règle d'or
+
+> Avant de coller quoi que ce soit dans un prompt, posez-vous cette question : **est-ce que je serais à l'aise si ce contenu apparaissait sur la page d'accueil de Hacker News ?**
+
+Si la réponse est non, le contenu n'a rien à faire dans un prompt cloud.
+
+## Techniques de masquage et d'anonymisation
+
+La bonne nouvelle : dans la plupart des cas, le LLM n'a pas besoin des vraies données pour vous aider.
+
+### Remplacement par des placeholders
+
+Avant d'envoyer votre prompt, remplacez les données sensibles :
+
+```sql
+-- Avant (dangereux)
+SELECT * FROM users WHERE email = 'jean.dupont@entreprise.fr'
+  AND ssn = '1850475012345';
+
+-- Après (sûr)
+SELECT * FROM users WHERE email = 'user@example.com'
+  AND ssn = 'XXX-XX-XXXXX';
+```
+
+### Anonymisation structurelle
+
+Pour du code, gardez la structure mais remplacez le contenu métier :
+
+```python
+# Avant (dangereux)
+def calculate_premium(client_data):
+    base_rate = CLIENT_SECRET_RATE  # 0.0847
+    return client_data.revenue * base_rate * PROPRIETARY_FACTOR
+
+# Après (sûr)
+def calculate_value(input_data):
+    base_rate = SOME_RATE  # 0.05
+    return input_data.amount * base_rate * SOME_FACTOR
+```
+
+Le LLM peut toujours vous aider à restructurer le code, trouver des bugs logiques, ou optimiser les performances, sans jamais voir vos constantes métier.
+
+### Abstraction du contexte
+
+Plutôt que de coller un fichier entier, décrivez le problème en termes abstraits :
+
+```
+Au lieu de :
+"Voici le code de notre système de facturation [500 lignes]"
+
+Préférez :
+"J'ai une fonction qui calcule un montant à partir de 3 paramètres
+numériques. Elle applique un taux, puis un facteur de correction.
+Le résultat est parfois négatif alors qu'il ne devrait pas l'être.
+Voici la structure simplifiée : [pseudo-code]"
+```
+
+## Modèles cloud vs modèles locaux
+
+La question de la confidentialité change radicalement selon l'infrastructure.
+
+| Critère | Modèle cloud (API) | Modèle local |
+|---|---|---|
+| Données transitent par le réseau | Oui | Non |
+| Stockage par un tiers | Possible (selon ToS) | Non |
+| Utilisation pour l'entraînement | Selon le fournisseur | Non |
+| Conformité RGPD | Complexe | Plus simple |
+| Performance | Meilleure (généralement) | Variable selon le hardware |
+
+### Quand privilégier un modèle local
+
+- Vous travaillez avec des données de santé ou financières réglementées
+- Votre entreprise interdit l'envoi de code source vers des services tiers
+- Vous manipulez des données clients soumises à des clauses de confidentialité
+- Vous êtes dans un secteur réglementé (défense, bancaire, médical)
+
+Des modèles comme Llama, Mistral ou Phi peuvent tourner localement via Ollama ou LM Studio. Ils sont moins performants que GPT-4 ou Claude sur certaines tâches, mais la contrainte de confidentialité prime.
+
+### Les nuances du cloud
+
+Tous les services cloud ne se valent pas :
+
+- **API OpenAI** (usage API, pas ChatGPT gratuit) : les données ne sont pas utilisées pour l'entraînement par défaut
+- **API Anthropic** : même politique, pas d'entraînement sur les données API
+- **ChatGPT gratuit / Copilot gratuit** : les données peuvent alimenter l'entraînement
+- **Azure OpenAI / AWS Bedrock** : vos données restent dans votre tenant cloud
+
+Lisez les conditions d'utilisation. La version gratuite d'un outil n'a pas les mêmes garanties que la version API ou Enterprise.
+
+## Checklist avant d'envoyer un prompt
+
+1. Le prompt contient-il des noms, emails, ou identifiants de vraies personnes ?
+2. Y a-t-il des credentials, tokens, ou clés API dans le texte ?
+3. Le code collé contient-il de la logique métier propriétaire ?
+4. Les données proviennent-elles de clients ou de partenaires sous NDA ?
+5. Suis-je en train d'utiliser la version gratuite d'un outil (risque d'entraînement) ?
+
+Si la réponse à l'une de ces questions est oui : anonymisez, abstrayez, ou utilisez un modèle local.
+
+## Ce qu'il faut retenir
+
+La sécurité des données dans les prompts n'est pas un sujet théorique. Des fuites de credentials via GitHub Copilot, des données patients envoyées à ChatGPT par des médecins, des codes sources propriétaires exposés : ces incidents ont déjà eu lieu.
+
+Le réflexe à construire est simple. Avant chaque prompt, 3 secondes de réflexion : est-ce que ces données m'appartiennent, et est-ce que je suis prêt à les rendre publiques ? Si non, nettoyez d'abord.

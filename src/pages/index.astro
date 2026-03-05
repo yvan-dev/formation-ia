@@ -12,11 +12,11 @@ const courses = await getCollection('courses');
     <!-- Warm gradient background -->
     <div class="pointer-events-none absolute inset-0">
       <div
-        class="from-gold-500/[0.07] via-gold-500/[0.02] absolute top-0 left-1/2 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-b to-transparent blur-3xl"
+        class="from-acton-600/[0.07] via-acton-600/[0.02] absolute top-0 left-1/2 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-b to-transparent blur-3xl"
       >
       </div>
       <div
-        class="from-coral-500/[0.04] absolute top-20 right-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-b to-transparent blur-3xl"
+        class="absolute top-20 right-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-b from-red-500/[0.04] to-transparent blur-3xl"
       >
       </div>
     </div>
@@ -24,15 +24,24 @@ const courses = await getCollection('courses');
     <div
       class="relative mx-auto max-w-5xl px-6 pt-24 pb-20 text-center lg:pt-32 lg:pb-28"
     >
+      <div
+        class="animate-fade-up border-acton-600/20 bg-acton-600/[0.06] text-acton-500 mb-8 inline-flex items-center gap-2.5 rounded-full border px-4 py-2 text-sm"
+      >
+        <span
+          class="h-1.5 w-1.5 rounded-full bg-green-500"
+          style="animation: pulseGlow 2s ease-in-out infinite"></span>
+        Plateforme 100% gratuite
+      </div>
+
       <h1
-        class="animate-fade-up stagger-1 font-display text-ink-50 mb-6 text-5xl leading-[1.1] font-bold tracking-tight lg:text-7xl"
+        class="animate-fade-up stagger-1 text-navy-50 mb-6 text-5xl leading-[1.1] font-bold tracking-tight lg:text-7xl"
       >
         Apprenez l'Intelligence<br />
-        Artificielle <span class="text-gold-500 italic">à votre rythme</span>
+        Artificielle <span class="text-acton-600 italic">à votre rythme</span>
       </h1>
 
       <p
-        class="animate-fade-up stagger-2 text-ink-300 mx-auto mb-12 max-w-2xl text-lg leading-relaxed lg:text-xl"
+        class="animate-fade-up stagger-2 text-navy-300 mx-auto mb-12 max-w-2xl text-lg leading-relaxed lg:text-xl"
       >
         Des cours structurés, des quiz interactifs et un suivi de progression.
         Commencez votre parcours en IA dès maintenant.
@@ -43,7 +52,7 @@ const courses = await getCollection('courses');
       >
         <a
           href="#courses"
-          class="group from-gold-600 to-gold-500 text-ink-950 hover:shadow-gold-500/20 relative rounded-xl bg-gradient-to-r px-7 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+          class="group from-acton-700 to-acton-600 text-navy-950 hover:shadow-acton-600/20 relative rounded-xl bg-gradient-to-r px-7 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
         >
           Découvrir les cours
           <svg
@@ -63,20 +72,20 @@ const courses = await getCollection('courses');
   </section>
 
   <!-- Stats -->
-  <section class="border-ink-800/40 bg-ink-900/30 border-y">
+  <section class="border-navy-800/40 bg-navy-900/30 border-y">
     <div
       class="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-6 py-10 text-center"
     >
       <div class="animate-fade-up stagger-3">
-        <div class="font-display text-ink-50 text-3xl font-bold">
+        <div class="text-navy-50 text-3xl font-bold">
           {courses.length}
         </div>
-        <div class="text-ink-500 mt-1.5 text-sm tracking-wide uppercase">
+        <div class="text-navy-500 mt-1.5 text-sm tracking-wide uppercase">
           Cours disponibles
         </div>
       </div>
       <div class="animate-fade-up stagger-4">
-        <div class="font-display text-ink-50 text-3xl font-bold">
+        <div class="text-navy-50 text-3xl font-bold">
           {
             courses.reduce(
               (acc, c) =>
@@ -85,7 +94,7 @@ const courses = await getCollection('courses');
             )
           }
         </div>
-        <div class="text-ink-500 mt-1.5 text-sm tracking-wide uppercase">
+        <div class="text-navy-500 mt-1.5 text-sm tracking-wide uppercase">
           Leçons
         </div>
       </div>
@@ -95,10 +104,8 @@ const courses = await getCollection('courses');
   <!-- Courses grid -->
   <section id="courses" class="mx-auto max-w-6xl px-6 py-20">
     <div class="mb-10">
-      <h2 class="font-display text-ink-50 mb-2 text-3xl font-bold">
-        Tous les cours
-      </h2>
-      <p class="text-ink-400">Choisissez un cours et commencez à apprendre</p>
+      <h2 class="text-navy-50 mb-2 text-3xl font-bold">Tous les cours</h2>
+      <p class="text-navy-400">Choisissez un cours et commencez à apprendre</p>
     </div>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

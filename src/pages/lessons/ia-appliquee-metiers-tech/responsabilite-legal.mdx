@@ -91,4 +91,142 @@ nextLesson:
 
 ## Responsabilité et cadre légal
 
-Contenu à venir.
+L'IA génère du code, des textes, des recommandations. Mais quand quelque chose tourne mal, qui est responsable ? La réponse est claire : **l'humain qui utilise et déploie l'output, toujours**. Cette leçon couvre le cadre juridique en construction autour de l'IA, les questions de propriété intellectuelle, et les bonnes pratiques pour se protéger.
+
+## Qui est responsable du code généré par l'IA ?
+
+### Le principe fondamental
+
+Aucun cadre juridique existant ne reconnaît l'IA comme une entité responsable. Le développeur qui utilise du code généré par l'IA est responsable au même titre que s'il avait écrit ce code lui-même.
+
+Concrètement :
+- Si du code généré par Copilot introduit une faille de sécurité, c'est votre responsabilité
+- Si un agent IA envoie un email diffamatoire, c'est la responsabilité de celui qui l'a déployé
+- Si une recommandation générée par un LLM cause un préjudice, celui qui l'a suivie et appliquée est responsable
+
+"L'IA l'a suggéré" n'est pas une défense juridique valable.
+
+### La chaîne de responsabilité
+
+Dans une entreprise, la responsabilité est distribuée :
+
+| Rôle | Responsabilité |
+|---|---|
+| Développeur | Qualité et sécurité du code déployé |
+| Tech Lead | Revue et validation des choix techniques |
+| RSSI / DPO | Conformité sécurité et données personnelles |
+| Direction | Politique d'usage de l'IA dans l'entreprise |
+
+Chaque niveau a sa part de responsabilité. Le développeur ne peut pas se défausser sur l'IA, mais l'entreprise ne peut pas non plus se défausser sur le développeur si elle n'a pas mis en place de politique d'usage.
+
+## Propriété intellectuelle des outputs générés
+
+### Le flou juridique actuel
+
+La question "qui possède le code généré par l'IA ?" n'a pas de réponse définitive en 2025. Les tribunaux et les législateurs travaillent encore sur le sujet.
+
+Ce qu'on sait :
+- **Le droit d'auteur protège les créations originales humaines.** Un output purement généré par l'IA, sans intervention créative humaine significative, n'est probablement pas protégeable par le droit d'auteur dans la plupart des juridictions.
+- **Les modifications humaines sont protégeables.** Si vous prenez un code généré par l'IA, le modifiez substantiellement, l'adaptez à votre contexte, ce travail de transformation est le vôtre.
+- **Les conditions d'utilisation des fournisseurs varient.** OpenAI, Anthropic et GitHub ont des positions différentes sur la propriété des outputs.
+
+### Positions des principaux fournisseurs
+
+- **OpenAI** : vous attribue les droits sur les outputs générés via l'API, sous réserve du respect de leurs conditions d'utilisation
+- **Anthropic** : position similaire, les outputs vous appartiennent
+- **GitHub Copilot** : les suggestions de code vous appartiennent, mais GitHub ne garantit pas qu'elles ne reproduisent pas du code existant sous licence
+- **Google Gemini** : politique variable selon les produits (API vs. consumer)
+
+## Licences et code open-source dans l'entraînement
+
+### Le problème
+
+Les LLMs ont été entraînés sur des milliards de lignes de code open-source. Ce code est sous licence (MIT, GPL, Apache, etc.). Quand le modèle génère du code qui reproduit ou s'inspire fortement de code sous licence, des questions se posent.
+
+Le cas le plus problématique est le code sous GPL. La GPL exige que tout code dérivé soit aussi sous GPL. Si un LLM génère du code qui reproduit du code GPL, et que vous l'intégrez dans un projet propriétaire, vous pourriez être en violation de licence.
+
+### Cas concret : GitHub Copilot et les licences
+
+GitHub Copilot a été au centre d'un procès collectif (Doe v. GitHub, 2022) alléguant qu'il reproduisait du code open-source sans respecter les attributions requises par les licences. Le procès est toujours en cours, mais il a mis en lumière un risque réel.
+
+### Comment se protéger
+
+- **Activez les filtres de duplication** : GitHub Copilot propose une option qui bloque les suggestions qui correspondent à du code public existant
+- **Vérifiez les snippets suspects** : si une suggestion semble très spécifique (noms de variables inhabituels, commentaires détaillés), cherchez-la sur GitHub pour vérifier qu'elle ne vient pas d'un projet sous licence restrictive
+- **Documentez vos sources** : notez quand du code a été généré par l'IA et vérifiez sa provenance
+
+## EU AI Act : ce que ça change pour les développeurs
+
+Le règlement européen sur l'intelligence artificielle (AI Act), entré en application progressive à partir de 2024, est le premier cadre réglementaire complet sur l'IA.
+
+### Classification par niveau de risque
+
+L'AI Act classe les systèmes d'IA en 4 catégories :
+
+| Niveau | Exemples | Obligations |
+|---|---|---|
+| Risque inacceptable | Notation sociale, manipulation subliminale | Interdit |
+| Haut risque | Recrutement, crédit, médical, justice | Conformité stricte, audit, traçabilité |
+| Risque limité | Chatbots, deepfakes | Obligations de transparence |
+| Risque minimal | Filtres email, assistants de code | Pas d'obligation spécifique |
+
+### Ce que ça signifie pour un développeur
+
+- **Transparence** : si votre produit utilise un chatbot IA, vous devez informer les utilisateurs qu'ils interagissent avec une IA
+- **Systèmes à haut risque** : si vous développez un système d'IA utilisé pour le recrutement, le crédit, ou le médical, des obligations strictes s'appliquent (documentation technique, évaluation de conformité, monitoring post-déploiement)
+- **IA générative** : les fournisseurs de modèles de fondation (OpenAI, Anthropic, etc.) ont des obligations de transparence sur les données d'entraînement et les capacités du modèle
+- **Documentation** : pour les systèmes à haut risque, une documentation technique détaillée est obligatoire
+
+### Les obligations des fournisseurs de modèles
+
+L'AI Act impose aux fournisseurs de modèles de fondation (les "general-purpose AI models") des obligations spécifiques :
+- Documenter le processus d'entraînement
+- Respecter le droit d'auteur européen
+- Publier un résumé des données d'entraînement
+- Pour les modèles présentant un risque systémique : évaluation et mitigation des risques
+
+## Bonnes pratiques : documenter l'usage de l'IA
+
+### Pourquoi documenter
+
+La documentation de l'usage de l'IA dans vos projets n'est pas seulement une bonne pratique. C'est en train de devenir une obligation réglementaire, et c'est une protection juridique.
+
+### Ce qu'il faut documenter
+
+- **Quels outils IA** sont utilisés (Copilot, Claude, ChatGPT, etc.)
+- **Pour quelles tâches** : génération de code, revue, documentation, tests
+- **Politique de validation** : comment le code généré est-il revu avant merge ?
+- **Données exposées** : quelles données sont envoyées aux services IA ?
+- **Traçabilité** : dans les commits, les PR, ou un registre interne
+
+### Exemple de politique d'équipe
+
+```markdown
+## Politique d'usage de l'IA - Équipe Backend
+
+### Outils autorisés
+- GitHub Copilot (licence Enterprise)
+- Claude API (via compte entreprise)
+
+### Outils interdits
+- ChatGPT gratuit (risque d'entraînement sur nos données)
+- Tout outil IA non approuvé par la DSI
+
+### Règles
+1. Jamais de données client dans un prompt
+2. Jamais de secrets/credentials dans un prompt
+3. Tout code généré passe par la code review standard
+4. Mention "AI-assisted" dans la PR si > 50% du code est généré
+5. Vérification des dépendances suggérées par l'IA
+```
+
+## Ce qu'il faut retenir
+
+Le cadre légal autour de l'IA est en construction. Les principes fondamentaux sont clairs :
+
+1. **Vous êtes responsable** de ce que vous déployez, quelle que soit l'origine du code
+2. **La propriété intellectuelle** des outputs est un terrain juridique mouvant. Documentez, vérifiez, restez informé
+3. **L'AI Act** impose des obligations croissantes selon le niveau de risque de votre système
+4. **Documentez tout** : quels outils, quelles données, quelle validation. C'est votre meilleure protection
+
+Le réflexe clé : traitez le code généré par l'IA exactement comme du code humain. Mêmes revues, mêmes tests, même responsabilité. L'IA est un outil, pas un bouclier juridique.

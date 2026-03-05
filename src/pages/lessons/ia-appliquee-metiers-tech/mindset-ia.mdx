@@ -89,6 +89,72 @@ nextLesson:
   title: "Ce qui différencie un bon ingénieur IA"
 ---
 
-## L'IA comme co-pilote, pas comme remplaçant
+## L'IA augmente, elle ne remplace pas
 
-Contenu à venir.
+Mettons les choses au clair : l'IA générative ne remplace pas un professionnel compétent. Elle le rend plus rapide, plus productif, et lui permet de se concentrer sur les problèmes qui comptent.
+
+Un LLM ne comprend pas votre contexte métier. Il ne connaît pas les contraintes de votre équipe, l'historique de vos décisions techniques, ni les subtilités de votre domaine. Il génère du texte statistiquement probable. C'est puissant, mais ce n'est pas de la compréhension.
+
+## L'analogie du pilote et du co-pilote
+
+Un pilote d'avion utilise le pilotage automatique sur 90% du vol. Ça ne fait pas de lui un passager. Il reste responsable du décollage, de l'atterrissage, de la gestion des incidents, et de toutes les décisions critiques. Le pilotage automatique gère le répétitif. Le pilote gère le complexe.
+
+C'est exactement votre relation avec l'IA :
+
+| Le pilote (vous) | Le co-pilote (l'IA) |
+|-------------------|---------------------|
+| Définit la destination | Calcule la trajectoire |
+| Prend les décisions critiques | Exécute les tâches répétitives |
+| Gère les imprévus | Signale les anomalies |
+| Reste responsable du résultat | Propose des options |
+| Comprend le contexte global | Traite l'information locale |
+
+> Personne ne monte dans un avion en disant "pas besoin de pilote, il y a le pilotage automatique". Ne faites pas l'équivalent avec votre code.
+
+## Le bon état d'esprit : collaboration, pas dépendance
+
+### Ce que font les bons utilisateurs d'IA
+
+- **Ils formulent des demandes précises.** "Refactorise cette fonction pour séparer la logique métier de l'accès base de données" vaut mieux que "améliore ce code".
+- **Ils vérifient chaque output.** Pas un coup d'œil rapide. Une vraie relecture, comme une code review.
+- **Ils comprennent ce que l'IA produit.** Si vous ne pouvez pas expliquer pourquoi le code généré fonctionne, vous ne devriez pas le merger.
+- **Ils itèrent.** Le premier output est rarement le bon. Le dialogue avec l'IA est un processus de raffinage.
+
+### Ce que font les mauvais utilisateurs d'IA
+
+- **Ils acceptent tout sans vérifier.** "Ça compile, ça doit être bon." Non.
+- **Ils ne lisent pas le code généré.** Copier-coller aveugle de 200 lignes dans la codebase.
+- **Ils s'appuient sur l'IA pour des décisions qu'ils ne comprennent pas.** "L'IA a dit d'utiliser MongoDB, alors on utilise MongoDB."
+- **Ils perdent leurs compétences.** À force de ne plus écrire de code eux-mêmes, ils ne savent plus debugger quand l'IA se trompe.
+
+## Quand l'IA est utile
+
+L'IA brille dans les situations suivantes :
+
+- **Tâches répétitives** : boilerplate, tests unitaires standards, conversions de format
+- **Exploration rapide** : prototyper une idée, tester une approche, générer un premier draft
+- **Documentation** : générer de la doc à partir du code, reformuler, structurer
+- **Apprentissage** : comprendre un concept, explorer une API, obtenir des exemples
+- **Refactoring mécanique** : renommages, extraction de fonctions, réorganisation de code
+
+## Quand l'IA est dangereuse
+
+L'IA devient un risque quand vous lui faites confiance sans recul :
+
+- **Architecture système** : un LLM ne connaît pas vos contraintes de production, vos SLAs, votre dette technique
+- **Sécurité** : le code généré peut contenir des vulnérabilités que le modèle ne détecte pas
+- **Décisions métier** : le modèle n'a pas le contexte pour faire des choix stratégiques
+- **Code critique** : paiement, authentification, gestion de données sensibles
+- **Situations nouvelles** : quand votre problème sort des patterns habituels, l'IA va quand même produire une réponse (souvent fausse)
+
+> L'IA est toujours confiante. Même quand elle a tort. C'est à vous de douter.
+
+## Les trois réflexes à adopter
+
+1. **Vérifier avant de merger.** Chaque ligne générée par l'IA passe par votre review. Sans exception.
+2. **Comprendre avant d'accepter.** Si vous ne pouvez pas expliquer le code à un collègue, ne le committez pas.
+3. **Rester compétent.** Continuez à écrire du code vous-même. L'IA est un accélérateur, pas une béquille.
+
+## À retenir
+
+L'IA est l'outil le plus puissant que les développeurs aient eu depuis l'invention de Stack Overflow. Mais comme tout outil puissant, il amplifie autant les erreurs que les succès. Votre valeur ne diminue pas avec l'IA. Elle se déplace : de l'exécution vers le jugement, de l'écriture vers la validation, du "comment" vers le "pourquoi".

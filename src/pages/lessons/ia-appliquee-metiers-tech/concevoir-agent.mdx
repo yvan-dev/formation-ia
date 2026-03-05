@@ -91,4 +91,188 @@ nextLesson:
 
 ## Concevoir un bon agent
 
-Contenu à venir.
+Un agent mal conçu produit des résultats imprévisibles. Un agent bien conçu fait exactement ce qu'on attend, de manière répétable. La différence tient à la clarté de sa définition.
+
+### Responsabilité unique
+
+Un bon agent fait une seule chose. Si vous ne pouvez pas résumer ce qu'il fait en une phrase, il est trop large.
+
+**Trop large :**
+> "Un agent qui gère le backend de l'application."
+
+**Bien cadré :**
+> "Un agent qui génère les tests unitaires pour les endpoints REST."
+
+La tentation est de créer un "super-agent" qui fait tout. C'est exactement comme écrire une fonction de 500 lignes : ça fonctionne une fois, puis ça devient impossible à débugger et à maintenir.
+
+### La structure d'un bon agent
+
+Chaque agent doit définir cinq éléments. Pas quatre, pas six. Cinq.
+
+#### 1. Rôle (une phrase)
+
+Qui est cet agent et quel est son domaine d'expertise.
+
+```yaml
+role: "Superviseur de tests - spécialiste Jest/Vitest pour projets TypeScript"
+```
+
+#### 2. Objectif (ce qu'il doit accomplir)
+
+Un livrable concret et vérifiable, pas une intention floue.
+
+```yaml
+# Mauvais
+objectif: "Améliorer la qualité du code"
+
+# Bon
+objectif: "Générer les tests unitaires manquants pour atteindre 80% de couverture sur src/services/"
+```
+
+#### 3. Permissions (ce qu'il peut et ne peut pas faire)
+
+Les permissions sont des garde-fous explicites. Sans elles, l'agent improvise.
+
+```yaml
+permissions:
+  autorisé:
+    - Lire tous les fichiers dans src/
+    - Créer des fichiers dans src/__tests__/
+    - Exécuter npm test et npm run coverage
+    - Installer des devDependencies de test
+  interdit:
+    - Modifier le code source de production
+    - Modifier la configuration CI/CD
+    - Supprimer des fichiers existants
+    - Installer des dépendances de production
+```
+
+#### 4. Critères d'acceptation (mesurables)
+
+Comment savoir si l'agent a réussi sa mission. Pas "le code est bien" mais des critères vérifiables.
+
+```yaml
+critères:
+  - Tous les tests passent (exit code 0)
+  - Couverture >= 80% sur les fichiers ciblés
+  - Aucun fichier de production modifié
+  - Chaque test a au moins un assert explicite
+```
+
+#### 5. Comportement en cas d'échec
+
+Que fait l'agent quand il est bloqué. C'est le point que 90% des configurations oublient.
+
+```yaml
+en_cas_échec:
+  - Si un test échoue après 3 tentatives → s'arrêter et rapporter l'erreur
+  - Si la couverture cible est impossible → expliquer pourquoi et proposer un seuil réaliste
+  - Si un fichier source est ambigu → demander clarification, ne pas deviner
+```
+
+### Instructions : précises et testables
+
+Les instructions d'un agent doivent être comme des tests : on peut vérifier objectivement si elles sont respectées.
+
+**Instruction floue (non testable) :**
+> "Écris du code propre et bien structuré."
+
+**Instruction précise (testable) :**
+> "Chaque fonction de test suit le pattern Arrange-Act-Assert. Le nom du test décrit le comportement attendu au format 'should [action] when [condition]'."
+
+Plus les instructions sont précises, moins l'agent a de marge d'interprétation, et plus les résultats sont reproductibles.
+
+### Exemples concrets
+
+#### Agent de code review
+
+```yaml
+role: "Revieweur de code - détecte les problèmes de qualité et sécurité"
+objectif: "Analyser les fichiers modifiés et produire un rapport de review"
+
+permissions:
+  autorisé:
+    - Lire tous les fichiers du projet
+    - Exécuter le linter et le type-checker
+    - Consulter l'historique git
+  interdit:
+    - Modifier des fichiers
+    - Créer des commits
+    - Approuver/merger des PRs
+
+critères:
+  - Chaque commentaire cite le fichier et la ligne concernée
+  - Les problèmes sont classés par sévérité (bloquant, important, suggestion)
+  - Aucun faux positif sur les règles de sécurité
+
+en_cas_échec:
+  - Si le linter ne s'exécute pas → signaler la configuration manquante
+  - Si un fichier est trop complexe à analyser → le signaler explicitement
+```
+
+#### Agent de documentation
+
+```yaml
+role: "Scribe - génère la documentation technique à partir du code"
+objectif: "Mettre à jour la doc API pour refléter les endpoints actuels"
+
+permissions:
+  autorisé:
+    - Lire le code source dans src/
+    - Créer/modifier des fichiers dans docs/
+    - Exécuter les scripts de génération de doc
+  interdit:
+    - Modifier le code source
+    - Modifier les tests
+    - Changer la structure du projet
+
+critères:
+  - Chaque endpoint public est documenté
+  - Les exemples de requête/réponse sont valides
+  - Les types de paramètres correspondent au code source
+
+en_cas_échec:
+  - Si un endpoint n'a pas de types → le documenter comme "types manquants"
+  - Si la structure de réponse est ambiguë → lire les tests pour déduire le format
+```
+
+#### Agent de refactoring
+
+```yaml
+role: "Refactorer - restructure le code sans changer le comportement"
+objectif: "Extraire les fonctions de plus de 50 lignes en sous-fonctions"
+
+permissions:
+  autorisé:
+    - Modifier les fichiers dans src/
+    - Exécuter les tests
+    - Créer de nouveaux fichiers utilitaires dans src/utils/
+  interdit:
+    - Changer le comportement observable (les tests doivent passer avant et après)
+    - Modifier les interfaces publiques
+    - Ajouter de nouvelles dépendances
+
+critères:
+  - Aucune fonction ne dépasse 50 lignes
+  - Tous les tests existants passent sans modification
+  - Aucune interface publique modifiée
+
+en_cas_échec:
+  - Si un refactoring casse un test → annuler et rapporter le conflit
+  - Si une fonction ne peut pas être découpée sans changer l'interface → la laisser et expliquer pourquoi
+```
+
+### Les erreurs courantes
+
+| Erreur | Conséquence | Solution |
+|--------|-------------|----------|
+| Pas de permissions explicites | L'agent modifie des fichiers qu'il ne devrait pas | Lister les actions autorisées ET interdites |
+| Objectif vague | Résultats imprévisibles d'une exécution à l'autre | Définir un livrable mesurable |
+| Pas de gestion d'échec | L'agent boucle indéfiniment ou produit du code cassé | Définir les conditions d'arrêt |
+| Trop de responsabilités | Impossible de débugger quand quelque chose échoue | Un agent = une responsabilité |
+
+### Ce qu'il faut retenir
+
+Concevoir un agent, c'est comme écrire une spécification. Plus c'est précis, plus le résultat est fiable. Les cinq éléments (rôle, objectif, permissions, critères, gestion d'échec) forment le contrat entre vous et l'agent.
+
+La leçon suivante aborde le dernier pilier : comment superviser ces agents efficacement avec le principe Human in the Loop.

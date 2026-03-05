@@ -89,6 +89,85 @@ nextLesson:
   title: "Les hallucinations : causes, détection et réduction"
 ---
 
-## La mémoire des LLMs — Fenêtre de contexte et Context Rot
+## La mémoire des LLMs : fenêtre de contexte et Context Rot
 
-Contenu à venir.
+Un LLM n'a pas de mémoire au sens classique. Il ne retient rien entre deux conversations, et à l'intérieur d'une conversation, il ne "retient" que ce qui tient dans sa fenêtre de contexte. Comprendre cette limite change fondamentalement la façon dont on structure ses échanges avec un modèle.
+
+### La fenêtre de contexte : votre espace de travail
+
+Imaginez un bureau avec une surface limitée. Vous pouvez y poser des documents, mais quand le bureau est plein, vous devez retirer des feuilles pour en ajouter de nouvelles. Les feuilles retirées n'existent plus pour vous.
+
+La fenêtre de contexte fonctionne de la même manière. C'est le nombre total de tokens (entrée + sortie) que le modèle peut traiter simultanément.
+
+| Modèle | Fenêtre de contexte | Équivalent approximatif |
+|--------|--------------------|-----------------------|
+| GPT-3.5 | 16K tokens | ~25 pages |
+| GPT-4o | 128K tokens | ~200 pages |
+| Claude Opus/Sonnet | 200K tokens | ~300 pages |
+| Gemini 1.5 Pro | 1M+ tokens | ~1 500 pages |
+
+Ces chiffres semblent énormes. En pratique, ils se remplissent vite. Un fichier de code de 1 000 lignes consomme environ 6 000 tokens. Ajoutez le system prompt, l'historique de conversation, et quelques fichiers de contexte : vous atteignez les limites plus rapidement qu'on ne le pense.
+
+### Ce qui se passe quand la fenêtre déborde
+
+Quand la conversation dépasse la fenêtre de contexte, les messages les plus anciens sont supprimés. Le modèle ne vous prévient pas. Il continue de répondre comme si de rien n'était, mais il a perdu le début de la conversation.
+
+Conséquences concrètes :
+- Les instructions données au début de la session sont oubliées
+- Les décisions prises plus tôt ne sont plus accessibles
+- Le modèle peut se contredire sans s'en rendre compte
+
+### Context Rot : la dégradation silencieuse
+
+Même quand la fenêtre de contexte n'est pas dépassée, la qualité des réponses se dégrade sur les longues sessions. C'est le phénomène de **Context Rot** (pourrissement du contexte).
+
+Le mécanisme est simple : plus la conversation est longue, plus le modèle doit jongler avec des informations variées, parfois contradictoires. Sa capacité d'attention se dilue. Les informations au milieu de la fenêtre sont moins bien prises en compte que celles au début et à la fin (c'est le problème connu du "lost in the middle").
+
+**Symptômes typiques :**
+- Le modèle "oublie" des contraintes que vous avez posées plus tôt
+- Les réponses deviennent plus génériques, moins précises
+- Des incohérences apparaissent entre les réponses successives
+- Les hallucinations augmentent en fréquence
+- Le modèle reformule des choses déjà dites au lieu d'avancer
+
+**Remèdes pratiques :**
+
+1. **Résumés intermédiaires.** Demandez au modèle de résumer les décisions prises et le contexte important, puis réinjectez ce résumé dans une nouvelle session.
+2. **Redécoupage des sessions.** Traitez un sujet par conversation. Plutôt qu'une session marathon de 3 heures, faites 6 sessions de 30 minutes avec un brief clair à chaque reprise.
+3. **Réinitialisation stratégique.** Quand vous sentez la qualité baisser, démarrez une nouvelle conversation en collant les éléments essentiels (spécifications, décisions prises, état actuel).
+
+### Mémoire externe : le principe du RAG
+
+Puisqu'un LLM n'a pas de mémoire persistante, comment lui donner accès à des informations spécifiques (documentation interne, base de connaissances, historique projet) ?
+
+C'est le rôle du **RAG** (Retrieval-Augmented Generation). Le principe en version simple :
+
+1. Vos documents sont découpés en fragments et indexés dans une base de données vectorielle.
+2. Quand l'utilisateur pose une question, le système recherche les fragments les plus pertinents.
+3. Ces fragments sont injectés dans le prompt, avant la question de l'utilisateur.
+4. Le LLM répond en s'appuyant sur ces fragments comme contexte.
+
+Le modèle ne "connaît" toujours rien. On lui fournit l'information pertinente au bon moment, dans sa fenêtre de contexte. C'est une forme de mémoire externe, pas de mémoire intrinsèque.
+
+### Contexte court vs contexte long : implications pratiques
+
+Un contexte plus grand n'est pas toujours meilleur.
+
+| Situation | Recommandation |
+|-----------|---------------|
+| Question précise sur un sujet ciblé | Contexte court, bien ciblé. Moins de bruit, meilleure réponse. |
+| Analyse d'un gros fichier de code | Contexte long nécessaire. Injectez le fichier complet. |
+| Session de travail itérative | Contexte moyen. Redémarrez régulièrement avec un résumé. |
+| Comparer plusieurs documents | Contexte long, mais surveillez la qualité. Testez les réponses. |
+
+### Bonnes pratiques pour gérer le contexte
+
+**Structurez vos prompts.** Mettez les informations critiques au début et à la fin de votre message. Le milieu est la zone la moins bien traitée par le modèle.
+
+**Soyez sélectif.** N'injectez pas "tout le projet" dans le contexte. Identifiez les fichiers réellement pertinents. Du contexte inutile, c'est du bruit qui dilue l'attention du modèle.
+
+**Surveillez les signaux de dégradation.** Si les réponses deviennent vagues, répétitives ou incohérentes, c'est probablement du Context Rot. Relancez une session propre.
+
+**Réaffirmez les contraintes.** Dans les longues sessions, rappelez périodiquement les contraintes et le format attendu. Ne comptez pas sur le modèle pour s'en souvenir.
+
+**Préférez plusieurs sessions courtes à une session longue.** C'est contre-intuitif, mais 5 sessions ciblées de 20 minutes produisent généralement de meilleurs résultats qu'une session continue de 2 heures.

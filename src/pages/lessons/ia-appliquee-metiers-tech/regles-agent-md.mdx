@@ -89,6 +89,121 @@ nextLesson:
   title: "Structure recommandée d'un AGENT.md"
 ---
 
-## Règles de construction d'un AGENT.md efficace
+## Un fichier d'instructions, pas un document de design
 
-Contenu à venir.
+Un AGENT.md est le contrat entre vous et l'agent IA. Ce qu'il doit faire, comment, et dans quelles limites. Pas un README, pas une spec fonctionnelle, pas un manifeste philosophique.
+
+La différence entre un agent qui produit du travail utilisable et un agent qui génère du bruit tient souvent à la qualité de ce fichier.
+
+### Ce que c'est, ce que ce n'est pas
+
+| AGENT.md | Ce n'est PAS |
+|----------|--------------|
+| Instructions exécutables | Un document de design |
+| Contrat de comportement | Un README pour humains |
+| Critères mesurables | Une liste d'aspirations |
+| Garde-fous explicites | Un guide de style générique |
+
+Un document de design explique *pourquoi* on a fait un choix. Un AGENT.md dit *quoi faire*. Si votre fichier contient plus de "pourquoi" que de "quoi", vous êtes en train d'écrire le mauvais document.
+
+### La concision comme discipline
+
+Un bon AGENT.md fait moins de 60 lignes. Ce n'est pas arbitraire. C'est une conséquence directe du fonctionnement des LLMs : plus le contexte est long, plus le modèle dilue son attention. Chaque ligne sans valeur ajoutée dégrade la performance de l'agent.
+
+Pour chaque phrase, posez-vous la question : "Si je retire cette ligne, l'agent produira-t-il un résultat différent ?" Si la réponse est non, supprimez-la.
+
+Voici un test rapide : prenez votre AGENT.md actuel et surlignez chaque ligne qui modifie concrètement le comportement de l'agent. Les lignes non surlignées sont candidates à la suppression.
+
+### Zéro ambiguïté
+
+Un agent n'a pas votre contexte implicite. Il ne "devine" pas ce que vous voulez. Si une instruction peut être interprétée de deux façons, elle le sera, et probablement pas comme vous l'espériez.
+
+Comparez :
+
+```markdown
+# Mauvais
+Écris du code propre et bien structuré.
+
+# Bon
+- Fonctions de moins de 20 lignes
+- Un seul niveau d'imbrication maximum
+- Noms de variables en camelCase, en anglais
+```
+
+La première version est subjective. La seconde est exécutable. L'agent sait exactement quoi vérifier.
+
+### Chaque instruction doit être actionnable
+
+Une instruction actionnable répond à la question "comment je vérifie que c'est fait ?"
+
+```markdown
+# Pas actionnable
+Assure-toi que le code est performant.
+
+# Actionnable
+Aucune requête SQL ne doit utiliser SELECT *.
+Les boucles sur des collections doivent utiliser .map() ou .filter(), pas for...in.
+```
+
+```markdown
+# Pas actionnable
+Écris des tests complets.
+
+# Actionnable
+Chaque fonction publique a au moins un test nominal et un test d'erreur.
+Les tests utilisent des données réalistes, pas "foo" et "bar".
+```
+
+Si vous ne pouvez pas vérifier mécaniquement qu'une instruction est respectée, reformulez-la jusqu'à ce que ce soit possible.
+
+### Anti-patterns courants
+
+**Trop long.** Un AGENT.md de 200 lignes est un signal d'alerte. L'agent va ignorer ou mal pondérer certaines instructions. Au-delà de 60 lignes, découpez en plusieurs agents spécialisés.
+
+**Trop vague.** "Assure-toi que le code est de qualité" ne signifie rien pour un agent. Qualité selon quels critères ? Quelles métriques ? Quels standards ?
+
+**Trop de contexte.** L'historique du projet, la philosophie de l'équipe, les raisons d'un choix technique : rien de tout cela n'aide l'agent à exécuter. Il a besoin d'instructions, pas d'un cours d'histoire.
+
+**Des contradictions.** "Sois concis" suivi de "Documente chaque décision en détail" crée un conflit que l'agent résoudra de façon imprévisible.
+
+**Des souhaits au lieu de règles.** "Idéalement, les tests devraient couvrir les edge cases" n'est pas une instruction. "Chaque fonction doit avoir au moins un test sur un cas limite" en est une.
+
+**L'effet "kitchen sink".** Ajouter chaque nouvelle idée dans le même AGENT.md sans jamais en retirer. Au bout de quelques semaines, le fichier ressemble à un fourre-tout. Prévoyez des sessions de nettoyage régulières.
+
+### Le test du nouvel arrivant
+
+Donnez votre AGENT.md à un collègue qui ne connaît pas le projet. Sans autre contexte, peut-il comprendre exactement ce que l'agent doit faire ?
+
+Si votre collègue pose des questions, ce sont des ambiguïtés que l'agent rencontrera aussi. Sauf que lui ne posera pas de questions. Il improvisera.
+
+Ce test fonctionne aussi en sens inverse : si un nouvel arrivant dans l'équipe peut utiliser votre AGENT.md comme guide de contribution, c'est qu'il est bien écrit.
+
+Trois questions à poser au relecteur :
+1. "Qu'est-ce que l'agent doit produire ?" (teste la clarté de l'objectif)
+2. "Qu'est-ce que l'agent n'a pas le droit de faire ?" (teste les permissions)
+3. "Comment tu sais si le résultat est correct ?" (teste les critères d'acceptation)
+
+### Pourquoi versionner les AGENT.md
+
+Un AGENT.md vit avec le code. Il évolue quand les standards changent, quand l'architecture se transforme, quand l'équipe apprend ce qui fonctionne.
+
+Versionnez-le dans Git, au même titre que le code source :
+
+1. **Traçabilité.** Vous voyez quand une règle a été ajoutée et pourquoi (via le message de commit).
+2. **Review.** Les changements passent par la même revue de code que le reste. Un collègue peut repérer une instruction ambiguë avant qu'elle ne cause des problèmes.
+3. **Cohérence.** Toute l'équipe travaille avec la même version. Pas de "moi j'utilise une version différente sur mon poste".
+
+Traitez un changement d'AGENT.md comme un changement de code : branch, PR, review, merge. Un AGENT.md modifié sans review peut introduire des régressions dans le comportement de l'agent, exactement comme du code non reviewé.
+
+### Récapitulatif
+
+| Principe | En pratique |
+|----------|-------------|
+| Moins de 60 lignes | Chaque ligne doit changer le comportement de l'agent |
+| Zéro ambiguïté | Instructions exécutables, pas des souhaits |
+| Tout est actionnable | "Comment je vérifie ?" doit avoir une réponse |
+| Pas de contexte inutile | "Quoi faire", pas "pourquoi on en est là" |
+| Test du nouvel arrivant | Si un humain a des questions, l'agent aussi |
+| Versionné comme du code | Git, review, historique |
+
+La leçon suivante détaille la structure recommandée pour organiser ces instructions.

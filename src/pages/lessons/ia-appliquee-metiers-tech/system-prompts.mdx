@@ -89,6 +89,185 @@ nextLesson:
   title: "Techniques avancées de prompting"
 ---
 
-## System Prompts
+## Qu'est-ce qu'un system prompt
 
-Contenu à venir.
+Quand vous utilisez ChatGPT, Claude ou un autre LLM via l'interface, vous écrivez dans le champ "user". Mais il existe un autre champ, invisible pour l'utilisateur final : le **system prompt**. C'est une instruction donnée au modèle avant toute conversation.
+
+Le system prompt définit le comportement global de l'IA : son identité, ses objectifs, ses interdictions, son format de réponse. C'est la différence entre un assistant générique et un outil calibré pour votre besoin précis.
+
+En pratique, le system prompt est utilisé dans trois contextes :
+- **Les APIs** (OpenAI, Anthropic, etc.) : vous le passez dans le champ `system` de l'appel
+- **Les outils custom** : un agent, un chatbot, un workflow automatisé
+- **Les interfaces avancées** : Claude Projects, GPT custom instructions
+
+## La structure d'un bon system prompt
+
+Un system prompt efficace couvre quatre blocs. L'ordre compte : les modèles accordent plus d'attention au début et à la fin du prompt.
+
+### 1. Identité et rôle
+
+Qui est l'agent ? Quel est son domaine d'expertise ? À qui s'adresse-t-il ?
+
+```markdown
+Tu es un assistant de code review spécialisé en TypeScript et React.
+Tu t'adresses à des développeurs mid-level dans une équipe produit.
+Ton ton est direct et professionnel. Tu ne fais pas de compliments inutiles.
+```
+
+### 2. Objectifs et critères d'acceptation
+
+Qu'est-ce que l'agent doit produire ? Comment sait-on que la réponse est bonne ?
+
+```markdown
+Ton objectif : identifier les problèmes de qualité, de performance et de
+sécurité dans le code soumis.
+
+Une bonne review :
+- Pointe les problèmes avec une référence à la ligne concernée
+- Explique POURQUOI c'est un problème (pas juste "c'est mal")
+- Propose une correction concrète
+- Classe les problèmes par sévérité : critique / important / mineur
+```
+
+### 3. Limites et interdictions
+
+Ce que l'agent ne doit PAS faire. C'est souvent ce qui manque dans les system prompts, et c'est ce qui cause les réponses hors sujet ou dangereuses.
+
+```markdown
+Règles strictes :
+- Ne modifie JAMAIS la logique métier sans explication
+- Ne propose pas de refactoring complet si seul un fix est demandé
+- Ne génère pas de code qui change le comportement des tests existants
+- Si le code touche à de l'authentification ou du paiement, signale-le
+  explicitement même si tout semble correct
+```
+
+### 4. Exemples de sorties attendues
+
+Montrer le format exact que vous attendez. Les exemples sont plus puissants que les descriptions.
+
+````markdown
+Format de réponse attendu :
+
+## Review de `filename.ts`
+
+### Critique
+- **Ligne 42** : La requête SQL est vulnérable à l'injection.
+  Utilisez des requêtes paramétrées.
+  ```ts
+  // Avant
+  db.query(`SELECT * FROM users WHERE id = ${id}`)
+  // Après
+  db.query('SELECT * FROM users WHERE id = $1', [id])
+  ```
+
+### Important
+- **Ligne 15** : Le useEffect manque `userId` dans son tableau de
+  dépendances. Ça peut causer des bugs de stale closure.
+
+### Mineur
+- **Ligne 3** : Import non utilisé (`lodash`). À supprimer.
+````
+
+## Exemples de system prompts par cas d'usage
+
+### Assistant de debug
+
+```markdown
+Tu es un assistant de debugging pour une application Node.js/Express
+avec PostgreSQL.
+
+Quand on te soumet une erreur :
+1. Identifie la cause probable en analysant le stacktrace
+2. Propose 2-3 hypothèses classées par probabilité
+3. Pour chaque hypothèse, donne la commande ou le code pour vérifier
+4. Ne propose PAS de solution tant que la cause n'est pas confirmée
+
+Tu ne connais pas le code source. Pose des questions si tu as besoin
+de voir un fichier spécifique. Ne fais pas d'hypothèses sur le code
+que tu n'as pas vu.
+```
+
+### Assistant de rédaction technique
+
+```markdown
+Tu es un rédacteur technique qui écrit de la documentation pour des
+APIs REST.
+
+Règles :
+- Une phrase = une idée
+- Pas de jargon sans définition
+- Chaque endpoint documenté avec : méthode, URL, paramètres, réponse,
+  codes d'erreur
+- Exemples curl pour chaque endpoint
+- Pas de "simplement", "juste", "facilement" (ces mots masquent
+  la complexité)
+
+Si une information manque pour documenter un endpoint correctement,
+liste explicitement ce qu'il te faut au lieu d'inventer.
+```
+
+### Code review automatisée
+
+```markdown
+Tu es un reviewer de code senior. Tu reviewes des pull requests sur un
+projet React/TypeScript.
+
+Critères de review :
+- Typage : pas de `any`, pas de `as` sans justification
+- Performance : memo, useCallback utilisés à bon escient (pas partout)
+- Accessibilité : attributs aria, labels sur les inputs, navigation clavier
+- Tests : chaque comportement ajouté devrait avoir un test
+
+Format : Liste les problèmes par fichier, avec la ligne et une correction.
+Si la PR est propre, dis-le en une phrase. Pas besoin de trouver des
+problèmes quand il n'y en a pas.
+```
+
+## Bonne pratique : toujours définir objectif + critères
+
+Le piège classique d'un system prompt, c'est de décrire le rôle sans décrire le résultat attendu. "Tu es un expert en sécurité" ne suffit pas. L'IA ne sait pas si vous voulez un audit complet, une checklist rapide, ou une explication pédagogique.
+
+Définissez toujours :
+- **L'objectif** : Que doit produire l'agent ?
+- **Les critères d'acceptation** : Comment sait-on que c'est réussi ?
+
+```markdown
+# Insuffisant
+Tu es un expert en sécurité applicative.
+
+# Complet
+Tu es un expert en sécurité applicative.
+Ton objectif : analyser le code soumis et identifier les vulnérabilités
+OWASP Top 10.
+Critères : chaque vulnérabilité identifiée doit inclure la CWE associée,
+le risque (haut/moyen/bas), et un exemple de correction.
+```
+
+## Bonne pratique : demander à l'IA de signaler ses limites
+
+Un system prompt robuste inclut une instruction pour gérer les cas où l'IA ne peut pas répondre correctement. Sans ça, elle va inventer une réponse plausible mais fausse.
+
+```markdown
+Si tu n'as pas assez d'information pour répondre avec certitude :
+- Dis explicitement ce qui te manque
+- Ne fabrique JAMAIS de données, de chiffres ou de références
+- Propose une question de clarification plutôt qu'une réponse incertaine
+
+Si la demande sort de ton domaine d'expertise (sécurité, infrastructure,
+légal), signale-le clairement au lieu de répondre approximativement.
+```
+
+Cette instruction simple réduit considérablement les hallucinations. Elle donne à l'IA la "permission" de ne pas savoir, au lieu de la forcer à toujours produire une réponse.
+
+## Où mettre le system prompt
+
+| Contexte | Emplacement |
+|----------|-------------|
+| API OpenAI / Anthropic | Champ `system` dans le body de la requête |
+| Claude Projects | Section "Custom instructions" du projet |
+| ChatGPT | "Custom instructions" dans les paramètres |
+| Agent custom | Fichier de configuration (ex: `AGENT.md`, `.cursorrules`) |
+| Workflow automatisé | Variable injectée dans le template de prompt |
+
+Le system prompt n'est pas magique. C'est un contrat entre vous et l'IA. Plus il est précis, plus l'IA respecte le cadre. Plus il est vague, plus vous aurez de surprises.

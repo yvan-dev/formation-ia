@@ -91,4 +91,196 @@ nextLesson:
 
 ## Exemple de workflow complet
 
-Contenu à venir.
+Les leçons précédentes ont présenté le Plan First et le Spec-Driven Development comme des principes. Cette leçon les assemble en un workflow concret, étape par étape, appliqué à une feature réelle.
+
+### Le workflow en 7 étapes
+
+```text
+1. Définir l'objectif métier
+2. Générer un plan détaillé (avec l'IA)
+3. Valider et affiner le plan
+4. Définir les critères d'acceptation
+5. Implémenter module par module
+6. Tester et valider chaque étape
+7. Documenter les décisions
+```
+
+### Feature exemple : système de notifications in-app
+
+On va suivre le workflow complet pour ajouter un système de notifications in-app à une application SaaS existante (Node.js, Express, TypeScript, Prisma, PostgreSQL, React frontend).
+
+### Etape 1 : Définir l'objectif métier
+
+Avant de toucher à la technique, on clarifie le besoin.
+
+```text
+Prompt :
+"Je veux ajouter un système de notifications in-app à mon SaaS.
+Les utilisateurs doivent voir un badge avec le nombre de notifications
+non lues, accéder à une liste de notifications, et les marquer comme lues.
+Les notifications sont déclenchées par des événements serveur
+(nouveau commentaire, invitation à un projet, changement de statut).
+
+Quels sont les cas d'usage principaux que je dois couvrir ?
+Y a-t-il des cas limites auxquels je ne pense pas ?"
+```
+
+Le point important ici : on ne demande pas du code. On demande à l'IA de valider notre compréhension du besoin et d'identifier les angles morts.
+
+**Checkpoint** : l'IA va probablement mentionner la pagination, la suppression, les préférences de notification, le temps réel. Décidez ce qui entre dans le scope v1 et ce qui est reporté.
+
+### Etape 2 : Générer un plan détaillé
+
+```text
+Prompt :
+"Voici le scope v1 retenu :
+- CRUD notifications côté API
+- Badge de compteur côté frontend
+- Liste paginée avec marquage lu/non lu
+- Pas de temps réel pour la v1 (polling toutes les 30s)
+- Pas de préférences utilisateur pour la v1
+
+Contexte technique :
+[Insérer le bloc de contexte projet : stack, conventions, architecture]
+
+Propose un plan d'implémentation détaillé avec :
+- Les fichiers à créer ou modifier
+- L'ordre d'implémentation
+- Les dépendances entre étapes
+- Les risques identifiés"
+```
+
+**Checkpoint** : le plan doit inclure le schéma de base de données, les endpoints API, les services, et les composants frontend. S'il manque un de ces éléments, demandez à l'IA de compléter.
+
+### Etape 3 : Valider et affiner le plan
+
+C'est l'étape la plus sous-estimée. On challenge chaque décision du plan.
+
+```text
+Prompt :
+"Questions sur le plan :
+1. Pourquoi une table séparée plutôt qu'un champ JSON
+   sur la table User ?
+2. Le polling à 30s va générer beaucoup de requêtes.
+   As-tu prévu un mécanisme de cache ?
+3. L'endpoint de listing utilise de l'offset pagination.
+   Pourquoi pas du cursor-based ?
+4. Je ne vois pas de migration Prisma dans le plan.
+   Ajoute-la."
+```
+
+Itérez jusqu'à ce que le plan reflète exactement ce que vous voulez. Deux à trois allers-retours suffisent en général. Si le plan nécessite plus de cinq itérations, c'est un signal que le scope est trop large ou trop flou.
+
+**Checkpoint** : le plan final doit être stable. Plus de questions ouvertes, plus de "on verra".
+
+### Etape 4 : Définir les critères d'acceptation
+
+Les critères d'acceptation sont le filet de sécurité. Ils définissent quand c'est "fini".
+
+```text
+Prompt :
+"À partir du plan validé, génère les critères d'acceptation
+pour chaque module. Utilise le format Given/When/Then.
+Couvre les cas nominaux et les cas d'erreur."
+```
+
+Résultat attendu :
+
+```text
+## API - GET /api/notifications
+
+- Given: un utilisateur authentifié avec 5 notifications
+  When: GET /api/notifications?limit=3
+  Then: retourne 3 notifications triées par date décroissante
+        avec un champ hasMore=true
+
+- Given: un utilisateur non authentifié
+  When: GET /api/notifications
+  Then: retourne 401
+
+- Given: un utilisateur avec 0 notifications
+  When: GET /api/notifications
+  Then: retourne un tableau vide avec hasMore=false
+```
+
+**Checkpoint** : chaque critère sera traduit en test. Si un critère est ambigu, il produira un test ambigu.
+
+### Etape 5 : Implémenter module par module
+
+On ne demande jamais "implémente tout". On découpe et on avance étape par étape.
+
+```text
+Prompt (étape 5a - schéma) :
+"Implémente l'étape 1 du plan : la migration Prisma.
+Crée le modèle Notification avec les champs définis dans le plan.
+Suis les conventions du schéma existant."
+
+Prompt (étape 5b - service) :
+"Implémente l'étape 2 : le service NotificationService.
+Référence : plan validé, critères d'acceptation du module API.
+Utilise le pattern repository existant dans le projet."
+
+Prompt (étape 5c - controller) :
+"Implémente l'étape 3 : le controller et les routes.
+Le service est déjà implémenté. Utilise les schémas Zod
+pour la validation des entrées."
+```
+
+**Checkpoint** : à chaque étape, relisez le code généré. Vérifiez qu'il correspond au plan. Si l'IA a pris une liberté (ajout d'un champ, changement de signature), corrigez immédiatement.
+
+### Etape 6 : Tester et valider chaque étape
+
+Les tests se basent directement sur les critères d'acceptation de l'étape 4.
+
+```text
+Prompt :
+"Écris les tests d'intégration pour GET /api/notifications.
+Utilise les critères d'acceptation suivants comme cas de test :
+[coller les critères de l'étape 4]
+
+Stack de test : Vitest + supertest.
+Utilise le helper de test existant pour créer des utilisateurs
+et des tokens d'authentification."
+```
+
+**Checkpoint** : les tests passent. Si un test échoue, le problème est soit dans le code, soit dans le critère d'acceptation. Identifiez lequel avant de corriger.
+
+### Etape 7 : Documenter les décisions
+
+Les décisions prises pendant le processus ont de la valeur. Capturez-les.
+
+```text
+Prompt :
+"Résume les décisions techniques prises pour le système
+de notifications :
+- Choix faits et pourquoi
+- Alternatives écartées et pourquoi
+- Limitations connues de la v1
+- Points d'attention pour la v2
+
+Format : une ADR (Architecture Decision Record) concise."
+```
+
+Le résultat est un document qui explique le "pourquoi" derrière le "quoi". Dans six mois, quand quelqu'un demandera pourquoi on utilise du polling au lieu du temps réel, la réponse est dans l'ADR.
+
+### Quand itérer vs quand avancer
+
+| Signal | Action |
+|--------|--------|
+| L'IA a fait un choix non couvert par le plan | Stop. Mettez à jour le plan, puis continuez. |
+| Un test échoue sur un cas non prévu | Ajoutez le cas aux critères d'acceptation, puis corrigez. |
+| Le code fonctionne mais la structure ne plaît pas | Avancez. Refactorez après que tous les tests passent. |
+| Vous avez un doute sur la sécurité | Stop. Clarifiez avant de continuer. |
+| L'implémentation est "assez bien" | Avancez. Le perfect est l'ennemi du done. |
+
+### Récapitulatif
+
+Le workflow complet forme une boucle de feedback :
+
+```text
+Objectif --> Plan --> Validation --> Critères --> Implémentation --> Tests --> Documentation
+   ^                                                                            |
+   +------ (si changement de scope ou nouveau besoin) -------------------------+
+```
+
+Chaque étape produit un artefact vérifiable. Le plan est vérifiable par une relecture. Les critères sont vérifiables par des tests. Le code est vérifiable par les critères. La documentation est vérifiable par le plan initial.

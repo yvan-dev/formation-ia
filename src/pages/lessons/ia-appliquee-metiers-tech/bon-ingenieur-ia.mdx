@@ -89,6 +89,94 @@ nextLesson:
   title: "Comment fonctionne un LLM"
 ---
 
-## Ce qui différencie un bon ingénieur IA
+## Le vrai avantage compétitif
 
-Contenu à venir.
+L'accès à l'IA est démocratisé. Tout le monde peut ouvrir ChatGPT ou installer Copilot. Ce qui fait la différence, ce n'est pas l'outil. C'est la capacité à l'utiliser correctement.
+
+Un bon ingénieur IA n'est pas celui qui tape le meilleur prompt. C'est celui qui sait quand la réponse est fausse, pourquoi elle est fausse, et comment la corriger.
+
+## Des connaissances théoriques pour guider l'IA
+
+L'IA génère du code qui fonctionne. Mais "ça fonctionne" n'est pas suffisant en production. Un bon ingénieur a les connaissances pour orienter l'IA dans la bonne direction.
+
+**Architecture** : Si vous ne comprenez pas les patterns d'architecture (clean architecture, hexagonal, CQRS), vous ne pourrez pas évaluer si la structure proposée par l'IA tient la route à l'échelle.
+
+**Design patterns** : L'IA connaît les patterns. Elle les applique parfois au mauvais endroit. Savoir quand un Strategy est pertinent et quand un simple `if` suffit, c'est votre travail.
+
+**Complexité algorithmique** : L'IA peut générer un algorithme en O(n³) là où un O(n log n) existe. Si vous ne savez pas lire la complexité, vous ne verrez pas le problème.
+
+**Sécurité** : Injections SQL, XSS, gestion des secrets. L'IA génère régulièrement du code vulnérable. Vos connaissances en sécurité sont votre filet de protection.
+
+> Plus vos connaissances sont solides, plus vous tirez de valeur de l'IA. C'est contre-intuitif : l'IA bénéficie davantage aux experts qu'aux débutants.
+
+## Valider, critiquer, corriger
+
+L'IA vous propose du code. Votre travail commence à ce moment-là.
+
+### Ce que vous devez vérifier
+
+- **La logique métier est-elle correcte ?** Le code fait-il ce qu'on lui demande, pas juste quelque chose qui y ressemble ?
+- **Les edge cases sont-ils gérés ?** L'IA oublie souvent les cas limites : valeurs nulles, listes vides, timeouts, erreurs réseau.
+- **Les conventions du projet sont-elles respectées ?** Nommage, structure de fichiers, patterns utilisés dans la codebase.
+- **La performance est-elle acceptable ?** Requêtes N+1, chargement de données inutiles, allocations excessives.
+- **La sécurité est-elle assurée ?** Validation des entrées, gestion des permissions, pas de secrets en dur.
+
+### Comment critiquer efficacement
+
+Ne vous contentez pas de "ça a l'air bien". Posez-vous ces questions :
+
+1. Est-ce que je comprends chaque ligne ?
+2. Est-ce que j'aurais écrit ça différemment ? Pourquoi ?
+3. Que se passe-t-il si l'input est inattendu ?
+4. Ce code sera-t-il maintenable dans 6 mois ?
+
+## Comprendre le "pourquoi"
+
+C'est la différence fondamentale entre utiliser l'IA et être utilisé par l'IA.
+
+**Mauvais** : "J'ai utilisé Claude pour générer le service d'authentification. Ça marche."
+
+**Bon** : "Claude a généré un service d'auth avec JWT et refresh tokens. J'ai modifié la rotation des tokens pour utiliser une stratégie sliding window parce que notre use case nécessite des sessions longues sans re-login."
+
+Dans le premier cas, vous êtes un opérateur de prompt. Dans le second, vous êtes un ingénieur qui utilise un outil. La différence se voit au premier incident en production.
+
+## Le "vibe coder" vs le développeur argumenté
+
+Le terme "vibe coding" désigne le fait de générer du code par IA sans vraiment comprendre ce qu'on produit. Ça fonctionne pour des prototypes et des projets personnels. En production, c'est une bombe à retardement.
+
+| Vibe coder | Développeur argumenté |
+|------------|----------------------|
+| Accepte le premier output | Itère et challenge |
+| Ne peut pas expliquer ses choix | Justifie chaque décision technique |
+| Debug par essai-erreur avec l'IA | Identifie la cause racine |
+| "Ça marche" | "Ça marche parce que..." |
+| Dépend de l'IA pour tout | Utilise l'IA pour accélérer |
+| Panique quand l'IA se trompe | Corrige et continue |
+
+> Le vibe coding est séduisant parce qu'il donne des résultats rapides. Mais la vitesse sans compréhension crée de la dette technique à un rythme jamais vu.
+
+## L'importance de la review et de la pensée critique
+
+### Traitez l'IA comme un junior talentueux
+
+Un junior peut produire du bon code, mais vous ne mergez pas son travail sans review. Appliquez le même standard à l'IA :
+
+- **Relisez tout.** Pas de fast-forward sur le code généré.
+- **Testez les edge cases.** L'IA teste rarement les scénarios limites.
+- **Challengez les choix.** "Pourquoi un useEffect ici et pas un useMemo ?" Posez la question à l'IA, puis évaluez la réponse.
+- **Refactorisez si nécessaire.** Le code généré est souvent verbeux. Simplifiez.
+
+### Les signaux d'alerte
+
+Méfiez-vous quand :
+
+- L'IA génère beaucoup de code que vous ne comprenez pas entièrement
+- Vous acceptez une solution parce que vous n'avez pas de meilleure idée (pas parce qu'elle est bonne)
+- Vous ne pourriez pas debugger le code généré sans redemander à l'IA
+- Vous avez arrêté d'écrire du code vous-même depuis un moment
+
+## À retenir
+
+Un bon ingénieur IA, c'est d'abord un bon ingénieur. L'IA amplifie vos compétences existantes. Si vos fondamentaux sont solides, l'IA vous rend redoutable. Si vos fondamentaux sont faibles, l'IA masque temporairement le problème, jusqu'au premier incident sérieux.
+
+Investissez dans vos compétences. L'IA changera, les outils évolueront. Votre capacité à comprendre, analyser et décider restera votre atout principal.

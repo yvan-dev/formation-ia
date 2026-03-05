@@ -91,4 +91,66 @@ nextLesson:
 
 ## Comment fonctionne un LLM
 
-Contenu à venir.
+Un LLM (Large Language Model) est un programme qui prédit le mot suivant. C'est tout. Pas de compréhension, pas de raisonnement au sens humain. Juste de la prédiction statistique, à très grande échelle.
+
+Comprendre ce mécanisme change radicalement la façon dont on interagit avec ces outils.
+
+### Le principe : prédire le token suivant
+
+Vous connaissez le texte prédictif de votre smartphone. Vous tapez "je suis en" et il propose "route", "retard" ou "réunion". Un LLM fait exactement la même chose, mais avec une capacité de contexte et une précision incomparablement plus grandes.
+
+Le modèle a été entraîné sur des milliards de textes. Il a appris des patterns statistiques : quels mots suivent quels autres mots, dans quels contextes. Quand vous lui posez une question, il génère sa réponse token par token, en choisissant à chaque étape le token le plus probable compte tenu de tout ce qui précède.
+
+Il ne "sait" rien. Il calcule des probabilités.
+
+### Les tokens : l'unité de base
+
+Un token n'est pas exactement un mot. C'est un fragment de texte, parfois un mot entier, parfois une syllabe, parfois un caractère spécial.
+
+Quelques repères concrets :
+
+| Texte | Nombre de tokens (approximatif) |
+|-------|-------------------------------|
+| "Bonjour" | 1-2 tokens |
+| Un paragraphe de 100 mots | ~130 tokens |
+| Une page A4 | ~500 tokens |
+| Un fichier de 500 lignes de code | ~3 000 tokens |
+
+Pourquoi c'est important ? Deux raisons :
+
+1. **Le coût.** Vous payez par token consommé (entrée + sortie). Un prompt de 10 000 tokens coûte plus qu'un prompt de 500.
+2. **La fenêtre de contexte.** Le modèle a une limite de tokens qu'il peut traiter en une fois. Au-delà, il ne voit tout simplement pas l'information. On y revient dans la leçon suivante.
+
+### Modèle de base vs modèle instruct
+
+Un modèle de base (comme GPT brut avant fine-tuning) est un autocompléteur. Donnez-lui "Le président de la France est", il complétera avec le nom le plus probable. Mais il ne sait pas "répondre à une question". Si vous écrivez "Quelle est la capitale de l'Italie ?", il pourrait très bien générer "Quelle est la capitale de l'Espagne ?" parce qu'il a vu ce pattern de liste de questions dans ses données d'entraînement.
+
+Un modèle instruct (ChatGPT, Claude, etc.) a été affiné pour suivre des instructions. Il a appris, via un entraînement supplémentaire avec retour humain (RLHF), à se comporter comme un assistant : répondre aux questions, refuser les demandes dangereuses, structurer ses réponses.
+
+La distinction compte. Quand un modèle instruct refuse de faire quelque chose ou répond de manière trop prudente, c'est souvent l'alignement (le fine-tuning) qui parle, pas une limitation fondamentale.
+
+### Pourquoi les LLMs "inventent" parfois
+
+Un LLM ne consulte pas une base de connaissances. Il génère du texte statistiquement plausible. Si vous lui demandez le nom d'un package npm qui fait X, il va prédire un nom de package qui *ressemble* à ce qui existe, basé sur les patterns de noms qu'il a vus.
+
+Parfois ce package existe. Parfois non. Le modèle ne fait pas la différence, il ne vérifie pas. Il produit ce qui est statistiquement cohérent avec le contexte.
+
+C'est la source des hallucinations (traitées en détail dans une leçon dédiée). La clé : ne jamais considérer la sortie d'un LLM comme un fait vérifié.
+
+### Les paramètres qui comptent
+
+Deux facteurs déterminent la capacité d'un modèle :
+
+**La taille du modèle** (en milliards de paramètres). Plus le modèle est grand, plus il peut capturer des patterns fins. GPT-4 est sensiblement plus capable que GPT-3.5 sur les tâches complexes. Mais plus gros ne veut pas toujours dire meilleur : un modèle plus petit, bien entraîné sur des données de qualité, peut battre un modèle plus gros entraîné sur du bruit.
+
+**Les données d'entraînement.** La qualité, la diversité et la date de coupure des données déterminent ce que le modèle "connaît". Un modèle entraîné jusqu'en 2024 ne sait rien de ce qui s'est passé en 2025. Et il connaît mieux les sujets abondamment représentés dans ses données (l'anglais, le code Python, la documentation populaire) que les sujets rares.
+
+### Ce qu'il faut retenir
+
+- Un LLM prédit le token suivant. Il ne comprend pas, il ne raisonne pas au sens strict.
+- Les tokens sont l'unité de mesure : coût, contexte, limites, tout se compte en tokens.
+- Un modèle instruct est un modèle de base affiné pour suivre des instructions.
+- La sortie d'un LLM est toujours probabiliste, jamais garantie factuellement.
+- La taille du modèle et la qualité des données d'entraînement déterminent ses capacités.
+
+Ces principes fondamentaux influencent chaque interaction que vous aurez avec un LLM. Gardez-les en tête pour la suite.

@@ -91,4 +91,89 @@ nextLesson:
 
 ## Les hallucinations : causes, détection et réduction
 
-Contenu à venir.
+Une hallucination, c'est quand un LLM génère une information fausse avec la même assurance qu'une information vraie. Pas de signal d'alerte, pas d'hésitation. Le modèle affirme, et il a tort.
+
+C'est probablement le risque le plus important à comprendre quand on utilise un LLM en contexte professionnel.
+
+### Pourquoi les hallucinations se produisent
+
+Rappel de la leçon précédente : un LLM prédit le token suivant. Il ne vérifie rien. Il ne consulte pas de source. Il génère ce qui est statistiquement plausible.
+
+Quand vous demandez "quel package npm permet de faire X ?", le modèle ne cherche pas sur npmjs.com. Il génère un nom de package qui *ressemble* à un vrai nom de package, basé sur les patterns qu'il a vus pendant l'entraînement. Si aucun package correspondant n'existait dans ses données, il en inventera un. Et il le présentera exactement comme s'il existait.
+
+Le modèle n'a aucune notion de "vrai" ou "faux". Il n'a que "probable" et "moins probable".
+
+### Types d'hallucinations courantes en dev
+
+**Faits inventés.** Le modèle cite une étude, un article de blog, une documentation qui n'existe pas. Il invente des dates, des chiffres, des noms d'auteurs.
+
+**Code incorrect qui compile.** Le code généré a l'air correct syntaxiquement, mais utilise des API qui n'existent pas, des signatures de fonctions erronées, ou des comportements inventés d'une librairie.
+
+**Dépendances inexistantes.** Le modèle recommande un package, une librairie, un outil qui n'existe tout simplement pas. C'est particulièrement fréquent pour les packages moins populaires ou les écosystèmes plus petits.
+
+**Versions fantômes.** Le modèle attribue des fonctionnalités à une version spécifique d'un framework, alors que cette fonctionnalité n'existe pas dans cette version (ou n'existe dans aucune version).
+
+**Mélange de sources.** Le modèle combine l'API de React avec celle de Vue, la syntaxe de Python 2 avec Python 3, ou la config de Webpack avec celle de Vite. Il produit quelque chose qui a l'air cohérent mais mélange des mondes incompatibles.
+
+### Comment détecter les hallucinations
+
+La détection repose sur un principe simple : ne faites confiance qu'à ce que vous pouvez vérifier.
+
+**Vérification croisée.** Si le modèle affirme un fait, vérifiez-le via une source fiable. Documentation officielle, code source, test local. Pas un autre LLM (qui pourrait halluciner la même chose).
+
+**Demandez les sources.** "D'où vient cette information ?" force le modèle à expliciter son raisonnement. Attention : il peut aussi halluciner des sources. Mais s'il ne peut pas en fournir, c'est un signal d'alerte.
+
+**Testez les assertions.** Si le modèle dit "cette méthode accepte un callback en troisième argument", vérifiez dans la doc ou testez le code. Ne prenez pas l'affirmation pour acquise.
+
+**Surveillez les détails trop précis.** Un modèle qui vous donne un numéro de téléphone, une URL très spécifique, ou un numéro de CVE devrait déclencher votre réflexe de vérification. Plus le détail est précis et vérifiable, plus il risque d'être inventé.
+
+**Posez la même question différemment.** Si vous obtenez deux réponses contradictoires en reformulant la question, au moins une des deux est fausse.
+
+### Stratégies de réduction
+
+Vous ne pouvez pas éliminer les hallucinations. Mais vous pouvez réduire leur fréquence de manière significative.
+
+#### Ancrer sur des faits
+
+Fournissez au modèle le contexte factuel dont il a besoin. Plutôt que de demander "comment configurer ESLint pour TypeScript ?", collez votre `eslint.config.js` actuel et la version d'ESLint que vous utilisez. Plus le modèle a de contexte concret, moins il a besoin d'inventer.
+
+#### Réduire l'ambiguïté
+
+Les questions vagues produisent des réponses vagues (et hallucinées). "Comment faire du caching ?" invite l'hallucination. "Comment implémenter un cache Redis pour les sessions utilisateur dans une app Express 5 avec ioredis ?" la réduit.
+
+#### Segmenter les tâches
+
+Plutôt qu'un prompt de 500 mots qui demande tout d'un coup, découpez en étapes :
+1. D'abord la structure
+2. Puis l'implémentation de chaque partie
+3. Puis la validation
+
+Chaque étape est plus simple. Le modèle a moins d'occasions de diverger.
+
+#### Utiliser des températures basses
+
+La température contrôle le caractère aléatoire des réponses. Une température basse (0 à 0.3) rend le modèle plus conservateur : il choisit les tokens les plus probables. Une température haute (0.8 à 1) le rend plus créatif, mais aussi plus susceptible d'halluciner.
+
+Pour du code et des faits techniques, préférez une température basse. Réservez les températures hautes au brainstorming et à la créativité.
+
+#### Demander au modèle d'exprimer son incertitude
+
+Ajoutez dans vos prompts : "Si tu n'es pas sûr, dis-le explicitement." Les modèles instruits sont entraînés pour tenter de répondre. Leur donner la permission d'admettre leur incertitude réduit les fabrications.
+
+### Exemples concrets d'hallucinations courantes
+
+| Situation | Hallucination typique | Comment vérifier |
+|-----------|----------------------|-----------------|
+| "Quel package pour parser du YAML en Rust ?" | Invente `yaml-rust2` avec une API fictive | Vérifier sur crates.io |
+| "Montre-moi l'API fetch avec timeout" | Utilise `AbortSignal.timeout()` avec une signature incorrecte | Vérifier sur MDN |
+| "Quel est le breaking change principal de Next.js 15 ?" | Attribue un changement qui n'existe pas dans cette version | Vérifier le changelog officiel |
+| "Écris un test avec Vitest et MSW" | Mélange l'API de MSW v1 et v2 | Vérifier la doc MSW pour la version installée |
+| "Cite-moi un article sur le sujet" | Invente un titre, un auteur, et une URL crédible | Visiter l'URL (elle renverra une 404) |
+
+### Ce qu'il faut retenir
+
+- Les hallucinations sont un comportement normal du modèle, pas un bug. Elles découlent directement du mécanisme de prédiction probabiliste.
+- Plus le sujet est spécifique ou récent, plus le risque d'hallucination est élevé.
+- La vérification n'est pas optionnelle. Chaque fait, chaque référence, chaque API doit être validé.
+- Fournir du contexte concret, poser des questions précises et segmenter les tâches sont vos meilleurs leviers de réduction.
+- Un LLM qui a tort avec assurance est plus dangereux qu'un LLM qui se trompe visiblement. Gardez votre esprit critique actif en permanence.

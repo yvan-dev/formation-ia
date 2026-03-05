@@ -1,42 +1,42 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-ink-950: #0d1117;
-  --color-ink-900: #141720;
-  --color-ink-800: #1f2533;
-  --color-ink-700: #2a3145;
-  --color-ink-600: #353d57;
-  --color-ink-500: #4a5270;
-  --color-ink-400: #6b7394;
-  --color-ink-300: #8e96b5;
-  --color-ink-200: #b4bbd4;
-  --color-ink-100: #d6dae8;
-  --color-ink-50: #ebeef5;
+  --color-navy-950: #141720;
+  --color-navy-900: #1a1e2a;
+  --color-navy-800: #1f2533;
+  --color-navy-700: #2a3045;
+  --color-navy-600: #3d4560;
+  --color-navy-500: #566480;
+  --color-navy-400: #7080a0;
+  --color-navy-300: #94a3bb;
+  --color-navy-200: #b0bdd0;
+  --color-navy-100: #d4dce8;
+  --color-navy-50: #eef1f6;
 
-  --color-gold-600: #7a00df;
-  --color-gold-500: #9333ea;
-  --color-gold-400: #ab1dfe;
-  --color-gold-300: #c084fc;
+  --color-acton-700: #5e00ab;
+  --color-acton-600: #7a00df;
+  --color-acton-500: #9b33f0;
+  --color-acton-400: #b366f5;
 
-  --color-sage-600: #0d9488;
-  --color-sage-500: #2dd4bf;
-  --color-sage-400: #34e2e4;
+  --color-green-600: #00a86b;
+  --color-green-500: #00d084;
+  --color-green-400: #33db9d;
 
-  --color-coral-600: #b85a4a;
-  --color-coral-500: #c47b7b;
-  --color-coral-400: #d9918a;
+  --color-red-600: #c53030;
+  --color-red-500: #e53e3e;
+  --color-red-400: #fc8181;
 
-  --color-amber-500: #e2a94e;
-  --color-amber-400: #f0c06a;
+  --color-blue-500: #0693e3;
+  --color-blue-400: #34a9ea;
 
-  --font-display: 'Crimson Pro', 'Georgia', serif;
-  --font-sans: 'Manrope', 'Avenir', system-ui, sans-serif;
+  --font-display: 'DM Sans', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 html {
-  background-color: var(--color-ink-950);
-  color: var(--color-ink-100);
+  background-color: var(--color-navy-950);
+  color: var(--color-navy-100);
   font-family: var(--font-sans);
   scroll-behavior: smooth;
 }
@@ -60,8 +60,8 @@ body::before {
 }
 
 ::selection {
-  background-color: var(--color-gold-500);
-  color: var(--color-ink-950);
+  background-color: var(--color-acton-600);
+  color: var(--color-navy-950);
 }
 
 ::-webkit-scrollbar {
@@ -70,16 +70,16 @@ body::before {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-ink-900);
+  background: var(--color-navy-900);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ink-600);
+  background: var(--color-navy-600);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-500);
+  background: var(--color-navy-500);
 }
 
 /* Page load animations */

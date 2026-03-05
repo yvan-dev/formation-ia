@@ -87,6 +87,241 @@ prevLesson:
 nextLesson: null
 ---
 
-## Bonnes pratiques et exemples
+## Inclure des exemples de référence
 
-Contenu à venir.
+Un AGENT.md sans exemples force l'agent à deviner le format de sortie. Avec des exemples, il reproduit le pattern. La différence de qualité est significative.
+
+### Exemples positifs et négatifs
+
+Quand le format est critique (code, données structurées, rapports), montrez les deux côtés : ce qui est attendu et ce qui ne l'est pas.
+
+```markdown
+## Format des messages de commit
+
+### Correct
+feat(auth): add JWT refresh token rotation
+fix(api): handle null response from payment provider
+docs(readme): update deployment instructions for v3
+
+### Incorrect
+Fixed stuff
+update
+WIP - do not merge
+feat: Added new feature for the authentication system that rotates tokens
+```
+
+L'agent comprend immédiatement le niveau de détail attendu, la longueur, la structure. Pas besoin d'expliquer la convention Conventional Commits en trois paragraphes.
+
+### Exemples de code comme référence
+
+Si votre agent génère du code, montrez-lui le style exact que vous attendez.
+
+```markdown
+## Style de code - Référence
+
+### Gestion d'erreurs
+// Correct : erreur typée avec contexte
+async function getUser(id: string): Promise<Result<User, AppError>> {
+  const user = await db.users.findById(id);
+  if (!user) {
+    return err(new NotFoundError("User", id));
+  }
+  return ok(user);
+}
+
+// Incorrect : try/catch générique sans typage
+async function getUser(id: string) {
+  try {
+    return await db.users.findById(id);
+  } catch (e) {
+    throw new Error("Something went wrong");
+  }
+}
+```
+
+## Structurer par sommaire et par use cases
+
+Quand un AGENT.md couvre plusieurs scénarios, organisez les instructions par cas d'usage plutôt que par catégorie technique.
+
+```markdown
+## Cas d'usage
+
+### PR < 100 lignes
+- Review rapide, focus sécurité uniquement
+- Verdict en une ligne
+
+### PR 100-500 lignes
+- Review complète : sécurité + conventions + architecture
+- Commentaires inline sur chaque problème
+
+### PR > 500 lignes
+- Signaler que la PR devrait être découpée
+- Review partielle sur les fichiers critiques uniquement
+```
+
+Cette organisation aide l'agent à choisir le bon comportement selon le contexte, sans instructions conditionnelles complexes.
+
+## Itérer sur son AGENT.md
+
+Un AGENT.md n'est jamais terminé du premier coup. Le cycle d'amélioration ressemble à ceci :
+
+### v1 : le premier jet
+
+Écrivez les instructions minimales. Rôle, objectif, permissions, deux ou trois critères. Lancez l'agent sur un cas réel.
+
+### Test : observer le résultat
+
+Analysez ce que l'agent produit. Les écarts entre le résultat et vos attentes révèlent les instructions manquantes ou ambiguës.
+
+| Observation | Action |
+|-------------|--------|
+| L'agent fait quelque chose d'inattendu | Ajouter une permission négative |
+| Le format de sortie varie | Ajouter un exemple concret |
+| L'agent ignore une règle | La remonter plus haut dans le fichier |
+| L'agent invente des informations | Ajouter "Ne jamais inventer de données" |
+| Le résultat est correct mais verbeux | Ajouter "Réponses concises, pas de reformulation" |
+
+### v2 : corriger et préciser
+
+Ajoutez les instructions manquantes. Reformulez les ambiguïtés. Supprimez ce qui n'a eu aucun effet.
+
+Répétez ce cycle. En général, trois itérations suffisent pour stabiliser un AGENT.md.
+
+## Organiser plusieurs agents
+
+Un agent par responsabilité. Pas un super-agent qui fait tout. Les raisons sont les mêmes que pour les fonctions en programmation : responsabilité unique, testabilité, maintenabilité.
+
+```
+.claude/
+  agents/
+    code-reviewer.md      # Review de code
+    doc-writer.md          # Documentation
+    test-writer.md         # Génération de tests
+    migration-checker.md   # Vérification de migrations DB
+```
+
+Chaque agent a son fichier, son périmètre, ses permissions. Si deux agents ont besoin de partager des conventions (style de code, format de commit), extrayez ces conventions dans un fichier commun et référencez-le.
+
+```markdown
+## Conventions
+Voir ./shared/code-style.md pour les conventions de code.
+```
+
+### Quand découper un agent
+
+Trois signaux indiquent qu'un agent fait trop de choses :
+
+1. **L'AGENT.md dépasse 60 lignes.** Vous avez probablement deux responsabilités mélangées.
+2. **Les permissions se contredisent.** "Peut modifier le code" et "Ne doit pas toucher aux tests" dans le même fichier, c'est un signe.
+3. **Les résultats sont incohérents.** Si l'agent fait bien la review mais mal la documentation, séparez les deux rôles.
+
+## Avant / après : transformer un mauvais AGENT.md
+
+### Avant (problématique)
+
+```markdown
+# Mon Agent
+
+Tu es un assistant IA très intelligent et compétent.
+Tu dois m'aider à coder. Fais du bon code, propre et bien testé.
+Utilise les meilleures pratiques. Sois efficace.
+
+Si tu ne sais pas, dis-le. Sinon fais de ton mieux.
+
+N'oublie pas d'être concis mais aussi complet. Fais attention
+aux edge cases. Le code doit être maintenable et performant.
+Utilise TypeScript de préférence mais tu peux aussi utiliser
+JavaScript si c'est plus simple. Les tests sont importants
+mais ne passe pas trop de temps dessus non plus.
+```
+
+Problèmes : aucun critère mesurable, instructions contradictoires ("concis mais complet"), pas de permissions, pas d'exemples, pas de format de sortie défini.
+
+### Après (actionnable)
+
+```markdown
+# TypeScript Developer
+
+## Rôle
+Agent de développement TypeScript pour une API REST Node.js.
+
+## Objectif
+Implémenter les fonctionnalités décrites dans les tickets,
+avec tests unitaires.
+
+## Permissions
+- Créer/modifier les fichiers dans src/ et tests/
+- NE PAS modifier les fichiers de configuration (tsconfig, eslint, etc.)
+- NE PAS ajouter de dépendances sans les lister en commentaire
+
+## Critères d'acceptation
+- TypeScript strict mode, zéro any
+- Chaque fonction exportée a au moins un test
+- Fonctions de moins de 30 lignes
+- Gestion d'erreur avec le pattern Result<T, E>
+
+## Exemple de sortie
+async function createUser(input: CreateUserInput): Promise<Result<User, ValidationError | ConflictError>> {
+  const validated = validateInput(input);
+  if (!validated.ok) return validated;
+  
+  const existing = await db.users.findByEmail(input.email);
+  if (existing) return err(new ConflictError("email", input.email));
+  
+  const user = await db.users.create(validated.value);
+  return ok(user);
+}
+
+## En cas d'incapacité
+Si la tâche nécessite un langage autre que TypeScript ou
+une modification de l'infrastructure, répondre :
+"HORS SCOPE: [raison]. Intervention humaine requise."
+```
+
+Le passage de "avant" à "après" illustre les principes vus dans les deux leçons précédentes : concision, précision, exemples concrets, permissions explicites.
+
+## Le peer review d'AGENT.md
+
+Faites relire vos AGENT.md par un collègue avant de les mettre en production. Les bénéfices sont les mêmes que pour la revue de code :
+
+- **Un regard neuf détecte les ambiguïtés** que vous ne voyez plus parce que vous avez le contexte en tête.
+- **Les questions du reviewer sont des bugs.** Si votre collègue demande "qu'est-ce que tu veux dire par 'code propre' ici ?", l'agent se posera la même question, sauf qu'il ne la posera pas.
+- **Les conventions d'équipe se propagent.** Un reviewer peut repérer que votre AGENT.md contredit les standards établis par un autre agent.
+
+Intégrez la review d'AGENT.md dans votre processus de PR. Même branche, même review, même merge.
+
+## Atelier final : checklist de validation
+
+Avant de considérer un AGENT.md comme prêt, passez-le à travers cette checklist.
+
+### Structure
+
+- [ ] Le fichier fait moins de 60 lignes
+- [ ] Le Rôle tient en une phrase
+- [ ] L'Objectif décrit un livrable concret
+- [ ] Les Permissions incluent au moins une interdiction
+- [ ] Les Critères d'acceptation sont tous mesurables
+- [ ] Au moins un exemple de sortie est fourni
+- [ ] Le comportement en cas d'échec est défini
+
+### Qualité des instructions
+
+- [ ] Aucune instruction subjective ("bon code", "qualité", "propre")
+- [ ] Aucune contradiction entre les instructions
+- [ ] Aucun souhait déguisé en règle ("idéalement", "si possible")
+- [ ] Chaque ligne change le comportement de l'agent
+
+### Test
+
+- [ ] Un collègue sans contexte comprend le fichier
+- [ ] L'agent a été testé sur au moins 3 cas réels
+- [ ] Les écarts observés ont été corrigés par des instructions
+- [ ] Le fichier est versionné dans le dépôt Git
+
+### Organisation
+
+- [ ] Un seul agent par responsabilité
+- [ ] Les conventions partagées sont extraites dans un fichier commun
+- [ ] Le fichier est accessible à toute l'équipe
+
+Cette checklist est aussi un bon outil de peer review. Partagez-la avec votre équipe et utilisez-la systématiquement avant chaque mise en production d'un AGENT.md.

@@ -89,6 +89,185 @@ nextLesson:
   title: "L'art du prompting en développement"
 ---
 
-## Techniques avancées de prompting
+## Chain of Thought : forcer le raisonnement
 
-Contenu à venir.
+Par défaut, un LLM répond directement. Il saute à la conclusion sans montrer son travail. Le problème : sur des tâches complexes (logique, calcul, analyse multi-critères), ça produit des erreurs.
+
+Le **Chain of Thought** (CoT) consiste à demander au modèle de raisonner étape par étape avant de donner sa réponse finale. Ça force le modèle à décomposer le problème, ce qui améliore significativement la qualité sur les tâches qui demandent du raisonnement.
+
+### Comment l'utiliser
+
+La version la plus simple : ajoutez "Raisonne étape par étape avant de répondre" à votre prompt.
+
+```markdown
+Analyse cette architecture et identifie les points de défaillance.
+
+Raisonne étape par étape :
+1. Identifie chaque composant et ses dépendances
+2. Pour chaque composant, évalue ce qui se passe s'il tombe
+3. Identifie les SPOF (single points of failure)
+4. Propose des solutions par ordre de priorité
+
+Puis donne ta conclusion.
+```
+
+### Quand l'utiliser
+
+| Situation | CoT utile ? |
+|-----------|------------|
+| Question factuelle simple | Non |
+| Choix d'architecture avec trade-offs | Oui |
+| Debugging d'un problème complexe | Oui |
+| Génération de code simple | Non |
+| Analyse de performance / bottleneck | Oui |
+| Comparaison de plusieurs solutions | Oui |
+
+Le CoT a un coût : des réponses plus longues et un peu plus de temps de génération. Ne l'utilisez pas pour des questions simples où la réponse directe suffit.
+
+## La température : créativité vs précision
+
+La **température** est un paramètre qui contrôle le caractère aléatoire des réponses du modèle. C'est un curseur entre "prévisible" et "créatif".
+
+| Température | Comportement | Cas d'usage |
+|------------|-------------|-------------|
+| 0 | Déterministe, toujours le même résultat | Code, SQL, données structurées |
+| 0.3 - 0.5 | Légèrement variable, reste factuel | Rédaction technique, analyse |
+| 0.7 - 0.9 | Créatif, explore des formulations différentes | Brainstorming, nommage, copy |
+| 1.0+ | Très aléatoire, peut devenir incohérent | Rarement utile en pratique |
+
+### Règles pratiques
+
+- **Code et données structurées** : température 0. Vous voulez de la précision, pas de la créativité.
+- **Rédaction technique** : température 0.3. Un peu de variation pour éviter le texte robotique, mais pas d'inventions.
+- **Brainstorming** : température 0.7-0.9. Vous voulez des idées inattendues.
+- **En cas de doute** : restez à 0 ou 0.3. Mieux vaut un résultat prévisible qu'une surprise.
+
+La température se configure dans les appels API (`temperature: 0.3`) ou dans les paramètres avancés des interfaces. Sur ChatGPT et Claude en mode conversation, vous ne la contrôlez pas directement, mais vous pouvez influencer le comportement en disant "sois créatif" ou "sois précis et factuel".
+
+## Itération de prompt : la méthode en 3 étapes
+
+Un prompt n'est presque jamais parfait du premier coup. Les meilleurs résultats viennent d'un processus d'itération en trois étapes.
+
+### Étape 1 : Le draft
+
+Écrivez un premier prompt avec les éléments de base (rôle, contexte, tâche). Ne cherchez pas la perfection. Envoyez-le.
+
+```markdown
+Tu es un développeur senior TypeScript.
+Écris une fonction de validation de formulaire d'inscription
+avec email, mot de passe et confirmation de mot de passe.
+```
+
+### Étape 2 : L'évaluation
+
+Analysez la réponse. Qu'est-ce qui manque ? Qu'est-ce qui est en trop ? Qu'est-ce qui n'est pas au bon niveau ?
+
+Questions à se poser :
+- Le format est-il celui que je voulais ?
+- Le niveau de détail est-il adapté ?
+- Y a-t-il des cas limites ignorés ?
+- Le code est-il dans le bon style / framework ?
+
+### Étape 3 : L'affinage
+
+Modifiez le prompt en fonction de votre évaluation. Ajoutez les contraintes manquantes, précisez le format, corrigez le tir.
+
+```markdown
+Tu es un développeur senior TypeScript/React.
+Écris une fonction de validation de formulaire d'inscription.
+
+Champs :
+- email (format valide, domaines jetables interdits)
+- password (min 8 chars, 1 majuscule, 1 chiffre, 1 caractère spécial)
+- confirmPassword (doit correspondre à password)
+
+Retourne un objet Record<string, string> où la clé est le nom du champ
+et la valeur est le message d'erreur. Objet vide = formulaire valide.
+
+N'utilise PAS de librairie externe. Pas de regex incompréhensible.
+Chaque règle de validation doit être une fonction séparée et testable.
+```
+
+Ce cycle draft / évaluation / affinage peut tourner 2-3 fois. C'est normal. Chaque itération rapproche le résultat de ce que vous voulez.
+
+## Prompting négatif : dire ce qu'il ne faut PAS faire
+
+Les LLMs ont des réflexes. Ils ajoutent des introductions inutiles, des disclaimers, des commentaires superflus dans le code. Le prompting négatif consiste à explicitement lister ce que vous ne voulez pas.
+
+### Pour du code
+
+```markdown
+Règles :
+- PAS d'introduction du type "Bien sûr, voici..."
+- PAS de disclaimers ou d'avertissements génériques
+- PAS de commentaires dans le code sauf si la logique est non-évidente
+- Ne répète PAS la question dans ta réponse
+- N'ajoute PAS d'explication après le code sauf si je la demande
+```
+
+### Pour de la rédaction
+
+```markdown
+Interdictions :
+- Pas de "il est important de noter que..."
+- Pas de listes de plus de 7 éléments (divise en sous-sections)
+- Pas de conclusions qui répètent l'introduction
+- Pas d'adverbes inutiles (simplement, facilement, évidemment)
+```
+
+Le prompting négatif est très efficace pour éliminer le "bruit" dans les réponses. Il est complémentaire du prompting positif (dire ce qu'on veut). Les deux ensemble donnent les meilleurs résultats.
+
+## Structured output : contrôler le format de sortie
+
+Quand vous intégrez l'IA dans un workflow ou un pipeline, la réponse doit être parseable. Le texte libre ne suffit plus. Il faut un format structuré.
+
+### JSON
+
+```markdown
+Analyse ce log d'erreur et retourne un JSON avec la structure suivante :
+
+{
+  "error_type": "string (RuntimeError, TypeError, etc.)",
+  "root_cause": "string (explication en une phrase)",
+  "file": "string (fichier concerné)",
+  "line": "number",
+  "suggested_fix": "string",
+  "confidence": "high | medium | low"
+}
+
+Retourne UNIQUEMENT le JSON, sans texte avant ou après.
+```
+
+### Markdown structuré
+
+````markdown
+Documente cette fonction au format suivant :
+
+## `nomDeLaFonction`
+
+**Signature** : `(param1: type, param2: type) => returnType`
+
+**Description** : Une phrase.
+
+**Paramètres** :
+| Nom | Type | Requis | Description |
+|-----|------|--------|-------------|
+
+**Retour** : Description du retour.
+
+**Exemple** :
+```ts
+// exemple d'utilisation
+```
+
+**Erreurs possibles** : Liste des cas d'erreur.
+````
+
+### Conseils pour le structured output
+
+- **Donnez un exemple concret** du format attendu, pas juste une description
+- **Précisez "UNIQUEMENT le JSON"** si vous ne voulez pas de texte autour
+- **Utilisez les schemas JSON** dans les appels API quand c'est supporté (OpenAI structured outputs, Anthropic tool use)
+- **Validez la sortie** côté code. Même avec un bon prompt, le LLM peut occasionnellement casser le format
+
+Le structured output est la passerelle entre le prompting conversationnel et l'intégration dans du code. C'est ce qui transforme l'IA d'un outil de chat en un composant de votre architecture.

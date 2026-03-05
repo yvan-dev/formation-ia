@@ -91,4 +91,106 @@ nextLesson:
 
 ## De l'assistant à l'agent
 
-Contenu à venir.
+Quand on parle d'IA en tant qu'outil de développement, deux modèles coexistent : l'assistant et l'agent. Comprendre la différence entre les deux, c'est comprendre ce qu'on peut attendre de l'IA aujourd'hui et comment structurer son travail autour.
+
+### Assistant : une interaction ponctuelle
+
+Un assistant IA fonctionne en mode requête/réponse. Vous posez une question, il répond. Vous lui donnez du code, il le commente. La relation est synchrone et sans mémoire d'une session à l'autre.
+
+Caractéristiques d'un assistant :
+
+- **Pas d'initiative** : il ne fait rien sans qu'on lui demande
+- **Pas de contexte persistant** : chaque conversation repart souvent de zéro
+- **Pas d'accès au système** : il ne lit pas vos fichiers, ne lance pas de commandes
+- **Réponse unique** : une question donne une réponse, fin de l'interaction
+
+Exemple typique : vous ouvrez Claude Chat, vous collez une fonction et demandez "Explique-moi ce code". Vous obtenez une explication. C'est tout.
+
+### Agent : une mission déléguée
+
+Un agent IA reçoit un objectif et travaille de manière autonome pour l'atteindre. Il planifie, exécute des actions, observe les résultats, et ajuste son approche. Il peut lire des fichiers, exécuter du code, naviguer dans un projet.
+
+Caractéristiques d'un agent :
+
+- **Autonomie** : il décompose une mission en sous-tâches
+- **Accès aux outils** : il peut lire/écrire des fichiers, lancer des commandes shell, chercher dans le codebase
+- **Boucle d'exécution** : il observe, agit, vérifie, corrige
+- **Persistance du contexte** : il travaille dans un contexte projet continu
+
+Exemple typique : vous demandez à Claude Code "Ajoute des tests unitaires pour le module auth". L'agent explore le code existant, identifie les fonctions à tester, écrit les tests, les exécute, corrige les erreurs, et vous présente le résultat.
+
+### Le spectre assistant/agent
+
+Ce n'est pas binaire. Il existe un continuum entre les deux extrêmes.
+
+| Niveau | Comportement | Exemple |
+|--------|-------------|---------|
+| Assistant pur | Réponse ponctuelle sans contexte | ChatGPT en mode conversation |
+| Assistant augmenté | Réponse avec accès à des documents | Claude avec upload de fichiers |
+| Agent guidé | Exécution avec validation humaine à chaque étape | Claude Code en mode normal |
+| Agent autonome | Exécution complète avec validation finale | Claude Code avec `--auto-accept` |
+
+En pratique, le mode "agent guidé" est le sweet spot pour le développement. L'agent fait le travail, l'humain valide les étapes critiques.
+
+### Ce qu'un ingénieur peut déléguer à un agent
+
+Les agents excellent sur les tâches répétitives, bien définies, et vérifiables automatiquement.
+
+**Bons candidats pour la délégation :**
+
+- Génération de boilerplate (composants, endpoints CRUD, migrations)
+- Écriture de tests unitaires et d'intégration
+- Refactoring mécanique (renommage, extraction de fonctions)
+- Génération de documentation à partir du code
+- Correction de bugs simples avec un message d'erreur clair
+- Conversion de formats (REST vers GraphQL, JSON vers TypeScript)
+
+### Ce qu'un ingénieur ne doit PAS déléguer
+
+Les décisions qui engagent l'architecture, la sécurité, ou la direction du produit restent humaines.
+
+**Mauvais candidats pour la délégation :**
+
+- Choix d'architecture (monolithe vs microservices, choix de base de données)
+- Décisions de sécurité (modèle d'authentification, gestion des secrets)
+- Arbitrages métier (quelles fonctionnalités prioriser)
+- Validation finale du code (review avant merge)
+- Choix de dépendances (évaluation de la maintenabilité long terme)
+
+La règle : si une mauvaise décision coûte cher à corriger, c'est une décision humaine.
+
+### En pratique : Claude Chat vs Claude Code
+
+Pour rendre ça concret, voici comment le même besoin se traite différemment selon le mode.
+
+**Besoin** : "Je veux ajouter de la validation sur mon formulaire d'inscription."
+
+Avec un **assistant** (Claude Chat) :
+
+```
+Vous : "Comment valider un email en TypeScript ?"
+Claude : "Voici une regex et une fonction de validation..."
+→ Vous copiez-collez et adaptez manuellement.
+```
+
+Avec un **agent** (Claude Code) :
+
+```
+Vous : "Ajoute la validation email et mot de passe
+        sur le formulaire d'inscription dans src/components/SignupForm.tsx"
+Claude Code :
+  1. Lit le composant existant
+  2. Identifie la structure du formulaire
+  3. Ajoute les règles de validation
+  4. Met à jour les messages d'erreur
+  5. Lance les tests existants pour vérifier la non-régression
+  → Vous reviewez le diff et validez.
+```
+
+La différence fondamentale : avec l'assistant, vous faites le travail d'intégration. Avec l'agent, vous faites le travail de supervision.
+
+### Ce qu'il faut retenir
+
+L'évolution de l'assistant vers l'agent change le rôle de l'ingénieur. Moins de temps à taper du code, plus de temps à spécifier, superviser, et valider. C'est un changement de posture, pas une perte de compétence.
+
+Le module suivant explique comment concevoir un agent qui fait exactement ce qu'on attend de lui, ni plus, ni moins.

@@ -91,4 +91,134 @@ nextLesson:
 
 ## Hallucinations dans un contexte critique
 
-Contenu à venir.
+Les hallucinations des LLMs ont été abordées dans le Module 2 comme un phénomène général. Ici, on s'intéresse aux conséquences concrètes quand du code halluciné par un LLM arrive en production. Les risques ne sont pas théoriques : failles de sécurité, dépendances piégées, et vulnérabilités invisibles à la revue de code classique.
+
+## Code généré avec des failles de sécurité
+
+Un LLM produit du code qui *a l'air* correct. Il compile, les tests passent, et la logique semble cohérente. Mais le modèle n'a aucune notion de sécurité en tant que concept. Il reproduit des patterns statistiquement fréquents dans ses données d'entraînement, y compris des patterns vulnérables.
+
+### Exemples de vulnérabilités générées par des LLMs
+
+**Injection SQL.** Vous demandez une fonction qui interroge une base de données. Le LLM génère :
+
+```python
+def get_user(username):
+    query = f"SELECT * FROM users WHERE name = '{username}'"
+    return db.execute(query)
+```
+
+Le code fonctionne. Il est aussi vulnérable à l'injection SQL. Le LLM a reproduit un pattern fréquent dans ses données d'entraînement (beaucoup de tutoriels utilisent la concaténation de chaînes), au lieu du pattern sécurisé avec des requêtes paramétrées.
+
+**XSS (Cross-Site Scripting).** Un composant React généré par l'IA :
+
+```jsx
+function UserGreeting({ name }) {
+    return <div dangerouslySetInnerHTML={{__html: `Bonjour ${name}`}} />;
+}
+```
+
+Le LLM a utilisé `dangerouslySetInnerHTML` parce que ce pattern existe dans ses données d'entraînement. Si `name` contient du JavaScript malveillant, il sera exécuté.
+
+**Gestion des secrets.** Le modèle peut générer du code qui logge des mots de passe, stocke des tokens en clair, ou désactive la vérification TLS avec `verify=False`.
+
+## Dépendances inexistantes : le risque du typosquatting
+
+C'est l'un des risques les plus insidieux du code généré par IA. Quand un LLM hallucine un nom de package, un attaquant peut créer ce package sur npm ou PyPI avec du code malveillant.
+
+### Comment ça fonctionne
+
+1. Vous demandez au LLM du code pour une tâche spécifique
+2. Le modèle génère un `import` avec un package qui n'existe pas (par exemple `flask-security-utils` au lieu de `flask-security`)
+3. Vous faites `pip install flask-security-utils` et obtenez une erreur
+4. Un attaquant surveille ces packages hallucinés, crée `flask-security-utils` sur PyPI avec un payload malveillant
+5. Le prochain développeur qui fait confiance au même output installe le package piégé
+
+Ce scénario n'est pas hypothétique. Des chercheurs de Vulcan Cyber ont démontré en 2023 que ChatGPT hallucinait de manière répétable certains noms de packages. Ils ont créé ces packages sur PyPI et ont observé des milliers d'installations.
+
+### Comment se protéger
+
+- **Vérifiez chaque dépendance** : avant `npm install` ou `pip install`, confirmez que le package existe sur le registre officiel et qu'il correspond à ce que vous attendez
+- **Vérifiez le nombre de téléchargements** : un package légitime utilisé par la communauté a un historique de téléchargements visible
+- **Vérifiez l'auteur et le dépôt source** : un package légitime a un repository GitHub lié, des contributeurs identifiables
+- **Utilisez des lockfiles** : `package-lock.json`, `poetry.lock` garantissent la reproductibilité et empêchent l'installation de versions altérées
+
+## Cas concret : une hallucination qui crée une vulnérabilité
+
+Scénario : vous demandez au LLM de générer un middleware d'authentification pour une API Express.
+
+Le LLM produit :
+
+```javascript
+function authMiddleware(req, res, next) {
+    const token = req.headers.authorization;
+    if (token) {
+        const decoded = jwt.decode(token);  // decode, pas verify !
+        req.user = decoded;
+        next();
+    } else {
+        res.status(401).json({ error: 'Non autorisé' });
+    }
+}
+```
+
+Le problème : `jwt.decode()` ne vérifie pas la signature du token. N'importe qui peut forger un token avec les claims de son choix. La fonction correcte est `jwt.verify(token, secret)`.
+
+Ce bug est particulièrement dangereux parce que :
+- Le code compile et s'exécute sans erreur
+- Les tests basiques passent (un token valide est bien décodé)
+- Le nom de la fonction `decode` est plausible
+- Seul un développeur qui connaît la différence entre `decode` et `verify` va détecter le problème
+
+## Protocole de validation avant mise en production
+
+Ne jamais déployer du code généré par l'IA sans passer par un protocole de validation. Ce protocole n'est pas différent de ce que vous feriez pour du code écrit par un junior : revue attentive, tests, et vérification des hypothèses.
+
+### Revue de sécurité systématique
+
+Pour chaque morceau de code généré, vérifiez :
+
+- **Entrées utilisateur** : sont-elles validées et sanitizées ?
+- **Requêtes BDD** : utilisent-elles des paramètres liés (prepared statements) ?
+- **Authentification** : les tokens sont-ils vérifiés, pas juste décodés ?
+- **Autorisations** : les permissions sont-elles contrôlées à chaque endpoint ?
+- **Données sensibles** : les secrets sont-ils gérés via des variables d'environnement ?
+- **Dépendances** : chaque import correspond-il à un package réel et maintenu ?
+
+### Tests orientés sécurité
+
+En plus des tests fonctionnels, ajoutez des tests qui ciblent les vulnérabilités courantes :
+
+```python
+def test_sql_injection():
+    """Vérifie que l'injection SQL est impossible."""
+    malicious_input = "'; DROP TABLE users; --"
+    result = get_user(malicious_input)
+    # La table doit toujours exister
+    assert db.table_exists('users')
+
+def test_invalid_token_rejected():
+    """Vérifie qu'un token forgé est rejeté."""
+    fake_token = jwt.encode({'role': 'admin'}, 'wrong_secret')
+    response = client.get('/api/data', headers={'Authorization': fake_token})
+    assert response.status_code == 401
+```
+
+## Checklist de validation du code généré
+
+Avant chaque merge de code généré par IA :
+
+1. **Compréhension** : est-ce que je comprends chaque ligne de ce code ?
+2. **Dépendances** : est-ce que chaque package importé existe réellement ?
+3. **Sécurité** : est-ce que les entrées sont validées et les secrets protégés ?
+4. **Authentification** : les vérifications de tokens/sessions sont-elles correctes ?
+5. **Erreurs** : les cas d'erreur sont-ils gérés proprement (pas de fail-open) ?
+6. **Tests** : des tests couvrent-ils les cas nominaux ET les cas d'attaque ?
+7. **Review** : un autre développeur a-t-il relu le code ?
+
+## Ce qu'il faut retenir
+
+Le code généré par un LLM est du code écrit par un développeur qui ne comprend pas ce qu'il écrit. Il produit des patterns statistiquement courants, pas forcément des patterns sûrs.
+
+Traitez chaque output comme vous traiteriez le code d'un stagiaire talentueux mais qui ne connaît rien à la sécurité. Lisez tout. Testez tout. Vérifiez chaque dépendance. Et ne déployez jamais sans revue humaine.
+
+La règle fondamentale : **l'IA accélère la production de code, mais la responsabilité de la qualité reste entièrement humaine**.

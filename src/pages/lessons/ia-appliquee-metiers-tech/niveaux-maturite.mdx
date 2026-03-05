@@ -89,6 +89,100 @@ nextLesson:
   title: "L'IA comme co-pilote, pas comme remplaçant"
 ---
 
-## Les 5 niveaux de maturité IA
+## Pourquoi une échelle de maturité ?
 
-Contenu à venir.
+Tout le monde "utilise l'IA". Mais entre poser une question à ChatGPT et orchestrer un système multi-agents, il y a un gouffre. Cette échelle vous permet de savoir où vous en êtes et où vous pouvez aller.
+
+Chaque niveau apporte de la valeur. L'objectif n'est pas forcément d'atteindre le niveau 5, mais de maîtriser chaque palier avant de passer au suivant.
+
+## Niveau 1 : Chat (Q&A basique)
+
+**Description** : Vous posez des questions à un LLM et vous utilisez ses réponses. C'est du question-réponse, sans structure particulière.
+
+**Exemples concrets** :
+- "Explique-moi la différence entre REST et GraphQL"
+- "Écris-moi un regex pour valider un email"
+- "Traduis ce message d'erreur"
+
+**Outils typiques** : ChatGPT, Claude.ai, Gemini
+
+**Limites** : Aucune intégration dans le workflow. Beaucoup de copier-coller. Le contexte se perd entre les conversations.
+
+> La majorité des professionnels tech sont ici. C'est un bon début, mais c'est l'équivalent de chercher sur Google avec des étapes supplémentaires.
+
+## Niveau 2 : Copilote (complétion et assistance)
+
+**Description** : L'IA est intégrée dans votre éditeur ou votre workflow. Elle suggère du code, aide au refactoring, génère des tests. Vous restez aux commandes, l'IA accélère l'exécution.
+
+**Exemples concrets** :
+- Complétion de code en temps réel dans l'éditeur
+- Génération de tests unitaires à partir d'une fonction
+- Refactoring guidé par l'IA (renommage, extraction de méthode)
+- Review de PR avec suggestions automatiques
+
+**Outils typiques** : GitHub Copilot, Cursor (mode tab), Codeium, Tabnine
+
+**Ce que ça change** : La vitesse d'écriture augmente de 20-40% sur les tâches répétitives. Vous tapez moins, vous relisez plus.
+
+## Niveau 3 : Agentique guidé (tâches complexes avec supervision)
+
+**Description** : Vous donnez à l'IA une tâche complète (pas juste une ligne de code) et vous supervisez le résultat. L'IA planifie, exécute, et vous validez.
+
+**Exemples concrets** :
+- "Crée un composant React de formulaire de contact avec validation"
+- "Refactorise ce module pour séparer les responsabilités"
+- "Écris les tests d'intégration pour ce service"
+- Utilisation de Claude Code ou Cursor Composer pour des tâches multi-fichiers
+
+**Outils typiques** : Claude Code, Cursor (mode composer/agent), Aider, Continue
+
+**Point clé** : La supervision reste active. Vous lisez chaque modification, vous comprenez les choix, vous corrigez les erreurs. L'IA propose, vous disposez.
+
+> C'est le niveau où la plupart des développeurs devraient viser à court terme. L'IA gère la complexité mécanique, vous gardez la vision d'ensemble.
+
+## Niveau 4 : Human in the Loop (workflows automatisés avec validation)
+
+**Description** : Des workflows entiers sont automatisés. L'IA exécute des pipelines de tâches, mais des points de validation humaine sont intégrés aux étapes critiques.
+
+**Exemples concrets** :
+- Pipeline CI/CD avec review IA automatique + validation humaine avant merge
+- Génération automatique de documentation à partir du code, validée par l'équipe
+- Triage automatique des issues avec proposition de solution, confirmée par un dev
+- Monitoring IA qui détecte les anomalies et propose des correctifs
+
+**Outils typiques** : GitHub Actions + IA, systèmes de workflow custom, plateformes low-code avec IA
+
+**Ce que ça change** : Le dev ne fait plus le travail répétitif. Il valide, ajuste, et intervient uniquement quand c'est nécessaire.
+
+## Niveau 5 : Swarm autonome (multi-agents, supervision minimale)
+
+**Description** : Plusieurs agents IA collaborent pour accomplir des objectifs complexes. La supervision humaine se fait au niveau stratégique, pas opérationnel.
+
+**Exemples concrets** :
+- Un agent planifie les tâches, un autre écrit le code, un troisième teste, un quatrième review
+- Systèmes de support client entièrement automatisés avec escalade intelligente
+- Génération et déploiement automatique de features à partir d'un brief produit
+
+**Outils typiques** : CrewAI, AutoGen, LangGraph, architectures custom multi-agents
+
+**Réalité** : Ce niveau existe en expérimentations et dans quelques cas de production spécifiques. Il n'est pas encore fiable pour du travail critique sans supervision. On y arrive, mais on n'y est pas.
+
+> Le niveau 5 fait rêver, mais ne vous précipitez pas. Un niveau 3 bien maîtrisé vaut mieux qu'un niveau 5 bancal.
+
+## Où vous situez-vous ?
+
+Posez-vous ces questions :
+
+| Question | Si oui, vous êtes au moins... |
+|----------|-------------------------------|
+| J'utilise un chatbot IA pour poser des questions | Niveau 1 |
+| L'IA est intégrée dans mon éditeur de code | Niveau 2 |
+| Je délègue des tâches complètes à l'IA et je review | Niveau 3 |
+| J'ai des workflows automatisés avec validation IA | Niveau 4 |
+| Plusieurs agents collaborent dans mes projets | Niveau 5 |
+
+La plupart des équipes tech sont entre les niveaux 1 et 2 début 2025. Les équipes avancées atteignent le niveau 3. Les niveaux 4 et 5 restent rares en production.
+
+## À retenir
+
+Cette échelle n'est pas un jugement. C'est un outil de diagnostic. Savoir où vous êtes permet de savoir quoi apprendre ensuite. Cette formation vous amènera progressivement du niveau 2 au niveau 3, avec les bases pour comprendre les niveaux 4 et 5.

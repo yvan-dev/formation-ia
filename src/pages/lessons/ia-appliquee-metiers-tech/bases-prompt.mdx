@@ -89,6 +89,159 @@ nextLesson:
   title: "System Prompts"
 ---
 
-## Les bases du prompt
+## Pourquoi "Je veux..." est un mauvais début
 
-Contenu à venir.
+Le réflexe naturel quand on parle à une IA, c'est de commencer par "Je veux...". Le problème : ça ne donne aucun cadre. L'IA n'a pas de contexte, pas de contrainte, pas de direction claire. Elle va produire quelque chose de générique.
+
+Un bon prompt ne commence pas par ce que vous voulez. Il commence par ce dont l'IA a besoin pour bien travailler : qui elle est, dans quel contexte, quelle tâche, quelles règles.
+
+## La structure d'un bon prompt
+
+Un prompt efficace suit une structure en 5 éléments. Pas besoin de tous les utiliser à chaque fois, mais plus vous en donnez, meilleur sera le résultat.
+
+| Élément | Rôle | Exemple |
+|---------|------|---------|
+| **Rôle** | Qui est l'IA dans ce contexte | "Tu es un architecte logiciel senior" |
+| **Contexte** | La situation, les contraintes métier | "Nous migrons une app monolithique vers des microservices" |
+| **Tâche** | Ce que l'IA doit produire | "Propose une stratégie de découpage" |
+| **Contraintes** | Les limites et règles à respecter | "Maximum 5 services, compatibilité PostgreSQL" |
+| **Format** | La forme attendue de la réponse | "Réponds sous forme de tableau avec colonnes : service, responsabilité, endpoints" |
+
+### Exemple complet
+
+```markdown
+Tu es un architecte logiciel senior spécialisé en microservices.
+
+Contexte : Nous avons une application monolithique Node.js/Express avec
+une base PostgreSQL. L'app gère des utilisateurs, des commandes et des
+notifications. Nous voulons la découper en microservices.
+
+Tâche : Propose une stratégie de découpage en microservices.
+
+Contraintes :
+- Maximum 5 services
+- Chaque service doit avoir sa propre base de données
+- Communication asynchrone entre services (pas de REST synchrone inter-services)
+- Compatible avec un déploiement Kubernetes
+
+Format : Un tableau avec les colonnes suivantes :
+| Service | Responsabilité | Base de données | Events publiés |
+```
+
+Ce prompt donne un cadre précis. L'IA sait exactement ce qu'on attend.
+
+## Persona prompting : donner un rôle à l'IA
+
+Donner un rôle à l'IA change radicalement la qualité de sa réponse. Sans rôle, elle produit du contenu générique. Avec un rôle, elle adopte le vocabulaire, le niveau de détail et l'angle de vue du professionnel que vous décrivez.
+
+Quelques exemples de rôles utiles :
+
+```markdown
+Tu es un tech lead qui fait une code review exigeante.
+```
+
+```markdown
+Tu es un DBA PostgreSQL avec 15 ans d'expérience.
+```
+
+```markdown
+Tu es un expert en sécurité applicative (OWASP Top 10).
+```
+
+Le rôle n'est pas décoratif. Il calibre le registre, la profondeur technique et les hypothèses de travail de l'IA. Un "DBA PostgreSQL senior" ne répondra pas comme un "développeur junior" sur une question d'indexation.
+
+## Few-shot examples : montrer avant de demander
+
+Le few-shot prompting consiste à donner des exemples dans votre prompt pour calibrer la réponse. Au lieu d'expliquer le format que vous voulez, vous le montrez.
+
+C'est particulièrement utile pour :
+- Standardiser un format de sortie
+- Imposer un style de rédaction
+- Calibrer le niveau de détail attendu
+
+### Exemple : générer des messages de commit
+
+```markdown
+Génère un message de commit pour les modifications suivantes.
+Respecte le format des exemples ci-dessous.
+
+Exemples :
+- fix(auth): handle expired JWT tokens in middleware
+- feat(api): add pagination to /users endpoint
+- refactor(db): extract connection pool into shared module
+
+Modifications : Ajout d'un endpoint GET /health qui retourne le statut
+de l'application et la version déployée.
+```
+
+Résultat attendu : `feat(api): add /health endpoint with app status and version`
+
+Sans les exemples, l'IA aurait pu générer un message trop long, sans préfixe conventionnel, ou dans un format complètement différent.
+
+## Avant / après : la différence en pratique
+
+### Exemple 1 : Demande de code
+
+**Mauvais prompt :**
+```markdown
+Fais-moi une fonction de validation d'email.
+```
+
+**Bon prompt :**
+```markdown
+Tu es un développeur TypeScript senior.
+
+Écris une fonction validateEmail qui :
+- Prend un string en entrée
+- Retourne un objet { valid: boolean, error?: string }
+- Vérifie le format avec une regex raisonnable (pas besoin de couvrir RFC 5322)
+- Vérifie que le domaine contient au moins un point
+- Retourne un message d'erreur explicite en cas d'échec
+
+Inclus 3 tests unitaires avec des cas limites.
+```
+
+### Exemple 2 : Demande d'analyse
+
+**Mauvais prompt :**
+```markdown
+Explique-moi les microservices.
+```
+
+**Bon prompt :**
+```markdown
+Tu es un architecte logiciel qui forme des développeurs mid-level.
+
+Explique les avantages et inconvénients des microservices par rapport
+à un monolithe, dans le contexte d'une équipe de 5 développeurs
+qui gère une application SaaS B2B avec environ 10 000 utilisateurs.
+
+Structure ta réponse en deux colonnes : avantages | inconvénients.
+Termine par une recommandation argumentée.
+```
+
+La différence est nette. Le deuxième prompt donne du contexte (taille d'équipe, type d'app, audience) et un format précis. L'IA n'a plus besoin de deviner.
+
+## Bonnes pratiques
+
+### Soyez spécifique
+
+Remplacez les termes vagues par des critères mesurables.
+
+| Vague | Spécifique |
+|-------|-----------|
+| "Fais un bon code" | "Code TypeScript, typage strict, pas de any" |
+| "Explique bien" | "Explique pour un développeur qui connaît React mais pas Next.js" |
+| "Sois concis" | "Maximum 10 lignes" |
+
+### Donnez du contexte
+
+L'IA ne connaît pas votre projet, votre équipe, ni vos contraintes. Ce qui vous semble évident ne l'est pas pour elle. Préciser "stack Node.js/PostgreSQL, équipe de 3, déploiement sur AWS" change complètement la réponse.
+
+### Définissez le format
+
+Si vous ne précisez pas le format, l'IA choisira pour vous. Et ce choix sera rarement celui que vous vouliez. Dites explicitement : tableau, liste à puces, JSON, code avec commentaires, paragraphe de 3 lignes.
+
+### Itérez
+
+Un prompt n'est presque jamais parfait du premier coup. Commencez par une version simple, évaluez la réponse, puis affinez. C'est normal et c'est même la méthode recommandée (on y reviendra dans la leçon sur les techniques avancées).

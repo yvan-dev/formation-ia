@@ -1,0 +1,109 @@
+---
+interface Props {
+  basePath: string;
+  courseSlug: string;
+}
+
+const { basePath, courseSlug } = Astro.props;
+
+const levels = [
+  {
+    number: 1,
+    title: 'Chat',
+    subtitle: 'Q&A basique',
+    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+  },
+  {
+    number: 2,
+    title: 'Copilote',
+    subtitle: 'Complétion et assistance',
+    icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+  },
+  {
+    number: 3,
+    title: 'Agentique guidé',
+    subtitle: 'Tâches complexes avec supervision',
+    icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+  },
+  {
+    number: 4,
+    title: 'Human in the Loop',
+    subtitle: 'Workflows automatisés',
+    icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
+  },
+  {
+    number: 5,
+    title: 'Swarm autonome',
+    subtitle: 'Multi-agents, supervision minimale',
+    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+  },
+];
+---
+
+<div class="border-navy-700/40 bg-navy-900/80 rounded-xl border p-6">
+  <!-- Header -->
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <svg
+        class="text-acton-500 h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+      </svg>
+      <h2 class="text-navy-200 text-base font-semibold">
+        Niveaux de maturité IA
+      </h2>
+    </div>
+    <a
+      href={`${basePath}lessons/${courseSlug}/niveaux-maturite`}
+      class="text-acton-400 hover:text-acton-500 text-xs font-medium transition-colors"
+    >
+      En savoir plus
+    </a>
+  </div>
+
+  <!-- Steps -->
+  <div class="overflow-x-auto">
+    <div class="relative flex min-w-[640px] items-start justify-between gap-2">
+      <!-- Connecting line -->
+      <div
+        class="bg-navy-700/60 absolute top-5 right-6 left-6 h-0.5"
+        aria-hidden="true"
+      >
+      </div>
+
+      {
+        levels.map((level) => (
+          <div class="group relative flex w-0 flex-1 flex-col items-center text-center">
+            <div class="border-navy-700/60 bg-navy-800 group-hover:border-acton-600/40 group-hover:bg-navy-800/80 relative z-10 mb-3 flex h-10 w-10 items-center justify-center rounded-lg border transition-colors duration-200">
+              <svg
+                class="text-navy-400 group-hover:text-acton-400 h-5 w-5 transition-colors duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d={level.icon}
+                />
+              </svg>
+            </div>
+            <span class="text-acton-400/80 mb-0.5 text-xs">
+              Niveau {level.number}
+            </span>
+            <span class="text-navy-200 text-sm font-medium">{level.title}</span>
+            <span class="text-navy-500 mt-0.5 text-xs">{level.subtitle}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

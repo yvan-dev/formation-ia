@@ -89,6 +89,119 @@ nextLesson:
   title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
 ---
 
-## Frameworks agentiques — Vue d'ensemble
+## Frameworks agentiques -- Vue d'ensemble
 
-Contenu à venir.
+Un agent IA, ce n'est pas juste un chatbot. C'est un LLM qui peut planifier, exécuter des actions, observer les résultats, et itérer jusqu'à atteindre un objectif. Les frameworks agentiques structurent cette boucle. Voyons ce qu'ils apportent et quand ils sont utiles.
+
+### Qu'est-ce qu'un framework agentique ?
+
+Un framework agentique fournit une architecture pour orchestrer un ou plusieurs agents IA. Au lieu de faire un seul appel "prompt entrant, réponse sortante", on construit une boucle :
+
+1. **Planifier** : l'agent décompose l'objectif en étapes
+2. **Exécuter** : il réalise une action (appel d'outil, écriture de code, recherche)
+3. **Observer** : il analyse le résultat
+4. **Itérer** : il ajuste son plan et recommence
+
+C'est la différence entre demander "écris-moi une fonction de tri" (un aller-retour) et demander "construis un module d'authentification complet, teste-le, et corrige les bugs" (une boucle agentique).
+
+### BMAD (Breakthrough Method of Agile Development)
+
+BMAD est un framework qui structure la collaboration entre un humain et des agents IA spécialisés.
+
+**Principes fondamentaux :**
+
+- **Rôles spécialisés.** Chaque agent a un persona défini (architecte, développeur, testeur, PM). Chaque persona a des instructions précises et un périmètre clair.
+- **Workflow séquentiel.** Le travail passe d'un persona à l'autre dans un ordre défini : analyse, conception, implémentation, vérification.
+- **Artifacts.** Chaque étape produit un document structuré (spec, plan, code) qui sert d'input à l'étape suivante.
+- **Human-in-the-loop.** L'humain valide à chaque transition entre personas.
+
+BMAD est adapté aux projets où la traçabilité et la rigueur du processus comptent autant que le résultat.
+
+### GSD (Get Stuff Done)
+
+GSD prend le contrepied de BMAD : moins de cérémonie, plus d'exécution.
+
+**Principes fondamentaux :**
+
+- **Pragmatisme.** On va droit au but. Pas de documentation excessive, pas de personas complexes.
+- **Itération rapide.** Cycle court : prompt, résultat, ajustement. On ne planifie pas tout d'avance.
+- **Un seul agent.** Pas de multi-agents : un LLM, des outils, et un humain qui pilote.
+- **Feedback immédiat.** L'agent exécute, montre le résultat, l'humain corrige la direction.
+
+GSD fonctionne bien pour le prototypage, les taches bien définies, et les équipes qui préfèrent l'agilité à la structure.
+
+### Le Ralph Loop
+
+Le Ralph Loop est un pattern d'exécution agentique qui formalise la boucle "réfléchir, agir, apprendre".
+
+**Le cycle :**
+
+1. **Read** : l'agent lit le contexte (code existant, specs, erreurs)
+2. **Analyze** : il identifie ce qui doit changer et pourquoi
+3. **Plan** : il propose un plan d'action concret
+4. **Execute** : il implémente le plan
+5. **Verify** : il vérifie que le résultat est correct (tests, build, review)
+
+Si la vérification échoue, l'agent revient à l'étape Read avec le nouveau contexte (message d'erreur, test qui échoue) et recommence.
+
+**Cas d'application typiques :**
+
+- Correction de bugs complexes (le bug guide l'itération)
+- Refactoring progressif (chaque étape est vérifiée avant de continuer)
+- Implémentation de features multi-fichiers (l'agent adapte son plan au fur et à mesure)
+
+### Skills, agents, hooks : les concepts fondamentaux
+
+Derrière les noms de frameworks, on retrouve les mêmes briques de base.
+
+#### Skills (compétences)
+
+Un skill est une capacité encapsulée qu'un agent peut utiliser. Par exemple :
+
+- Lire un fichier
+- Exécuter une commande shell
+- Faire une recherche web
+- Appeler une API externe
+
+Les skills sont modulaires. Vous pouvez en ajouter, en retirer, en combiner selon le cas d'usage.
+
+#### Agents
+
+Un agent combine un LLM, un system prompt (qui définit son rôle), et un ensemble de skills. L'agent a un objectif et utilise ses skills pour l'atteindre.
+
+Les architectures multi-agents ajoutent un agent orchestrateur qui délègue à des agents spécialisés. C'est plus puissant, mais aussi plus complexe à debugger.
+
+#### Hooks
+
+Les hooks sont des points d'interception dans le cycle de vie de l'agent. Ils permettent de :
+
+- **Pré-traiter** : valider ou enrichir un prompt avant qu'il soit envoyé
+- **Post-traiter** : vérifier ou logger une action après exécution
+- **Intercepter** : bloquer certaines actions (sécurité, permissions)
+
+Les hooks rendent les agents prévisibles et contrôlables, ce qui est indispensable en production.
+
+### Framework vs prompt simple : comment choisir ?
+
+La question la plus pragmatique. Utilisez ce tableau.
+
+| Situation | Approche recommandée |
+|-----------|---------------------|
+| Question ponctuelle, réponse en un coup | Prompt simple |
+| Tache bien définie, un seul fichier | Prompt simple |
+| Tache multi-étapes avec vérification | Framework léger (Ralph Loop) |
+| Projet structuré avec plusieurs rôles | Framework complet (BMAD) |
+| Prototypage rapide | GSD |
+| Pipeline automatisé en production | Framework + hooks |
+
+**La règle d'or :** commencez par le prompt simple. Si vous vous retrouvez à enchainer manuellement 5+ prompts pour une tache, c'est le moment de passer à un framework.
+
+Les frameworks ajoutent de la complexité. Cette complexité n'est justifiée que quand elle résout un vrai problème : coordination, traçabilité, fiabilité, ou autonomie.
+
+### En résumé
+
+- Un framework agentique structure la boucle planifier-exécuter-observer-itérer.
+- BMAD mise sur la rigueur et les rôles spécialisés, GSD sur la rapidité d'exécution.
+- Le Ralph Loop formalise le cycle read-analyze-plan-execute-verify.
+- Skills, agents et hooks sont les briques universelles de tout framework.
+- Commencez simple. Passez au framework quand la complexité de la tache le justifie.

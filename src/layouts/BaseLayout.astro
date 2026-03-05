@@ -24,40 +24,39 @@ const base = import.meta.env.BASE_URL;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body class="flex min-h-screen flex-col">
     <header
-      class="border-ink-800/60 bg-ink-950/90 sticky top-0 z-50 border-b backdrop-blur-md"
+      class="border-navy-800/60 bg-navy-950/90 sticky top-0 z-50 border-b backdrop-blur-md"
     >
       <nav
         class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6"
       >
         <a href={base} class="group flex items-center gap-3">
           <div
-            class="from-gold-500 to-gold-600 shadow-gold-500/10 group-hover:shadow-gold-500/20 relative flex h-9 w-9 items-center justify-center rounded-md bg-gradient-to-br shadow-lg transition-shadow"
+            class="from-acton-600 to-acton-700 shadow-acton-600/10 group-hover:shadow-acton-600/20 relative flex h-9 w-9 items-center justify-center rounded-md bg-gradient-to-br shadow-lg transition-shadow"
           >
-            <span
-              class="font-display text-ink-950 text-sm font-bold tracking-tight"
+            <span class="text-navy-950 text-sm font-bold tracking-tight"
               >IA</span
             >
           </div>
-          <span class="text-ink-50 text-lg font-semibold tracking-tight"
-            >Formation <span class="text-gold-500">IA</span></span
+          <span class="text-navy-50 text-lg font-semibold tracking-tight"
+            >Formation <span class="text-acton-600">IA</span></span
           >
         </a>
         <div class="flex items-center gap-6">
           <a
             href={base}
-            class="text-ink-400 hover:text-gold-400 text-sm transition-colors duration-200"
+            class="text-navy-400 hover:text-acton-500 text-sm transition-colors duration-200"
             >Cours</a
           >
           <div id="search-container">
             <button
               id="search-trigger"
-              class="border-ink-700/50 text-ink-400 hover:border-gold-500/30 hover:text-gold-400 flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-all duration-200"
+              class="border-navy-700/50 text-navy-400 hover:border-acton-600/30 hover:text-acton-500 flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-all duration-200"
               aria-label="Rechercher"
             >
               <svg
@@ -74,7 +73,7 @@ const base = import.meta.env.BASE_URL;
               </svg>
               <span class="hidden sm:inline">Rechercher</span>
               <kbd
-                class="text-ink-500 bg-ink-800/50 border-ink-700/50 ml-2 hidden items-center gap-0.5 rounded border px-1.5 py-0.5 font-mono text-[10px] sm:inline-flex"
+                class="text-navy-500 bg-navy-800/50 border-navy-700/50 ml-2 hidden items-center gap-0.5 rounded border px-1.5 py-0.5 font-mono text-[10px] sm:inline-flex"
               >
                 <span>&#8984;</span>K
               </kbd>
@@ -88,23 +87,22 @@ const base = import.meta.env.BASE_URL;
       <slot />
     </main>
 
-    <footer class="border-ink-800/40 mt-auto border-t">
+    <footer class="border-navy-800/40 mt-auto border-t">
       <div class="mx-auto max-w-7xl px-6 py-10">
         <div
           class="flex flex-col items-center justify-between gap-4 sm:flex-row"
         >
           <div class="flex items-center gap-2">
             <div
-              class="from-gold-500 to-gold-600 flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br"
+              class="from-acton-600 to-acton-700 flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br"
             >
-              <span class="font-display text-ink-950 text-[9px] font-bold"
-                >IA</span
-              >
+              <span class="text-navy-950 text-[9px] font-bold">IA</span>
             </div>
-            <span class="text-ink-500 text-sm">Formation IA</span>
+            <span class="text-navy-500 text-sm">Formation IA</span>
           </div>
-          <p class="text-ink-600 text-sm">
-            &copy; {new Date().getFullYear()} Formation IA - GUNEWOU TAKAM Yvan. Tous droits réservés.
+          <p class="text-navy-600 text-sm">
+            &copy; {new Date().getFullYear()} Formation IA - GUNEWOU TAKAM Yvan. Tous
+            droits réservés.
           </p>
         </div>
       </div>
@@ -114,50 +112,72 @@ const base = import.meta.env.BASE_URL;
     <script is:inline define:vars={{ base }}>
       window.addEventListener('DOMContentLoaded', () => {
         const trigger = document.getElementById('search-trigger');
-        const container = document.getElementById('search-container');
-        if (!trigger || !container) return;
+        if (!trigger) return;
 
-        let searchLoaded = false;
+        let searchModal = null;
+        let pagefindLoaded = false;
+
+        function createModal() {
+          const wrapper = document.createElement('div');
+          wrapper.id = 'search-modal';
+          wrapper.className =
+            'fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4';
+          wrapper.style.animation = 'fadeIn 0.15s ease-out';
+          wrapper.innerHTML = `
+            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="search-backdrop"></div>
+            <div class="relative w-full max-w-2xl bg-navy-900 border border-navy-700/50 rounded-2xl shadow-2xl shadow-black/40 overflow-hidden" style="animation: fadeUp 0.2s ease-out">
+              <div id="pagefind-search"></div>
+            </div>
+          `;
+          document.body.appendChild(wrapper);
+          wrapper
+            .querySelector('#search-backdrop')
+            ?.addEventListener('click', closeSearch);
+          return wrapper;
+        }
 
         function openSearch() {
-          if (searchLoaded) return;
-          searchLoaded = true;
-
-          import(`${base}pagefind/pagefind-ui.js`).then(({ PagefindUI }) => {
-            const wrapper = document.createElement('div');
-            wrapper.id = 'search-modal';
-            wrapper.className =
-              'fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4';
-            wrapper.style.animation = 'fadeIn 0.15s ease-out';
-            wrapper.innerHTML = `
-              <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="search-backdrop"></div>
-              <div class="relative w-full max-w-2xl bg-ink-900 border border-ink-700/50 rounded-2xl shadow-2xl shadow-black/40 overflow-hidden" style="animation: fadeUp 0.2s ease-out">
-                <div id="pagefind-search"></div>
-              </div>
-            `;
-            document.body.appendChild(wrapper);
-
-            new PagefindUI({
-              element: '#pagefind-search',
-              showSubResults: true,
-              showImages: false,
-            });
-
-            const input = wrapper.querySelector('input');
-            if (input) input.focus();
-
-            document
-              .getElementById('search-backdrop')
-              ?.addEventListener('click', closeSearch);
+          if (searchModal) {
+            searchModal.style.display = '';
+            const input = searchModal.querySelector('input');
+            if (input) {
+              input.focus();
+              input.select();
+            }
             document.addEventListener('keydown', handleEsc);
-          });
+            return;
+          }
+
+          searchModal = createModal();
+          document.addEventListener('keydown', handleEsc);
+
+          if (pagefindLoaded) return;
+          pagefindLoaded = true;
+
+          import(`${base}pagefind/pagefind-ui.js`)
+            .then(function (module) {
+              const PagefindUI = module.PagefindUI || module.default;
+              new PagefindUI({
+                element: '#pagefind-search',
+                showSubResults: true,
+                showImages: false,
+              });
+              const input = searchModal.querySelector('input');
+              if (input) input.focus();
+            })
+            .catch(function () {
+              pagefindLoaded = false;
+              const el = searchModal.querySelector('#pagefind-search');
+              if (el) {
+                el.innerHTML =
+                  '<p style="padding:1.5rem;text-align:center;color:#9ca3af;">La recherche n\u2019est pas disponible. Lancez <code style="background:#1e293b;padding:2px 6px;border-radius:4px;">npm run build</code> pour indexer le contenu.</p>';
+              }
+            });
         }
 
         function closeSearch() {
-          const wrapper = document.getElementById('search-modal');
-          if (wrapper) {
-            wrapper.remove();
-            searchLoaded = false;
+          if (searchModal) {
+            searchModal.style.display = 'none';
           }
           document.removeEventListener('keydown', handleEsc);
         }
@@ -169,11 +189,14 @@ const base = import.meta.env.BASE_URL;
         trigger.addEventListener('click', openSearch);
 
         // Cmd+K shortcut
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', function (e) {
           if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
             e.preventDefault();
-            if (searchLoaded) closeSearch();
-            else openSearch();
+            if (searchModal && searchModal.style.display !== 'none') {
+              closeSearch();
+            } else {
+              openSearch();
+            }
           }
         });
       });

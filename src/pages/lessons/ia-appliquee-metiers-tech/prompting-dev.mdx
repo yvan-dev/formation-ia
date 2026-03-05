@@ -89,6 +89,203 @@ nextLesson:
   title: "L'écosystème des outils IA"
 ---
 
-## L'art du prompting en développement
+## L'erreur classique : demander du code directement
 
-Contenu à venir.
+Le réflexe quand on utilise un LLM en dev, c'est de demander du code. "Écris-moi une fonction qui fait X." Le problème : vous obtenez du code qui fonctionne peut-être, mais vous ne savez pas pourquoi il est construit comme ça, quels compromis ont été faits, ni quelles alternatives existaient.
+
+Les meilleurs résultats viennent quand vous traitez l'IA comme un collègue senior, pas comme un générateur de code. Vous discutez avant de coder.
+
+## Demander de l'architecture avant du code
+
+Avant de demander une implémentation, demandez un plan. L'IA est meilleure quand elle réfléchit d'abord à la structure.
+
+### Mauvais réflexe
+
+```markdown
+Écris un système de file d'attente pour traiter des jobs en arrière-plan
+en Node.js.
+```
+
+Vous allez obtenir un fichier monolithique avec des choix arbitraires.
+
+### Bon réflexe
+
+```markdown
+Tu es un architecte backend Node.js.
+
+Je dois implémenter un système de file d'attente pour traiter des jobs
+en arrière-plan. Contexte :
+- ~500 jobs/heure en pic
+- Les jobs sont des envois d'email et des générations de PDF
+- Stack actuelle : Node.js, PostgreSQL, Redis disponible
+- Équipe de 3 devs, pas d'expérience avec les message brokers
+
+Avant d'écrire du code :
+1. Propose 2-3 approches architecturales
+2. Compare-les sur : complexité, fiabilité, observabilité
+3. Recommande une approche avec justification
+4. Décris la structure des fichiers / modules
+```
+
+La différence : vous obtenez une vision d'ensemble avant de plonger dans le code. Vous pouvez challenger les choix, poser des questions, et seulement ensuite demander l'implémentation de l'approche retenue.
+
+## Demander une explication avant une implémentation
+
+Quand vous ne comprenez pas bien un concept ou une technologie, résistez à la tentation de demander directement du code. Demandez d'abord une explication.
+
+```markdown
+Avant d'écrire quoi que ce soit, explique-moi comment fonctionne
+le pattern CQRS dans le contexte d'une API REST Node.js.
+
+- Quels problèmes ça résout ?
+- À partir de quelle complexité ça vaut le coup ?
+- Quels sont les pièges courants ?
+
+Utilise un exemple concret avec une entité "Commande" dans un
+contexte e-commerce.
+```
+
+Cette approche a deux avantages : vous apprenez (au lieu de copier-coller du code que vous ne comprenez pas), et l'implémentation qui suivra sera de meilleure qualité parce que l'IA a déjà posé les fondations conceptuelles dans son contexte.
+
+## Faire critiquer son propre code
+
+L'un des usages les plus puissants d'un LLM en dev : lui soumettre votre code et lui demander de le critiquer. Pas juste "est-ce que c'est bien ?", mais une critique structurée.
+
+```markdown
+Tu es un tech lead qui fait des code reviews exigeantes.
+
+Voici ma fonction de gestion des erreurs API. Critique-la sur :
+1. Gestion des cas limites
+2. Typage TypeScript
+3. Testabilité
+4. Clarté pour un nouveau développeur qui lirait ce code
+
+[votre code ici]
+
+Pour chaque problème identifié :
+- Explique pourquoi c'est un problème
+- Propose une correction concrète
+- Classe en critique / important / mineur
+```
+
+Le point clé : soyez spécifique sur les axes de critique. "Review ce code" donne des commentaires génériques. "Review ce code sur la gestion des erreurs et la testabilité" donne des retours actionnables.
+
+### Variante : demander un audit de sécurité
+
+```markdown
+Tu es un expert en sécurité applicative (OWASP Top 10).
+
+Audite cet endpoint API qui gère l'authentification.
+Cherche spécifiquement :
+- Injection (SQL, NoSQL, LDAP)
+- Gestion des tokens (stockage, expiration, rotation)
+- Rate limiting
+- Information disclosure dans les messages d'erreur
+
+[votre code ici]
+```
+
+## Demander des alternatives et des trade-offs
+
+Quand vous avez une solution qui fonctionne, demandez à l'IA s'il existe mieux. Pas "améliore ce code", mais "quelles autres approches existent et pourquoi choisir l'une plutôt que l'autre ?"
+
+```markdown
+Voici comment je gère le cache dans mon API :
+[votre code]
+
+Propose 2 alternatives à cette approche.
+Pour chaque alternative, compare avec ma solution actuelle sur :
+- Performance
+- Complexité de maintenance
+- Comportement en cas de pic de charge
+- Facilité de debug
+
+Termine par une recommandation argumentée. Si ma solution actuelle
+est la meilleure, dis-le.
+```
+
+Ce prompt est puissant parce qu'il donne la permission à l'IA de valider votre solution existante. Sans cette dernière phrase, l'IA va toujours proposer quelque chose de différent (même si votre approche est la bonne), parce qu'elle veut "être utile".
+
+## Le pattern "show your work"
+
+Ce pattern consiste à demander à l'IA de montrer son raisonnement avant de produire du code. C'est le Chain of Thought appliqué au développement.
+
+```markdown
+Tu es un développeur senior TypeScript.
+
+Implémente un rate limiter pour une API Express.
+
+IMPORTANT : Avant d'écrire le code, explique :
+1. L'algorithme que tu vas utiliser et pourquoi (token bucket,
+   sliding window, fixed window, etc.)
+2. Les compromis de cet algorithme vs les alternatives
+3. Les cas limites à gérer
+4. La structure du code
+
+Ensuite seulement, écris l'implémentation.
+```
+
+L'intérêt : vous pouvez valider le raisonnement avant que le code soit écrit. Si l'IA choisit un algorithme inadapté à votre contexte, vous corrigez le tir avant d'avoir 200 lignes de code à jeter.
+
+### Quand utiliser "show your work"
+
+- Quand la tâche a plusieurs approches valides
+- Quand vous voulez comprendre, pas juste obtenir du code
+- Quand le code sera difficile à modifier après coup (architecture, schémas DB)
+- Quand vous allez devoir justifier le choix auprès de votre équipe
+
+## Itérer : premier jet, review, affinage
+
+Le workflow optimal pour du code généré par IA n'est pas un prompt unique. C'est une conversation en trois temps.
+
+### Temps 1 : Le premier jet
+
+Demandez une première version avec les contraintes de base.
+
+```markdown
+Implémente un middleware Express de validation de requêtes
+utilisant Zod. Le middleware doit valider body, query params
+et path params séparément.
+```
+
+### Temps 2 : La review
+
+Lisez le code généré. Identifiez ce qui ne colle pas avec votre contexte. Puis demandez des modifications spécifiques.
+
+```markdown
+Bonne base. Modifications :
+1. Le middleware doit retourner une 422 (pas une 400) avec le
+   détail des erreurs de validation au format RFC 7807
+2. Ajoute un mode "strict" qui rejette les champs non déclarés
+   dans le schema
+3. Le typage TypeScript doit inférer le type du body validé
+   (req.body doit être typé après validation)
+```
+
+### Temps 3 : L'affinage
+
+Derniers ajustements, cas limites, documentation.
+
+```markdown
+Ajoute :
+- La gestion du content-type (rejeter si ce n'est pas JSON)
+- Un test unitaire pour chaque cas d'erreur
+- Un JSDoc sur la fonction principale avec un exemple d'utilisation
+```
+
+### Pourquoi itérer fonctionne mieux qu'un mega-prompt
+
+Un prompt unique de 50 lignes a un problème : le modèle doit tout gérer en même temps. En itérant, chaque étape a un focus clair. Le modèle utilise le code déjà généré comme contexte, ce qui améliore la cohérence.
+
+L'autre avantage : vous restez maître du processus. Vous validez chaque étape avant de passer à la suivante. Le résultat final est du code que vous comprenez et que vous avez validé, pas une boîte noire générée en un coup.
+
+## Résumé : les 6 réflexes du dev qui prompte bien
+
+| Réflexe | Au lieu de... | Faites... |
+|---------|--------------|-----------|
+| Architecture d'abord | "Écris le code" | "Propose l'architecture, puis on code" |
+| Comprendre d'abord | "Implémente CQRS" | "Explique CQRS, puis implémente" |
+| Critique structurée | "C'est bien mon code ?" | "Critique sur sécurité, typage, testabilité" |
+| Alternatives | "Améliore ce code" | "Compare 3 approches avec trade-offs" |
+| Show your work | "Écris un rate limiter" | "Explique ton choix d'algorithme, puis code" |
+| Itération | Un mega-prompt | Draft, review, affinage |

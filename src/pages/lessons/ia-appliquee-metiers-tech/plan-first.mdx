@@ -91,4 +91,92 @@ nextLesson:
 
 ## Le principe Plan First
 
-Contenu à venir.
+La majorité des erreurs dans un projet assisté par IA ne viennent pas du code généré. Elles viennent de l'absence de plan. Quand on demande directement du code à une IA, on obtient une solution techniquement correcte mais souvent mal alignée avec le besoin réel.
+
+Le principe Plan First est simple : toujours commencer par un plan, jamais directement par le code.
+
+### Pourquoi l'IA a besoin d'un plan
+
+Un LLM fonctionne par prédiction de tokens. Sans contrainte claire, il emprunte le chemin le plus probable, pas le plus pertinent pour votre contexte. Un plan agit comme un cadre de contraintes qui oriente la génération vers le bon résultat.
+
+Les bénéfices concrets :
+
+- **Moins de retravail** : un plan validé en amont évite les allers-retours sur du code qui part dans la mauvaise direction
+- **Meilleure architecture** : l'IA découpe mieux quand on lui dit quoi découper
+- **Traçabilité** : le plan documente les décisions prises avant l'implémentation
+- **Collaboration** : un plan se review et se discute, du code mal orienté se jette
+
+### Demander un plan avant d'implémenter
+
+Le réflexe à acquérir : quand vous avez une tâche, commencez par demander un plan à l'IA. Pas du code, pas un prototype. Un plan.
+
+```text
+Prompt (mauvais) :
+"Code-moi un système d'authentification avec JWT et refresh tokens."
+
+Prompt (bon) :
+"Je dois ajouter un système d'authentification JWT avec refresh tokens
+à mon API Express/TypeScript. Avant de coder quoi que ce soit, propose
+un plan détaillé : architecture, fichiers à créer, dépendances,
+flux d'authentification, et gestion des erreurs."
+```
+
+La différence est significative. Le premier prompt produit du code immédiatement, avec des choix architecturaux implicites que vous n'avez jamais validés. Le second vous donne un document de travail que vous pouvez challenger.
+
+### Valider le plan : le moment décisif
+
+C'est à l'étape de validation que se joue la qualité du résultat final. Un plan non validé est un plan inutile.
+
+Quand vous recevez un plan de l'IA, vérifiez :
+
+1. **La complétude** : est-ce que tous les cas sont couverts ? Erreurs, edge cases, sécurité ?
+2. **La cohérence** : est-ce que le plan respecte les conventions du projet existant ?
+3. **Les hypothèses** : est-ce que l'IA a fait des suppositions sur votre stack ou votre architecture ?
+4. **L'ordre** : est-ce que les étapes sont dans le bon ordre avec les bonnes dépendances ?
+
+```text
+Prompt de validation :
+"Ce plan ne mentionne pas la révocation des refresh tokens.
+Ajoute cette gestion. Aussi, on utilise Prisma et non TypeORM,
+adapte le plan en conséquence."
+```
+
+Itérer sur le plan est rapide. Itérer sur du code mal conçu est coûteux.
+
+### Anti-pattern : le "code-moi ça"
+
+Le pattern le plus courant et le plus coûteux :
+
+| Approche | Ce qui se passe |
+|----------|-----------------|
+| "Code-moi cette feature" | L'IA choisit l'architecture, les patterns, les noms. Vous perdez le contrôle. |
+| "Propose un plan pour cette feature" | Vous validez chaque décision. Le code qui suit est aligné avec vos attentes. |
+
+Le "code-moi ça" fonctionne pour des tâches isolées et triviales (un helper, un test unitaire). Pour tout ce qui touche à l'architecture ou implique plusieurs fichiers, c'est un piège.
+
+### Le plan comme contrat
+
+Une fois validé, le plan devient un contrat entre vous et l'IA. Ce qui a été validé est ce qui sera implémenté, rien de plus, rien de moins.
+
+```text
+Prompt d'implémentation (après validation du plan) :
+"Implémente l'étape 1 du plan : le middleware d'authentification.
+Suis exactement le plan validé. Si tu rencontres un cas non couvert
+par le plan, signale-le au lieu de prendre une décision seul."
+```
+
+Cette approche a trois avantages :
+
+- **Prévisibilité** : vous savez ce que l'IA va produire avant qu'elle le produise
+- **Scope control** : l'IA ne va pas ajouter des fonctionnalités non demandées
+- **Debugging facilité** : quand le résultat diverge du plan, vous savez exactement où chercher
+
+### En pratique
+
+Le workflow Plan First en trois étapes :
+
+1. **Demander le plan** : décrivez l'objectif, le contexte, les contraintes. Demandez un plan, pas du code.
+2. **Valider et affiner** : challengez les choix, corrigez les hypothèses, ajoutez les cas manquants. Deux à trois itérations suffisent en général.
+3. **Implémenter par étapes** : référencez le plan validé à chaque étape d'implémentation. Une étape = un prompt.
+
+Ce n'est pas plus lent. C'est plus rapide, parce que le code produit est aligné dès le premier essai.

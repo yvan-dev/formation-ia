@@ -91,4 +91,172 @@ nextLesson:
 
 ## Human in the Loop
 
-Contenu à venir.
+Un agent autonome sans supervision, c'est un script avec de l'imagination. Ça peut fonctionner, mais quand ça dérape, les conséquences sont proportionnelles au niveau d'autonomie accordé. La supervision humaine n'est pas un frein à la productivité, c'est ce qui rend l'autonomie possible.
+
+### Pourquoi la supervision est non négociable
+
+Les LLMs ont trois propriétés qui rendent la supervision indispensable :
+
+1. **Ils ne savent pas ce qu'ils ne savent pas.** Un agent ne lèvera pas la main pour dire "je ne suis pas sûr de comprendre le contexte métier ici". Il produira un résultat plausible mais potentiellement faux.
+
+2. **Ils sont confiants même quand ils ont tort.** Un agent qui génère du code cassé le présente avec la même assurance qu'un code correct. Il n'y a pas de signal visuel d'incertitude.
+
+3. **Les erreurs s'accumulent.** Dans une chaîne de décisions, chaque erreur non détectée augmente la probabilité d'un résultat final inutilisable. Sans checkpoint humain, les erreurs se composent.
+
+### Les points de validation critiques
+
+Tous les moments d'un workflow ne nécessitent pas la même attention. Voici où placer vos checkpoints.
+
+#### Après la planification
+
+Avant que l'agent écrive la moindre ligne de code, validez son plan d'action.
+
+```
+Agent : "Pour implémenter la feature d'export CSV, je propose :
+  1. Ajouter un endpoint GET /api/exports/csv
+  2. Créer un service CsvExporter dans src/services/
+  3. Ajouter les tests dans src/__tests__/export/
+  4. Mettre à jour la doc API"
+
+Humain : "OK pour le plan, mais utilise le service existant
+          dans src/services/formatters/ plutôt que d'en créer un nouveau."
+```
+
+C'est le checkpoint le moins cher et le plus rentable. Corriger un plan prend 30 secondes. Corriger une implémentation basée sur un mauvais plan prend des heures.
+
+#### Avant un déploiement ou un merge
+
+Toute action irréversible (ou coûteuse à annuler) exige une validation explicite.
+
+```
+Agent : "Les changements sont prêts. Voici le diff :
+  - 3 fichiers modifiés
+  - 142 lignes ajoutées, 23 supprimées
+  - Tous les tests passent (47/47)
+  Dois-je créer la PR ?"
+
+Humain : [review le diff] → "Go pour la PR."
+```
+
+Ne laissez jamais un agent merger ou déployer sans votre accord explicite.
+
+#### Quand l'agent rencontre de l'incertitude
+
+Un agent bien configuré s'arrête et demande plutôt que de deviner. C'est un comportement souhaitable qu'il faut encourager dans les instructions.
+
+```yaml
+# Dans la configuration de l'agent
+comportement:
+  si_ambiguïté: "S'arrêter et poser la question. Ne jamais deviner."
+  si_plusieurs_approches: "Lister les options avec les trade-offs. Laisser l'humain choisir."
+  si_erreur_inattendue: "Rapporter l'erreur complète. Ne pas tenter de contournement."
+```
+
+### Le principe du moindre privilège
+
+Donnez à l'agent exactement les permissions dont il a besoin, pas une de plus. C'est le même principe qu'en sécurité informatique.
+
+| Tâche | Permissions minimales | Permissions excessives |
+|-------|----------------------|----------------------|
+| Génération de tests | Lire src/, écrire dans tests/ | Accès complet au filesystem |
+| Code review | Lecture seule | Lecture + écriture |
+| Refactoring | Écrire dans src/, exécuter les tests | Accès au CI/CD, aux secrets |
+| Documentation | Lire src/, écrire dans docs/ | Accès à la base de données |
+
+Plus un agent a de permissions, plus les conséquences d'une erreur sont graves. Un agent en lecture seule ne peut pas casser votre codebase. Un agent avec accès root peut casser votre infrastructure.
+
+### Traiter les cas d'erreur
+
+Les agents produisent des erreurs. C'est normal. Ce qui compte, c'est comment votre workflow les gère.
+
+**Erreur de compréhension** : l'agent interprète mal la demande.
+```
+Détection : le plan proposé ne correspond pas au besoin
+Réponse : reformuler la demande avec plus de contexte
+Prévention : fournir des exemples concrets dans les instructions
+```
+
+**Erreur d'exécution** : le code généré ne fonctionne pas.
+```
+Détection : les tests échouent, le linter signale des erreurs
+Réponse : laisser l'agent corriger (une fois), puis intervenir
+Prévention : exiger que l'agent vérifie son travail avant de rapporter
+```
+
+**Comportement inattendu** : l'agent fait quelque chose de non demandé.
+```
+Détection : le diff montre des changements hors périmètre
+Réponse : rejeter et restreindre les permissions
+Prévention : permissions explicites + périmètre de fichiers restreint
+```
+
+### Le bon ratio autonomie/supervision
+
+Le niveau de supervision dépend du contexte. Ce n'est pas une valeur fixe.
+
+| Contexte | Supervision | Exemple |
+|----------|-------------|---------|
+| Code critique (paiement, auth) | Forte : validation à chaque étape | Chaque fichier modifié est reviewé |
+| Code standard (CRUD, UI) | Moyenne : validation du plan + du résultat | Review du plan initial, puis du diff final |
+| Code jetable (prototypes, POCs) | Légère : validation du résultat final | L'agent travaille, on regarde à la fin |
+| Tâches mécaniques (formatting, renommage) | Minimale : vérification automatique | Les tests passent = c'est bon |
+
+La règle : plus le coût d'une erreur est élevé, plus la supervision doit être serrée.
+
+### Exemple : workflow avec 3 checkpoints
+
+Voici un workflow concret pour l'ajout d'une feature avec un agent, illustrant les trois points de validation.
+
+```
+ÉTAPE 1 : Spécification
+  Humain → Agent : "Ajoute un système de notifications par email
+                    quand un utilisateur s'inscrit."
+
+ÉTAPE 2 : Planification (l'agent propose)
+  Agent → Humain : "Voici mon plan :
+    1. Créer src/services/email-notification.ts
+    2. Ajouter un hook post-inscription dans src/auth/register.ts
+    3. Créer le template email dans src/templates/welcome.html
+    4. Ajouter les tests unitaires
+    5. Configurer les variables d'env pour le SMTP"
+
+  ┌─────────────────────────────────┐
+  │  CHECKPOINT 1 : Validation     │
+  │  du plan                       │
+  │  Humain : "OK, mais utilise    │
+  │  le service de mail existant   │
+  │  dans src/services/mailer.ts"  │
+  └─────────────────────────────────┘
+
+ÉTAPE 3 : Implémentation (l'agent exécute)
+  Agent : [écrit le code, exécute les tests]
+
+  ┌─────────────────────────────────┐
+  │  CHECKPOINT 2 : Review du code │
+  │  Humain : review le diff       │
+  │  → "La gestion d'erreur SMTP   │
+  │    est trop silencieuse.        │
+  │    Ajoute du logging."         │
+  └─────────────────────────────────┘
+
+ÉTAPE 4 : Correction + finalisation
+  Agent : [corrige, relance les tests, confirme 100% pass]
+
+  ┌─────────────────────────────────┐
+  │  CHECKPOINT 3 : Validation     │
+  │  finale avant merge            │
+  │  Humain : review le diff final │
+  │  → "OK, merge."               │
+  └─────────────────────────────────┘
+
+ÉTAPE 5 : Merge
+  Agent : crée la PR, l'humain approuve et merge.
+```
+
+Trois checkpoints, pas cinquante. Le premier valide la direction, le deuxième valide la qualité, le troisième autorise le déploiement. C'est suffisant pour 90% des cas.
+
+### Ce qu'il faut retenir
+
+La supervision humaine n'est pas un aveu de faiblesse de l'IA. C'est un choix d'ingénierie. Les systèmes les plus fiables combinent l'autonomie de l'agent (vitesse, exhaustivité, patience) avec le jugement de l'humain (contexte métier, goût, responsabilité).
+
+Un agent sans supervision est un risque. Un agent avec la bonne supervision est un multiplicateur de productivité.

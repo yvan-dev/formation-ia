@@ -89,6 +89,221 @@ nextLesson:
   title: "Bonnes pratiques et exemples"
 ---
 
-## Structure recommandée d'un AGENT.md
+## Le template recommandé
 
-Contenu à venir.
+Voici la structure qui fonctionne. Chaque section a un rôle précis, et l'ordre compte : les informations les plus importantes arrivent en premier, quand l'attention du modèle est maximale.
+
+```markdown
+# [Nom de l'agent]
+
+## Rôle
+[Une phrase. Ce que l'agent est.]
+
+## Objectif
+[Ce que l'agent doit accomplir.]
+
+## Permissions
+- Ce qu'il peut faire
+- Ce qu'il ne peut PAS faire
+
+## Critères d'acceptation
+- [Critère mesurable 1]
+- [Critère mesurable 2]
+
+## Exemples de sorties attendues
+[Exemple de code ou de format correct]
+
+## En cas d'incapacité
+[Comment l'agent doit signaler qu'il ne peut pas accomplir la tâche]
+```
+
+### Pourquoi cet ordre
+
+Le **Rôle** vient en premier parce qu'il cadre tout le reste. Un agent qui sait qu'il est "un reviewer de code senior spécialisé en sécurité" ne se comportera pas comme un assistant généraliste.
+
+L'**Objectif** précise la mission. Le rôle dit *ce qu'il est*, l'objectif dit *ce qu'il doit accomplir*.
+
+Les **Permissions** posent les garde-fous. Sans elles, l'agent prendra des initiatives que vous n'avez pas anticipées.
+
+Les **Critères d'acceptation** rendent le succès mesurable. "Le code est bon" n'est pas un critère. "Aucune vulnérabilité OWASP Top 10 détectée" en est un.
+
+Les **Exemples** ancrent les attentes dans du concret. Un modèle de langage travaille par pattern matching : lui montrer un exemple du résultat attendu est souvent plus efficace qu'une longue explication.
+
+Le bloc **En cas d'incapacité** évite le pire scénario : un agent qui produit un résultat médiocre plutôt que de signaler qu'il ne peut pas faire le travail correctement.
+
+## Section par section
+
+### Rôle
+
+Une seule phrase. Pas de liste, pas de paragraphe. Si vous avez besoin de plus d'une phrase pour décrire le rôle, vous avez probablement besoin de plusieurs agents.
+
+```markdown
+## Rôle
+Agent de code review spécialisé en TypeScript et sécurité applicative.
+```
+
+Pas :
+
+```markdown
+## Rôle
+Tu es un agent intelligent capable de faire de la revue de code.
+Tu maîtrises plusieurs langages et tu peux aussi écrire de la
+documentation si nécessaire. Tu es rigoureux et professionnel.
+```
+
+La première version est précise. La seconde est un CV.
+
+### Objectif
+
+Ce que l'agent doit produire concrètement. Formulez-le comme un livrable, pas comme une aspiration.
+
+```markdown
+## Objectif
+Analyser chaque pull request et produire un rapport listant :
+les problèmes de sécurité, les violations de conventions,
+et les suggestions d'amélioration.
+```
+
+### Permissions
+
+C'est la section la plus sous-estimée. Sans permissions explicites, un agent fera ce qu'il juge pertinent, ce qui inclut parfois modifier des fichiers qu'il ne devrait pas toucher ou prendre des décisions architecturales.
+
+```markdown
+## Permissions
+- Lire tous les fichiers du repository
+- Commenter les pull requests
+- Suggérer des modifications de code
+- NE PAS merger de pull request
+- NE PAS modifier directement le code source
+- NE PAS approuver sans avoir vérifié les tests
+```
+
+Les permissions négatives sont aussi importantes que les positives.
+
+### Critères d'acceptation
+
+Chaque critère doit être vérifiable par un humain ou par un outil. "Le code est propre" ne passe pas ce test. "Le linter ne retourne aucune erreur" oui.
+
+```markdown
+## Critères d'acceptation
+- Chaque commentaire cite le fichier et la ligne concernée
+- Les problèmes de sécurité sont classés par sévérité (critique/haute/moyenne/basse)
+- Le rapport se termine par un verdict : APPROVED, CHANGES_REQUESTED, ou NEEDS_DISCUSSION
+- Temps de réponse inférieur à 2 minutes par PR de moins de 500 lignes
+```
+
+### Exemples de sorties attendues
+
+Les exemples valent mieux que les descriptions. Montrez exactement le format de sortie que vous attendez.
+
+```markdown
+## Exemples de sorties attendues
+
+### Commentaire sur une faille de sécurité
+**[CRITIQUE] src/auth/login.ts:42**
+Injection SQL possible. Le paramètre `username` est concaténé
+directement dans la requête. Utiliser une requête paramétrée.
+
+### Verdict final
+**CHANGES_REQUESTED**
+2 problèmes critiques, 1 suggestion. Les problèmes de sécurité
+doivent être corrigés avant merge.
+```
+
+### En cas d'incapacité
+
+Un agent qui échoue silencieusement est pire qu'un agent qui ne fait rien. Donnez-lui une porte de sortie explicite.
+
+```markdown
+## En cas d'incapacité
+Si le diff dépasse 2000 lignes ou si le langage n'est pas
+TypeScript/JavaScript, répondre :
+"SKIP: [raison]. Review manuelle recommandée."
+Ne jamais produire une review partielle sans le signaler.
+```
+
+## Exemple complet : agent de code review
+
+```markdown
+# Code Reviewer
+
+## Rôle
+Agent de code review spécialisé en TypeScript et sécurité applicative.
+
+## Objectif
+Analyser chaque pull request et produire un rapport structuré couvrant
+la sécurité, les conventions et la qualité du code.
+
+## Permissions
+- Lire tous les fichiers du repository
+- Commenter les pull requests
+- NE PAS merger ou approuver les PRs
+- NE PAS modifier le code directement
+
+## Critères d'acceptation
+- Chaque commentaire référence fichier:ligne
+- Sévérité classée : critique / haute / moyenne / basse
+- Verdict final : APPROVED | CHANGES_REQUESTED | NEEDS_DISCUSSION
+- Aucune review sur du code non-TypeScript sans le signaler
+
+## Exemples de sorties attendues
+**[HAUTE] src/api/users.ts:87**
+La validation d'email utilise une regex permissive. Utiliser
+la librairie `validator` déjà présente dans le projet.
+
+**Verdict : CHANGES_REQUESTED** - 1 problème haute sévérité.
+
+## En cas d'incapacité
+Si le diff dépasse 2000 lignes : "SKIP: PR trop volumineuse
+pour une review automatique fiable. Review manuelle recommandée."
+```
+
+## Exemple complet : agent de documentation
+
+```markdown
+# Doc Writer
+
+## Rôle
+Agent de documentation technique pour API REST.
+
+## Objectif
+Générer la documentation de chaque endpoint à partir du code source,
+au format OpenAPI 3.0.
+
+## Permissions
+- Lire les fichiers src/routes/** et src/models/**
+- Créer/modifier les fichiers dans docs/api/**
+- NE PAS modifier le code source
+- NE PAS documenter les routes marquées @internal
+
+## Critères d'acceptation
+- Chaque endpoint a : méthode, path, paramètres, body, réponses
+- Les exemples de requête/réponse sont valides (JSON parsable)
+- Les codes d'erreur documentés correspondent au code source
+- Le fichier OpenAPI passe la validation avec swagger-cli validate
+
+## Exemples de sorties attendues
+paths:
+  /users/{id}:
+    get:
+      summary: Récupérer un utilisateur par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Utilisateur trouvé
+        404:
+          description: Utilisateur non trouvé
+
+## En cas d'incapacité
+Si un endpoint utilise un pattern non standard (WebSocket, SSE),
+ajouter un placeholder : "TODO: documentation manuelle requise
+pour [endpoint] - pattern [type] non supporté."
+```
+
+Ces deux exemples suivent la même structure mais servent des objectifs très différents. C'est la force du template : il s'adapte au contexte tout en garantissant que rien d'essentiel n'est oublié.

@@ -91,4 +91,84 @@ nextLesson:
 
 ## Biais et limitations des modèles
 
-Contenu à venir.
+Les LLMs ne sont pas neutres. Ils reflètent les biais présents dans leurs données d'entraînement, et ils ont des limitations structurelles que vous devez connaître pour les utiliser correctement. Ignorer ces biais et limitations mène à des décisions techniques biaisées, du code sous-optimal, et une confiance mal placée dans les recommandations du modèle.
+
+## Les LLMs reflètent leurs données d'entraînement
+
+Un LLM est, fondamentalement, une compression statistique d'un corpus de textes. Si ce corpus surreprésente certaines perspectives, le modèle les surreprésente aussi. Ce n'est pas un défaut qu'on peut corriger facilement. C'est une propriété inhérente au fonctionnement du système.
+
+Concrètement, les données d'entraînement des grands modèles sont dominées par du contenu en anglais, provenant majoritairement de sources occidentales, avec une surreprésentation du contenu tech américain (Stack Overflow, GitHub, Reddit, documentation technique en anglais).
+
+## Types de biais
+
+### Biais culturels et linguistiques
+
+- **Surreprésentation anglophone** : les réponses en français sont souvent des traductions de patterns anglophones. Les conventions françaises (nommage, architecture, pratiques métier) sont moins bien représentées.
+- **Biais géographique** : quand vous demandez des recommandations d'architecture, le modèle pense d'abord AWS/GCP/Azure, pas OVHcloud ou Scaleway. Il recommande des patterns adaptés aux contraintes américaines (latence, réglementation, échelle).
+- **Normes culturelles implicites** : les exemples générés supposent souvent des formats de date américains (MM/DD/YYYY), des systèmes d'unités impériaux, ou des pratiques commerciales anglo-saxonnes.
+
+### Biais techniques
+
+C'est le biais le plus directement impactant pour les développeurs :
+
+- **Frameworks surreprésentés** : React est systématiquement favorisé par rapport à Vue ou Svelte. Express par rapport à Fastify. Django par rapport à Flask dans certains contextes. Non pas parce qu'ils sont objectivement meilleurs, mais parce qu'il y a plus de contenu d'entraînement à leur sujet.
+- **Patterns dominants** : le modèle reproduit les patterns les plus fréquents dans ses données, pas les plus adaptés à votre contexte. Il va suggérer un monolithe Express quand un simple script suffirait, ou une architecture microservices quand un monolithe serait plus approprié.
+- **Stack overflow effect** : les réponses acceptées sur Stack Overflow influencent fortement les suggestions du modèle, même quand ces réponses sont obsolètes ou contestées dans les commentaires.
+- **Biais de popularité** : le modèle recommande plus facilement des outils populaires que des alternatives plus récentes ou mieux adaptées. Il suggérera MongoDB avant PostgreSQL pour du stockage de documents, même si PostgreSQL avec JSONB serait plus approprié pour votre cas d'usage.
+
+### Biais temporels
+
+Les données d'entraînement ont une date de fin (knowledge cutoff). Tout ce qui s'est passé après cette date est invisible pour le modèle.
+
+Conséquences pratiques :
+- Recommandation de versions obsolètes de librairies
+- Ignorance de failles de sécurité découvertes après le cutoff
+- Suggestion d'APIs dépréciées ou de services qui n'existent plus
+- Méconnaissance des nouvelles best practices
+
+Un modèle entraîné sur des données jusqu'en 2023 ne connaît pas les changements de l'API de Next.js 14, les nouvelles fonctionnalités de Node.js 22, ou les dernières CVE publiées.
+
+## Sur-confiance du modèle
+
+Les LLMs ne savent pas dire "je ne sais pas" de manière fiable. Ils produisent des réponses avec le même ton assertif, qu'ils soient dans leur zone de compétence ou complètement à côté.
+
+### Reconnaître les signaux d'incertitude
+
+Même si le modèle ne dit pas explicitement qu'il doute, certains signaux doivent vous alerter :
+
+- **Réponses vagues** : "Il existe plusieurs approches pour..." suivi de suggestions génériques. Le modèle n'a probablement pas de réponse précise.
+- **Hedging linguistique** : "Il me semble que...", "Si je ne me trompe pas...", "Il est possible que...". Le modèle exprime une incertitude, prenez-la au sérieux.
+- **Incohérences entre les réponses** : posez la même question deux fois. Si les réponses divergent significativement, le modèle n'a pas de connaissance solide sur le sujet.
+- **Détails inventés** : le modèle cite un numéro de version précis, un nom de fonction spécifique, ou une URL. Vérifiez systématiquement. Les détails très précis sont souvent les plus hallucinés.
+
+### Techniques pour calibrer la confiance
+
+- **Demandez les sources** : "Quelles sont tes sources pour cette recommandation ?" Si le modèle ne peut pas pointer vers de la documentation officielle, méfiez-vous.
+- **Testez les limites** : posez des questions dont vous connaissez la réponse dans le même domaine. Si le modèle se trompe sur ce que vous savez, ne lui faites pas confiance sur ce que vous ne savez pas.
+- **Croisez avec la documentation** : une recommandation technique du LLM ne vaut rien tant qu'elle n'est pas confirmée par la documentation officielle.
+
+## Impact sur les décisions techniques
+
+### Choix de technologie biaisés
+
+Quand vous demandez "Quel framework utiliser pour mon projet ?", le modèle ne répond pas objectivement. Il répond statistiquement, en favorisant ce qui est le plus représenté dans ses données.
+
+Pour contrer ce biais :
+- Formulez des questions comparatives : "Compare React, Vue et Svelte pour un dashboard interne avec 5 développeurs"
+- Précisez vos contraintes : taille d'équipe, budget, compétences existantes, contraintes réglementaires
+- Demandez explicitement les inconvénients : "Quels sont les 3 principaux inconvénients de React pour ce cas d'usage ?"
+
+### Architecture sur-dimensionnée
+
+Les données d'entraînement surreprésentent les pratiques des grandes entreprises tech. Le modèle a tendance à suggérer des architectures complexes (microservices, event-driven, CQRS) même quand un monolithe simple suffirait.
+
+Gardez en tête que 90% des projets n'ont pas besoin de microservices. Quand le LLM vous propose une architecture sophistiquée, demandez-vous si un fichier Python de 200 lignes ne ferait pas le travail.
+
+## Ce qu'il faut retenir
+
+Les biais des LLMs ne sont pas un accident. Ils sont structurels. Les connaître permet de les compenser.
+
+Trois réflexes à développer :
+1. **Questionnez les recommandations par défaut** : pourquoi React et pas Vue ? Pourquoi AWS et pas un provider européen ?
+2. **Vérifiez les faits** : chaque affirmation technique doit être confirmée par la documentation officielle
+3. **Précisez votre contexte** : plus vous donnez de contraintes spécifiques, moins le modèle peut se rabattre sur des réponses génériques biaisées
