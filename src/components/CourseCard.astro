@@ -10,105 +10,50 @@ interface Props {
 const { slug, title, description, level, lessonCount } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
-const levelConfig: Record<
-  string,
-  { color: string; bg: string; border: string; icon: string }
-> = {
-  Débutant: {
-    color: 'text-green-400',
-    bg: 'bg-green-500/8',
-    border: 'border-green-500/15',
-    icon: '01',
-  },
-  Intermédiaire: {
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/8',
-    border: 'border-blue-500/15',
-    icon: '02',
-  },
-  Avancé: {
-    color: 'text-red-400',
-    bg: 'bg-red-500/8',
-    border: 'border-red-500/15',
-    icon: '03',
-  },
+const levelMap: Record<string, string> = {
+  Débutant: 'bg-[rgba(52,168,54,0.16)] text-[var(--brand-700)]',
+  Intermédiaire: 'bg-[rgba(23,229,23,0.16)] text-[var(--brand-900)]',
+  Avancé: 'bg-[rgba(0,0,0,0.82)] text-[var(--brand-500)]',
 };
-
-const cfg = level ? levelConfig[level] || levelConfig.Débutant : null;
 ---
 
 <a
   href={`${base}courses/${slug}`}
-  class="group border-navy-700/30 bg-navy-900/40 hover:bg-navy-900/70 hover:border-acton-600/20 block rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20"
+  class="group surface-card reveal block overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-strong)]"
 >
-  <!-- Course visual header -->
-  <div class="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
-    <div
-      class="from-navy-800 via-navy-800/90 to-navy-900 absolute inset-0 bg-gradient-to-br"
-    >
-    </div>
-    <div
-      class="from-acton-600/[0.06] absolute inset-0 bg-gradient-to-br to-transparent"
-    >
-    </div>
-    <!-- Decorative grid pattern -->
-    <div
-      class="absolute inset-0 opacity-[0.03]"
-      style="background-image: linear-gradient(var(--color-navy-400) 1px, transparent 1px), linear-gradient(90deg, var(--color-navy-400) 1px, transparent 1px); background-size: 32px 32px;"
-    >
-    </div>
-    <div class="absolute inset-0 flex items-center justify-center">
-      <div class="relative">
-        <span
-          class="text-navy-600/40 group-hover:text-acton-600/20 text-6xl font-bold transition-colors duration-500"
-          >{cfg ? cfg.icon : '00'}</span
-        >
+  <div class="relative overflow-hidden border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-strong)_78%,transparent)] px-5 py-5">
+    <div class="grid-pattern"></div>
+    <div class="relative flex items-start justify-between gap-4">
+      <div>
+        {
+          level && (
+            <span class:list={['course-badge', levelMap[level] || 'bg-[var(--surface-strong)] text-[var(--text-muted)]']}>
+              {level}
+            </span>
+          )
+        }
+      </div>
+      <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-xs font-mono font-semibold text-[var(--text-faint)]">
+        {String(lessonCount).padStart(2, '0')} leçons
       </div>
     </div>
-    <!-- Level badge overlaid (only if level exists) -->
-    {
-      level && cfg && (
-        <div class="absolute top-4 left-4">
-          <span
-            class={`rounded-lg border px-2.5 py-1 text-xs font-semibold ${cfg.bg} ${cfg.color} ${cfg.border}`}
-          >
-            {level}
-          </span>
-        </div>
-      )
-    }
+
+    <h3 class="section-title relative mt-4 text-xl text-[var(--text-primary)]">{title}</h3>
   </div>
 
-  <div class="p-6">
-    <h3
-      class="text-navy-50 group-hover:text-acton-500 mb-2.5 text-xl leading-snug font-semibold transition-colors duration-300"
-    >
-      {title}
-    </h3>
+  <div class="p-5">
+    <p class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]">{description}</p>
 
-    <p class="text-navy-400 mb-5 line-clamp-2 text-sm leading-relaxed">
-      {description}
-    </p>
-
-    <div
-      class="border-navy-800/50 flex items-center justify-between border-t pt-4"
-    >
-      <div class="text-navy-500 flex items-center gap-1.5 text-sm">
-        <svg
-          class="h-4 w-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-          ></path>
+    <div class="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-4">
+      <span class="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">
+        Programme détaillé
+      </span>
+      <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-muted)] transition-all duration-300 group-hover:border-[var(--brand-400)] group-hover:text-[var(--brand-400)]">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
-        <span>{lessonCount} leçons</span>
-      </div>
+      </span>
     </div>
   </div>
 </a>
+
