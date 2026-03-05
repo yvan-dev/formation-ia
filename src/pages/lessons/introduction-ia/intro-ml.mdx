@@ -1,0 +1,147 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Introduction au Machine Learning"
+courseSlug: "introduction-ia"
+courseTitle: "Introduction à l'IA"
+lessonSlug: "intro-ml"
+modules:
+  - title: "Les fondamentaux de l'IA"
+    lessons:
+      - slug: "histoire-ia"
+        title: "Histoire et évolution de l'IA"
+      - slug: "types-ia"
+        title: "Les différents types d'IA"
+  - title: "Machine Learning"
+    lessons:
+      - slug: "intro-ml"
+        title: "Introduction au Machine Learning"
+      - slug: "algorithmes-ml"
+        title: "Les algorithmes essentiels"
+  - title: "Deep Learning et réseaux de neurones"
+    lessons:
+      - slug: "reseaux-neurones"
+        title: "Comprendre les réseaux de neurones"
+      - slug: "applications-dl"
+        title: "Applications pratiques du Deep Learning"
+prevLesson:
+  slug: "types-ia"
+  title: "Les différents types d'IA"
+nextLesson:
+  slug: "algorithmes-ml"
+  title: "Les algorithmes essentiels"
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+
+## Qu'est-ce que le Machine Learning ?
+
+Le **Machine Learning** (apprentissage automatique) est une branche de l'IA qui permet aux ordinateurs d'apprendre à partir de données, sans être explicitement programmés pour chaque tâche.
+
+Au lieu d'écrire des règles manuellement, on fournit des **données** et le système **découvre les patterns** par lui-même.
+
+### Programmation classique vs Machine Learning
+
+**Programmation classique :**
+```
+Règles + Données → Programme → Résultat
+```
+
+**Machine Learning :**
+```
+Données + Résultats attendus → Algorithme → Modèle (règles apprises)
+```
+
+La différence fondamentale : en ML, c'est la machine qui découvre les règles.
+
+## Les trois types d'apprentissage
+
+### 1. Apprentissage supervisé
+
+On fournit au modèle des **exemples étiquetés** (données + réponses correctes). Le modèle apprend à prédire la réponse pour de nouvelles données.
+
+**Cas d'usage :**
+- Classification d'emails (spam / non-spam)
+- Prédiction de prix immobiliers
+- Diagnostic médical à partir d'images
+- Détection d'objets dans des photos
+
+**Analogie :** C'est comme un élève qui apprend avec un professeur qui lui donne les bonnes réponses.
+
+### 2. Apprentissage non supervisé
+
+On fournit des données **sans étiquettes**. Le modèle doit trouver des structures cachées par lui-même.
+
+**Cas d'usage :**
+- Segmentation de clients
+- Détection d'anomalies
+- Réduction de dimensionnalité
+- Systèmes de recommandation
+
+**Analogie :** C'est comme trier une boîte de Lego par couleur et forme sans instructions.
+
+### 3. Apprentissage par renforcement
+
+Un **agent** apprend en interagissant avec un **environnement**. Il reçoit des **récompenses** pour les bonnes actions et des **pénalités** pour les mauvaises.
+
+**Cas d'usage :**
+- Jeux vidéo (AlphaGo, OpenAI Five)
+- Robotique
+- Trading automatisé
+- Conduite autonome
+
+**Analogie :** C'est comme apprendre à faire du vélo — on tombe, on se relève, et on s'améliore.
+
+## Le pipeline du Machine Learning
+
+Un projet de ML suit généralement ces étapes :
+
+1. **Collecte des données** — Rassembler les données nécessaires
+2. **Nettoyage et préparation** — Traiter les valeurs manquantes, normaliser
+3. **Exploration** — Comprendre les données, visualiser les patterns
+4. **Séparation** — Diviser en jeu d'entraînement et jeu de test
+5. **Entraînement** — Faire apprendre le modèle sur les données
+6. **Évaluation** — Mesurer la performance sur les données de test
+7. **Déploiement** — Mettre le modèle en production
+
+## Concepts clés
+
+### Overfitting vs Underfitting
+
+- **Overfitting** : le modèle apprend le bruit des données d'entraînement et généralise mal
+- **Underfitting** : le modèle est trop simple pour capturer les patterns
+
+L'objectif est de trouver le **juste milieu** : un modèle qui généralise bien sur de nouvelles données.
+
+### Features (caractéristiques)
+
+Les **features** sont les variables d'entrée que le modèle utilise pour faire ses prédictions. Le choix des bonnes features est crucial — c'est ce qu'on appelle le **feature engineering**.
+
+## Points clés à retenir
+
+- Le ML permet aux machines d'apprendre à partir de données
+- Les trois types : supervisé, non supervisé, et par renforcement
+- Le pipeline ML va de la collecte à la mise en production
+- L'overfitting est le piège principal à éviter
+
+---
+
+<Quiz client:load questions={[
+  {
+    question: "Quelle est la différence fondamentale entre programmation classique et machine learning ?",
+    options: ["Le ML est plus rapide", "En ML, la machine découvre les règles à partir des données", "Le ML n'utilise pas de données", "La programmation classique est obsolète"],
+    correct: 1,
+    explanation: "En programmation classique, on écrit les règles manuellement. En ML, on fournit des données et le système découvre automatiquement les patterns et les règles."
+  },
+  {
+    question: "La segmentation de clients est un exemple de quel type d'apprentissage ?",
+    options: ["Supervisé", "Non supervisé", "Par renforcement", "Semi-supervisé"],
+    correct: 1,
+    explanation: "La segmentation de clients utilise l'apprentissage non supervisé car on cherche à regrouper les clients en catégories sans étiquettes prédéfinies."
+  },
+  {
+    question: "Qu'est-ce que l'overfitting ?",
+    options: ["Un modèle trop simple", "Un modèle qui apprend le bruit et généralise mal", "Un modèle parfait", "Un manque de données"],
+    correct: 1,
+    explanation: "L'overfitting se produit quand le modèle mémorise les données d'entraînement (y compris le bruit) au lieu d'apprendre les vrais patterns, ce qui donne de mauvais résultats sur de nouvelles données."
+  }
+]} />

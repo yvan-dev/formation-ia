@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const courses = await getCollection('courses');
+  return courses.map((course) => ({
+    params: { slug: course.id },
+    props: { course },
+  }));
+}
+
+const { course } = Astro.props;
+const { title, description, level, modules } = course.data;
+const base = import.meta.env.BASE_URL;
+
+interface Lesson {
+  slug: string;
+  title: string;
+}
+
+interface Module {
+  title: string;
+  lessons: Lesson[];
+}
+
+const totalLessons = modules.reduce(
+  (a: number, m: Module) => a + m.lessons.length,
+  0,
+);
+
+const levelColors: Record<string, string> = {
+  Débutant: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  Intermédiaire: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  Avancé: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+};
+---
+
+<BaseLayout title={title}>
+  <div class="mx-auto max-w-4xl px-4 py-12">
+    <!-- Course header -->
+    <div class="mb-12">
+      <nav
+        class="mb-6 flex items-center gap-2 text-sm text-slate-500"
+        aria-label="Breadcrumb"
+      >
+        <a href={base} class="transition-colors hover:text-slate-300">Accueil</a
+        >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"></path></svg
+        >
+        <span class="text-slate-300">{title}</span>
+      </nav>
+
+      <h1 class="mb-4 text-3xl font-bold text-slate-100 lg:text-4xl">
+        {title}
+      </h1>
+      <p class="mb-6 text-lg leading-relaxed text-slate-400">{description}</p>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <span
+          class={`text-sm font-medium px-3 py-1.5 rounded-lg border ${levelColors[level]}`}
+        >
+          {level}
+        </span>
+        <div class="flex items-center gap-2 text-sm text-slate-500">
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            ></path></svg
+          >
+          {totalLessons} leçons
+        </div>
+      </div>
+    </div>
+
+    <!-- Course progress -->
+    <div class="mb-10 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <div class="mb-3 flex items-center justify-between">
+        <span class="text-sm font-medium text-slate-300">Votre progression</span
+        >
+        <span class="text-sm text-slate-500" id="progress-text"
+          >0 / {totalLessons} leçons</span
+        >
+      </div>
+      <div class="h-2 overflow-hidden rounded-full bg-slate-800">
+        <div
+          id="course-progress-fill"
+          class="h-full rounded-full bg-gradient-to-r from-violet-600 to-violet-400 transition-all duration-500"
+          style="width: 0%"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules -->
+    <div class="space-y-6">
+      {
+        modules.map((module: Module, moduleIndex: number) => (
+          <div class="overflow-hidden rounded-xl border border-slate-800">
+            <div class="border-b border-slate-800 bg-slate-900/80 px-6 py-4">
+              <h2 class="text-base font-semibold text-slate-200">
+                <span class="mr-2 text-violet-400">
+                  Module {moduleIndex + 1}
+                </span>
+                {module.title}
+              </h2>
+            </div>
+            <ul class="divide-y divide-slate-800/50">
+              {module.lessons.map((lesson: Lesson, lessonIndex: number) => (
+                <li>
+                  <a
+                    href={`${base}lessons/${course.id}/${lesson.slug}`}
+                    data-lesson-item={lesson.slug}
+                    class="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-slate-800/30"
+                  >
+                    <div class="lesson-number flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-700 text-sm text-slate-500 transition-colors group-hover:border-violet-500/40 group-hover:text-violet-400">
+                      {lessonIndex + 1}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-sm font-medium text-slate-300 transition-colors group-hover:text-slate-100">
+                        {lesson.title}
+                      </div>
+                    </div>
+                    <svg
+                      class="h-4 w-4 shrink-0 text-slate-600 transition-colors group-hover:text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ courseId: course.id, totalLessons }}>
+    (function () {
+      const progress = JSON.parse(
+        localStorage.getItem(`progress_${courseId}`) || '[]',
+      );
+      const pct =
+        totalLessons > 0
+          ? Math.round((progress.length / totalLessons) * 100)
+          : 0;
+
+      const fill = document.getElementById('course-progress-fill');
+      const text = document.getElementById('progress-text');
+      if (fill) fill.style.width = pct + '%';
+      if (text)
+        text.textContent = progress.length + ' / ' + totalLessons + ' leçons';
+
+      // Mark completed lessons
+      progress.forEach(function (slug) {
+        const item = document.querySelector(`[data-lesson-item="${slug}"]`);
+        if (!item) return;
+        const numEl = item.querySelector('.lesson-number');
+        if (numEl) {
+          numEl.innerHTML =
+            '<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>';
+          numEl.classList.add('border-emerald-500/30', 'bg-emerald-500/10');
+          numEl.classList.remove('border-slate-700');
+        }
+      });
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,337 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import LessonSidebar from '../components/LessonSidebar.astro';
+import ProgressBar from '../components/ProgressBar.astro';
+
+interface Props {
+  title: string;
+  courseSlug: string;
+  courseTitle: string;
+  lessonSlug: string;
+  modules: Array<{
+    title: string;
+    lessons: Array<{
+      slug: string;
+      title: string;
+    }>;
+  }>;
+  prevLesson?: { slug: string; title: string } | null;
+  nextLesson?: { slug: string; title: string } | null;
+}
+
+const props = Astro.props.frontmatter || Astro.props;
+const {
+  title,
+  courseSlug,
+  courseTitle,
+  lessonSlug,
+  modules,
+  prevLesson,
+  nextLesson,
+} = props;
+const base = import.meta.env.BASE_URL;
+
+const allLessons = modules.flatMap((m) => m.lessons);
+const currentIndex = allLessons.findIndex((l) => l.slug === lessonSlug);
+const totalLessons = allLessons.length;
+---
+
+<BaseLayout title={title}>
+  <div class="mx-auto flex max-w-7xl">
+    <!-- Sidebar -->
+    <aside
+      class="sticky top-16 hidden min-h-[calc(100vh-4rem)] w-80 shrink-0 overflow-y-auto border-r border-slate-800 lg:block"
+    >
+      <LessonSidebar
+        courseSlug={courseSlug}
+        courseTitle={courseTitle}
+        modules={modules}
+        currentLesson={lessonSlug}
+      />
+    </aside>
+
+    <!-- Main content -->
+    <div class="min-w-0 flex-1">
+      <!-- Progress bar -->
+      <ProgressBar courseSlug={courseSlug} totalLessons={totalLessons} />
+
+      <!-- Breadcrumb -->
+      <div class="px-6 pt-6 lg:px-12">
+        <nav
+          class="flex items-center gap-2 text-sm text-slate-500"
+          aria-label="Breadcrumb"
+        >
+          <a href={base} class="transition-colors hover:text-slate-300"
+            >Accueil</a
+          >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path></svg
+          >
+          <a
+            href={`${base}courses/${courseSlug}`}
+            class="transition-colors hover:text-slate-300">{courseTitle}</a
+          >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path></svg
+          >
+          <span class="text-slate-300">{title}</span>
+        </nav>
+      </div>
+
+      <!-- Lesson content -->
+      <article class="max-w-3xl px-6 py-8 lg:px-12" data-pagefind-body>
+        <div class="mb-8">
+          <div class="mb-3 flex items-center gap-3">
+            <span class="text-sm text-slate-500"
+              >Leçon {currentIndex + 1} / {totalLessons}</span
+            >
+          </div>
+          <h1 class="text-3xl leading-tight font-bold text-slate-100">
+            {title}
+          </h1>
+        </div>
+
+        <div
+          class="prose prose-invert prose-slate max-w-none [&_a]:text-violet-400 [&_a]:underline [&_a]:hover:text-violet-300 [&_blockquote]:border-l-2 [&_blockquote]:border-violet-500 [&_blockquote]:pl-4 [&_blockquote]:text-slate-400 [&_blockquote]:italic [&_code]:rounded [&_code]:bg-slate-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-sm [&_code]:text-violet-400 [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-slate-100 [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-slate-200 [&_hr]:my-8 [&_hr]:border-slate-700 [&_li]:leading-relaxed [&_ol]:mb-4 [&_ol]:space-y-2 [&_ol]:text-slate-300 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:text-slate-300 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:border-slate-700 [&_pre]:bg-slate-900 [&_pre]:p-4 [&_strong]:font-semibold [&_strong]:text-slate-100 [&_ul]:mb-4 [&_ul]:space-y-2 [&_ul]:text-slate-300"
+        >
+          <slot />
+        </div>
+
+        <!-- Mark as complete button -->
+        <div class="mt-12 mb-8 flex justify-center">
+          <button
+            id="mark-complete-btn"
+            data-course={courseSlug}
+            data-lesson={lessonSlug}
+            class="flex items-center gap-2 rounded-lg bg-violet-600 px-6 py-3 font-medium text-white transition-colors hover:bg-violet-500"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>Marquer comme terminée</span>
+          </button>
+        </div>
+
+        <!-- Prev/Next navigation -->
+        <nav
+          class="flex justify-between gap-4 border-t border-slate-800 pt-8"
+          aria-label="Navigation entre leçons"
+        >
+          {
+            prevLesson ? (
+              <a
+                href={`${base}lessons/${courseSlug}/${prevLesson.slug}`}
+                class="group flex-1 rounded-lg border border-slate-800 p-4 transition-colors hover:border-slate-700"
+              >
+                <span class="flex items-center gap-1 text-sm text-slate-500">
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                  Précédent
+                </span>
+                <span class="mt-1 block text-slate-200 transition-colors group-hover:text-violet-400">
+                  {prevLesson.title}
+                </span>
+              </a>
+            ) : (
+              <div />
+            )
+          }
+          {
+            nextLesson ? (
+              <a
+                href={`${base}lessons/${courseSlug}/${nextLesson.slug}`}
+                class="group flex-1 rounded-lg border border-slate-800 p-4 text-right transition-colors hover:border-slate-700"
+              >
+                <span class="flex items-center justify-end gap-1 text-sm text-slate-500">
+                  Suivant
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+                <span class="mt-1 block text-slate-200 transition-colors group-hover:text-violet-400">
+                  {nextLesson.title}
+                </span>
+              </a>
+            ) : (
+              <div />
+            )
+          }
+        </nav>
+      </article>
+    </div>
+  </div>
+
+  <!-- Mobile sidebar toggle -->
+  <button
+    id="mobile-sidebar-toggle"
+    class="fixed right-6 bottom-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-violet-600 text-white shadow-lg transition-colors hover:bg-violet-500 lg:hidden"
+    aria-label="Ouvrir le menu des leçons"
+  >
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- Mobile sidebar overlay -->
+  <div id="mobile-sidebar" class="fixed inset-0 z-50 hidden lg:hidden">
+    <div class="absolute inset-0 bg-black/60" id="mobile-sidebar-backdrop">
+    </div>
+    <div
+      class="absolute top-0 left-0 h-full w-80 overflow-y-auto border-r border-slate-800 bg-slate-900"
+    >
+      <div class="flex justify-end p-4">
+        <button
+          id="mobile-sidebar-close"
+          class="text-slate-400 hover:text-slate-200"
+          aria-label="Fermer le menu"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <LessonSidebar
+        courseSlug={courseSlug}
+        courseTitle={courseTitle}
+        modules={modules}
+        currentLesson={lessonSlug}
+      />
+    </div>
+  </div>
+
+  <script is:inline>
+    // Mark as complete
+    document
+      .getElementById('mark-complete-btn')
+      ?.addEventListener('click', function (e) {
+        const btn = e.currentTarget;
+        const course = btn.dataset.course;
+        const lesson = btn.dataset.lesson;
+        const key = `progress_${course}`;
+        const progress = JSON.parse(localStorage.getItem(key) || '[]');
+
+        if (!progress.includes(lesson)) {
+          progress.push(lesson);
+          localStorage.setItem(key, JSON.stringify(progress));
+        }
+
+        btn.innerHTML = `
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Terminée !</span>
+      `;
+        btn.classList.remove('bg-violet-600', 'hover:bg-violet-500');
+        btn.classList.add('bg-emerald-600', 'cursor-default');
+        btn.disabled = true;
+
+        // Update sidebar checkmarks
+        document
+          .querySelectorAll(`[data-lesson-link="${lesson}"]`)
+          .forEach((el) => {
+            el.querySelector('.lesson-check')?.classList.remove('hidden');
+          });
+
+        // Update progress bar
+        window.dispatchEvent(new CustomEvent('lesson-completed'));
+      });
+
+    // Check if already completed
+    (function () {
+      const btn = document.getElementById('mark-complete-btn');
+      if (!btn) return;
+      const course = btn.dataset.course;
+      const lesson = btn.dataset.lesson;
+      const progress = JSON.parse(
+        localStorage.getItem(`progress_${course}`) || '[]',
+      );
+      if (progress.includes(lesson)) {
+        btn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>Terminée !</span>
+        `;
+        btn.classList.remove('bg-violet-600', 'hover:bg-violet-500');
+        btn.classList.add('bg-emerald-600', 'cursor-default');
+        btn.disabled = true;
+      }
+    })();
+
+    // Mobile sidebar
+    const toggle = document.getElementById('mobile-sidebar-toggle');
+    const sidebar = document.getElementById('mobile-sidebar');
+    const backdrop = document.getElementById('mobile-sidebar-backdrop');
+    const closeBtn = document.getElementById('mobile-sidebar-close');
+
+    function openSidebar() {
+      sidebar?.classList.remove('hidden');
+    }
+    function closeSidebar() {
+      sidebar?.classList.add('hidden');
+    }
+
+    toggle?.addEventListener('click', openSidebar);
+    backdrop?.addEventListener('click', closeSidebar);
+    closeBtn?.addEventListener('click', closeSidebar);
+  </script>
+</BaseLayout>

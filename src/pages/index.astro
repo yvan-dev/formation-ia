@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CourseCard from '../components/CourseCard.astro';
+import { getCollection } from 'astro:content';
+
+const courses = await getCollection('courses');
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Accueil">
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <!-- Warm gradient background -->
+    <div class="pointer-events-none absolute inset-0">
+      <div
+        class="from-gold-500/[0.07] via-gold-500/[0.02] absolute top-0 left-1/2 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-b to-transparent blur-3xl"
+      >
+      </div>
+      <div
+        class="from-coral-500/[0.04] absolute top-20 right-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-b to-transparent blur-3xl"
+      >
+      </div>
+    </div>
+
+    <div
+      class="relative mx-auto max-w-5xl px-6 pt-24 pb-20 text-center lg:pt-32 lg:pb-28"
+    >
+      <div
+        class="animate-fade-up border-gold-500/20 bg-gold-500/[0.06] text-gold-400 mb-8 inline-flex items-center gap-2.5 rounded-full border px-4 py-2 text-sm"
+      >
+        <span
+          class="bg-sage-500 h-1.5 w-1.5 rounded-full"
+          style="animation: pulseGlow 2s ease-in-out infinite"></span>
+        Plateforme 100% gratuite
+      </div>
+
+      <h1
+        class="animate-fade-up stagger-1 font-display text-ink-50 mb-6 text-5xl leading-[1.1] font-bold tracking-tight lg:text-7xl"
+      >
+        Apprenez l'Intelligence<br />
+        Artificielle <span class="text-gold-500 italic">à votre rythme</span>
+      </h1>
+
+      <p
+        class="animate-fade-up stagger-2 text-ink-300 mx-auto mb-12 max-w-2xl text-lg leading-relaxed lg:text-xl"
+      >
+        Des cours structurés, des quiz interactifs et un suivi de progression.
+        Commencez votre parcours en IA dès maintenant.
+      </p>
+
+      <div
+        class="animate-fade-up stagger-3 flex items-center justify-center gap-4"
+      >
+        <a
+          href="#courses"
+          class="group from-gold-600 to-gold-500 text-ink-950 hover:shadow-gold-500/20 relative rounded-xl bg-gradient-to-r px-7 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          Découvrir les cours
+          <svg
+            class="ml-1.5 inline-block h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              d="M9 5l7 7-7 7"></path></svg
+          >
+        </a>
+        <a
+          href={`${base}quiz-niveau`}
+          class="group rounded-xl border border-ink-600 text-ink-200 px-7 py-3.5 font-semibold transition-all duration-300 hover:border-gold-500/40 hover:text-gold-400"
+        >
+          <svg class="mr-1.5 inline-block h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Testez votre niveau
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="border-ink-800/40 bg-ink-900/30 border-y">
+    <div
+      class="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-6 py-10 text-center"
+    >
+      <div class="animate-fade-up stagger-3">
+        <div class="font-display text-ink-50 text-3xl font-bold">
+          {courses.length}
+        </div>
+        <div class="text-ink-500 mt-1.5 text-sm tracking-wide uppercase">
+          Cours disponibles
+        </div>
+      </div>
+      <div class="animate-fade-up stagger-4">
+        <div class="font-display text-ink-50 text-3xl font-bold">
+          {
+            courses.reduce(
+              (acc, c) =>
+                acc + c.data.modules.reduce((a, m) => a + m.lessons.length, 0),
+              0,
+            )
+          }
+        </div>
+        <div class="text-ink-500 mt-1.5 text-sm tracking-wide uppercase">
+          Leçons
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses grid -->
+  <section id="courses" class="mx-auto max-w-6xl px-6 py-20">
+    <div class="mb-10">
+      <h2 class="font-display text-ink-50 mb-2 text-3xl font-bold">
+        Tous les cours
+      </h2>
+      <p class="text-ink-400">Choisissez un cours et commencez à apprendre</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        courses.map((course, i) => (
+          <div
+            class="animate-fade-up"
+            style={`animation-delay: ${0.1 + i * 0.1}s`}
+          >
+            <CourseCard
+              slug={course.id}
+              title={course.data.title}
+              description={course.data.description}
+              level={course.data.level}
+              lessonCount={course.data.modules.reduce(
+                (a, m) => a + m.lessons.length,
+                0,
+              )}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

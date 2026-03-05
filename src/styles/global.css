@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink-950: #0c0a09;
+  --color-ink-900: #151210;
+  --color-ink-800: #1e1a17;
+  --color-ink-700: #2a2520;
+  --color-ink-600: #3d3630;
+  --color-ink-500: #5c534b;
+  --color-ink-400: #7d7268;
+  --color-ink-300: #a69a8e;
+  --color-ink-200: #ccc2b6;
+  --color-ink-100: #e8e1d9;
+  --color-ink-50: #f5f0eb;
+
+  --color-gold-600: #b8863a;
+  --color-gold-500: #d4a574;
+  --color-gold-400: #e2bf8a;
+  --color-gold-300: #f0d9a8;
+
+  --color-sage-600: #5a9a6b;
+  --color-sage-500: #7db88f;
+  --color-sage-400: #9acca8;
+
+  --color-coral-600: #b85a4a;
+  --color-coral-500: #c47b7b;
+  --color-coral-400: #d9918a;
+
+  --color-amber-500: #e2a94e;
+  --color-amber-400: #f0c06a;
+
+  --font-display: 'Crimson Pro', 'Georgia', serif;
+  --font-sans: 'Manrope', 'Avenir', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+  background-color: var(--color-ink-950);
+  color: var(--color-ink-100);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Subtle grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+::selection {
+  background-color: var(--color-gold-500);
+  color: var(--color-ink-950);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-ink-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-500);
+}
+
+/* Page load animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+.stagger-5 {
+  animation-delay: 0.5s;
+}

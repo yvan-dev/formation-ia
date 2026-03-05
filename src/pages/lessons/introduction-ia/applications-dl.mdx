@@ -1,0 +1,149 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Applications pratiques du Deep Learning"
+courseSlug: "introduction-ia"
+courseTitle: "Introduction à l'IA"
+lessonSlug: "applications-dl"
+modules:
+  - title: "Les fondamentaux de l'IA"
+    lessons:
+      - slug: "histoire-ia"
+        title: "Histoire et évolution de l'IA"
+      - slug: "types-ia"
+        title: "Les différents types d'IA"
+  - title: "Machine Learning"
+    lessons:
+      - slug: "intro-ml"
+        title: "Introduction au Machine Learning"
+      - slug: "algorithmes-ml"
+        title: "Les algorithmes essentiels"
+  - title: "Deep Learning et réseaux de neurones"
+    lessons:
+      - slug: "reseaux-neurones"
+        title: "Comprendre les réseaux de neurones"
+      - slug: "applications-dl"
+        title: "Applications pratiques du Deep Learning"
+prevLesson:
+  slug: "reseaux-neurones"
+  title: "Comprendre les réseaux de neurones"
+nextLesson: null
+---
+
+import Quiz from '../../../components/Quiz.tsx';
+
+## Le Deep Learning en action
+
+Le deep learning a révolutionné de nombreux domaines grâce à sa capacité à traiter des **données non structurées** (images, texte, audio, vidéo). Explorons les architectures clés et leurs applications.
+
+## Vision par ordinateur (Computer Vision)
+
+### CNN — Réseaux de neurones convolutifs
+
+Les **CNN** (Convolutional Neural Networks) sont spécialisés dans le traitement d'images. Ils utilisent des **filtres** qui balaient l'image pour détecter des patterns.
+
+**Applications :**
+- **Reconnaissance faciale** : déverrouillage de téléphone, sécurité
+- **Diagnostic médical** : détection de tumeurs sur des radiographies
+- **Véhicules autonomes** : détection de piétons, panneaux, obstacles
+- **Agriculture** : détection de maladies des plantes par drone
+
+### Comment fonctionne un CNN ?
+
+1. **Convolution** : des filtres détectent des motifs locaux (bords, textures)
+2. **Pooling** : réduction de la taille tout en conservant l'information importante
+3. **Classification** : les couches denses finales classifient l'image
+
+## Traitement du langage naturel (NLP)
+
+### Transformers
+
+L'architecture **Transformer** (2017) a révolutionné le NLP. C'est la base de modèles comme GPT, BERT et Claude.
+
+**Innovation clé :** le mécanisme d'**attention**, qui permet au modèle de comprendre les relations entre tous les mots d'une phrase simultanément.
+
+**Applications :**
+- **Traduction automatique** : Google Translate, DeepL
+- **Chatbots** : ChatGPT, Claude, Gemini
+- **Résumé automatique** : condensation de documents longs
+- **Analyse de sentiments** : comprendre l'opinion dans les textes
+
+### Les Large Language Models (LLM)
+
+Les **LLM** sont des Transformers entraînés sur des quantités massives de texte. Ils peuvent :
+- Générer du texte cohérent
+- Répondre à des questions
+- Écrire du code
+- Raisonner sur des problèmes complexes
+
+## Génération de contenu (IA générative)
+
+### GANs — Generative Adversarial Networks
+
+Deux réseaux s'affrontent :
+- Le **générateur** crée de fausses images
+- Le **discriminateur** essaie de distinguer le vrai du faux
+- Ils s'améliorent mutuellement
+
+**Applications :** création d'images de visages réalistes, transfert de style, super-résolution
+
+### Modèles de diffusion
+
+Les **modèles de diffusion** (Stable Diffusion, DALL-E, Midjourney) génèrent des images à partir de descriptions textuelles. Ils fonctionnent en :
+1. Ajoutant progressivement du bruit à une image
+2. Apprenant à retirer ce bruit
+3. Partant du bruit pur pour générer de nouvelles images
+
+## Audio et parole
+
+### Reconnaissance vocale
+Les réseaux comme **Whisper** (OpenAI) convertissent la parole en texte avec une précision remarquable, même dans des environnements bruyants.
+
+### Synthèse vocale
+Des modèles génèrent de la parole naturelle à partir de texte, avec contrôle de l'émotion et du style.
+
+### Génération musicale
+Des systèmes comme **Suno** ou **Udio** composent de la musique à partir de descriptions textuelles.
+
+## Les défis du Deep Learning
+
+### Coût computationnel
+Entraîner un LLM comme GPT-4 coûte des **millions de dollars** en calcul. L'empreinte carbone est significative.
+
+### Biais et équité
+Les modèles héritent des biais présents dans leurs données d'entraînement. Un modèle entraîné sur des données biaisées produira des résultats biaisés.
+
+### Interprétabilité
+Les réseaux profonds sont souvent des **boîtes noires** : on sait qu'ils fonctionnent, mais on ne comprend pas toujours pourquoi.
+
+### Hallucinations
+Les LLM peuvent générer des informations **fausses mais convaincantes**. C'est un défi majeur pour leur déploiement.
+
+## Points clés à retenir
+
+- Les **CNN** dominent la vision par ordinateur
+- Les **Transformers** ont révolutionné le NLP et sont la base des LLM
+- L'IA générative (GANs, diffusion) crée du contenu nouveau
+- Les défis majeurs : coût, biais, interprétabilité et hallucinations
+
+---
+
+<Quiz client:load questions={[
+  {
+    question: "Quelle architecture est à la base des modèles comme GPT et Claude ?",
+    options: ["CNN (Convolutional Neural Network)", "RNN (Recurrent Neural Network)", "Transformer", "GAN (Generative Adversarial Network)"],
+    correct: 2,
+    explanation: "L'architecture Transformer, introduite en 2017, est la base des grands modèles de langage comme GPT, BERT et Claude. Son mécanisme d'attention permet de comprendre les relations entre les mots."
+  },
+  {
+    question: "Comment fonctionne un GAN ?",
+    options: ["Un seul réseau qui s'entraîne seul", "Deux réseaux (générateur et discriminateur) qui s'affrontent", "Un réseau qui copie des images existantes", "Un réseau qui classe des images"],
+    correct: 1,
+    explanation: "Un GAN utilise deux réseaux : le générateur crée de fausses données et le discriminateur essaie de les distinguer des vraies. En s'affrontant, les deux s'améliorent mutuellement."
+  },
+  {
+    question: "Quel est un des principaux défis des LLM ?",
+    options: ["Ils sont trop lents", "Ils ne comprennent que l'anglais", "Ils peuvent générer des hallucinations (informations fausses)", "Ils ne peuvent pas générer de texte long"],
+    correct: 2,
+    explanation: "Les hallucinations sont un défi majeur des LLM : ils peuvent générer des informations fausses mais qui paraissent convaincantes, ce qui pose des problèmes de fiabilité."
+  }
+]} />

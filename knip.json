@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["src/pages/**/*.{astro,mdx}", "src/layouts/**/*.astro"],
+  "project": ["src/**/*.{astro,ts,tsx,js,jsx,mdx}"],
+  "ignoreDependencies": ["tailwindcss"],
+  "astro": true,
+  "playwright": {
+    "entry": ["e2e/**/*.{ts,js}", "playwright.config.ts"]
+  }
+}
