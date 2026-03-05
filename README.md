@@ -1,6 +1,6 @@
 # Formation IA - Frontend
 
-Astro-based frontend for the Formation IA project, using React, MDX, and Tailwind CSS v4.
+Astro-based frontend for the Formation IA project, using React v19, MDX v4, and Tailwind CSS v4.
 
 ## Prerequisites
 
