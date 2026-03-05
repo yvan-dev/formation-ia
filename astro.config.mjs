@@ -16,39 +16,37 @@ function pagefindDevPlugin() {
       basePath = config.base || '/';
     },
     configureServer(server) {
-      return () => {
-        server.middlewares.use((req, res, next) => {
-          const prefix = basePath + 'pagefind/';
-          if (req.url?.startsWith(prefix)) {
-            const relPath = req.url.slice(basePath.length);
-            const distPath = resolve('dist', relPath);
-            if (existsSync(distPath)) {
-              const content = readFileSync(distPath);
-              const ext = relPath.split('.').pop();
-              const types = {
-                js: 'application/javascript',
-                css: 'text/css',
-                json: 'application/json',
-                wasm: 'application/wasm',
-              };
-              res.setHeader(
-                'Content-Type',
-                types[ext] || 'application/octet-stream',
-              );
-              res.end(content);
-              return;
-            }
+      server.middlewares.use((req, res, next) => {
+        const prefix = basePath + 'pagefind/';
+        if (req.url?.startsWith(prefix)) {
+          const relPath = req.url.slice(basePath.length);
+          const distPath = resolve('dist', relPath);
+          if (existsSync(distPath)) {
+            const content = readFileSync(distPath);
+            const ext = relPath.split('.').pop();
+            const types = {
+              js: 'application/javascript',
+              css: 'text/css',
+              json: 'application/json',
+              wasm: 'application/wasm',
+            };
+            res.setHeader(
+              'Content-Type',
+              types[ext] || 'application/octet-stream',
+            );
+            res.end(content);
+            return;
           }
-          next();
-        });
-      };
+        }
+        next();
+      });
     },
   };
 }
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://your-username.github.io',
+  site: 'https://ilies-bel.github.io',
   base: '/formation-ia/',
   output: 'static',
   vite: {

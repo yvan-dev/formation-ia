@@ -36,13 +36,11 @@ const base = import.meta.env.BASE_URL;
         class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6"
       >
         <a href={base} class="group flex items-center gap-3">
-          <div
-            class="from-acton-600 to-acton-700 shadow-acton-600/10 group-hover:shadow-acton-600/20 relative flex h-9 w-9 items-center justify-center rounded-md bg-gradient-to-br shadow-lg transition-shadow"
-          >
-            <span class="text-navy-950 text-sm font-bold tracking-tight"
-              >IA</span
-            >
-          </div>
+          <img
+            src={`${base}favicon.jpg`}
+            alt="Formation IA"
+            class="h-9 w-9 rounded-md shadow-lg"
+          />
           <span class="text-navy-50 text-lg font-semibold tracking-tight"
             >Formation <span class="text-acton-600">IA</span></span
           >
@@ -93,11 +91,11 @@ const base = import.meta.env.BASE_URL;
           class="flex flex-col items-center justify-between gap-4 sm:flex-row"
         >
           <div class="flex items-center gap-2">
-            <div
-              class="from-acton-600 to-acton-700 flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br"
-            >
-              <span class="text-navy-950 text-[9px] font-bold">IA</span>
-            </div>
+            <img
+              src={`${base}favicon.jpg`}
+              alt="Formation IA"
+              class="h-6 w-6 rounded"
+            />
             <span class="text-navy-500 text-sm">Formation IA</span>
           </div>
           <p class="text-navy-600 text-sm">
@@ -154,25 +152,26 @@ const base = import.meta.env.BASE_URL;
           if (pagefindLoaded) return;
           pagefindLoaded = true;
 
-          import(`${base}pagefind/pagefind-ui.js`)
-            .then(function (module) {
-              const PagefindUI = module.PagefindUI || module.default;
-              new PagefindUI({
-                element: '#pagefind-search',
-                showSubResults: true,
-                showImages: false,
-              });
-              const input = searchModal.querySelector('input');
-              if (input) input.focus();
-            })
-            .catch(function () {
-              pagefindLoaded = false;
-              const el = searchModal.querySelector('#pagefind-search');
-              if (el) {
-                el.innerHTML =
-                  '<p style="padding:1.5rem;text-align:center;color:#9ca3af;">La recherche n\u2019est pas disponible. Lancez <code style="background:#1e293b;padding:2px 6px;border-radius:4px;">npm run build</code> pour indexer le contenu.</p>';
-              }
+          const script = document.createElement('script');
+          script.src = base + 'pagefind/pagefind-ui.js';
+          script.onload = function () {
+            new window.PagefindUI({
+              element: '#pagefind-search',
+              showSubResults: true,
+              showImages: false,
             });
+            const input = searchModal.querySelector('input');
+            if (input) input.focus();
+          };
+          script.onerror = function () {
+            pagefindLoaded = false;
+            const el = searchModal.querySelector('#pagefind-search');
+            if (el) {
+              el.innerHTML =
+                '<p style="padding:1.5rem;text-align:center;color:#9ca3af;">La recherche n\u2019est pas disponible. Lancez <code style="background:#1e293b;padding:2px 6px;border-radius:4px;">npm run build</code> pour indexer le contenu.</p>';
+            }
+          };
+          document.head.appendChild(script);
         }
 
         function closeSearch() {
