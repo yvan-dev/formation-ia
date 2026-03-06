@@ -18,8 +18,7 @@ const baseNoTrailingSlash = base.endsWith('/') ? base.slice(0, -1) : base;
 const relativePath = path.startsWith(baseNoTrailingSlash)
   ? path.slice(baseNoTrailingSlash.length)
   : path;
-const isQuizTab = relativePath.startsWith('/quiz-niveau');
-const isFormationsTab = !isQuizTab;
+const isQuizPage = relativePath.startsWith('/quiz-niveau');
 ---
 
 <!doctype html>
@@ -65,35 +64,33 @@ const isFormationsTab = !isQuizTab;
           </a>
 
           <div class="hidden items-center gap-2 md:flex">
-            <a href={base} class:list={['nav-tab', isFormationsTab && 'nav-tab-active']}
-              >Formations</a
+            <a
+              href={`${base}courses/ia-appliquee-metiers-tech`}
+              class:list={[
+                'btn-ghost nav-main-cta',
+                !isQuizPage && 'nav-main-cta-active',
+              ]}
             >
-            <a href={`${base}quiz-niveau`} class:list={['nav-tab', isQuizTab && 'nav-tab-active']}
-              >Quiz</a
+              Découvrir notre première formation
+            </a>
+            <a
+              href={`${base}quiz-niveau`}
+              class:list={[
+                'btn-primary nav-main-cta',
+                isQuizPage && 'nav-main-cta-primary-active',
+              ]}
             >
+              Faire un quiz de placement
+            </a>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button
-              id="search-trigger"
-              class="btn-ghost text-xs md:text-sm"
-              aria-label="Ouvrir la recherche"
-            >
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.2-5.2m1.6-4.6a6.2 6.2 0 11-12.4 0 6.2 6.2 0 0112.4 0z"></path>
-              </svg>
-              <span class="hidden sm:inline">Recherche</span>
-            </button>
-
-            <button
-              id="theme-toggle"
-              class="btn-ghost"
-              aria-label="Basculer le thème"
-              title="Basculer le thème"
-            >
-              <span id="theme-toggle-dot" class="theme-toggle-dot inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-500)]"></span>
-              <span id="theme-toggle-label" class="text-xs font-semibold sm:text-sm">Thème</span>
-            </button>
+          <div class="flex items-center gap-2 md:hidden">
+            <a href={`${base}courses/ia-appliquee-metiers-tech`} class="btn-ghost !px-3 !py-2 text-xs">
+              Formation
+            </a>
+            <a href={`${base}quiz-niveau`} class="btn-primary !px-3 !py-2 text-xs">
+              Quiz
+            </a>
           </div>
         </nav>
       </header>
@@ -107,7 +104,7 @@ const isFormationsTab = !isQuizTab;
           <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="flex items-center gap-3">
               <img src={`${base}brand/logo-mark.svg`} alt="AOT" class="h-7 w-7" />
-              <p class="text-sm text-[var(--text-muted)]">AOT Academy - Accompagnement industriel aux outils IA</p>
+              <p class="text-sm text-[var(--text-muted)]">AOT Academy - Accompagnement IA pour équipes tech</p>
             </div>
             <p class="text-xs text-[var(--text-faint)]">
               &copy; {new Date().getFullYear()} AOT Academy. Tous droits réservés.
@@ -117,20 +114,27 @@ const isFormationsTab = !isQuizTab;
       </footer>
     </div>
 
-    <link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
+    <button
+      id="theme-toggle"
+      class="floating-theme-btn"
+      aria-label="Basculer le thème"
+      title="Basculer le thème"
+    >
+      <span id="theme-toggle-dot" class="theme-toggle-dot inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-500)]"></span>
+      <span id="theme-toggle-label" class="text-xs font-semibold">Mode clair</span>
+    </button>
 
-    <script is:inline define:vars={{ base }}>
+    <script is:inline>
       window.addEventListener('DOMContentLoaded', () => {
         const root = document.documentElement;
         const themeBtn = document.getElementById('theme-toggle');
         const themeLabel = document.getElementById('theme-toggle-label');
-        const searchTrigger = document.getElementById('search-trigger');
 
         function applyTheme(theme) {
           root.setAttribute('data-theme', theme);
           localStorage.setItem('aot-theme', theme);
           if (themeLabel) {
-            themeLabel.textContent = theme === 'dark' ? 'Sombre' : 'Clair';
+            themeLabel.textContent = theme === 'dark' ? 'Mode sombre' : 'Mode clair';
           }
         }
 
@@ -141,95 +145,7 @@ const isFormationsTab = !isQuizTab;
           const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
           applyTheme(current === 'dark' ? 'light' : 'dark');
         });
-
-        let searchModal = null;
-        let pagefindLoaded = false;
-
-        function closeSearch() {
-          if (searchModal) {
-            searchModal.style.display = 'none';
-          }
-          document.removeEventListener('keydown', handleEsc);
-        }
-
-        function handleEsc(event) {
-          if (event.key === 'Escape') closeSearch();
-        }
-
-        function createModal() {
-          const wrapper = document.createElement('div');
-          wrapper.id = 'search-modal';
-          wrapper.style.position = 'fixed';
-          wrapper.style.inset = '0';
-          wrapper.style.zIndex = '120';
-          wrapper.style.padding = '6rem 1rem 1rem';
-          wrapper.innerHTML = `
-            <div id="search-backdrop" style="position:absolute;inset:0;background:rgba(2,8,3,.68);backdrop-filter:blur(7px)"></div>
-            <div style="position:relative;max-width:840px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow-strong)">
-              <div id="pagefind-search"></div>
-            </div>
-          `;
-          document.body.appendChild(wrapper);
-          wrapper.querySelector('#search-backdrop')?.addEventListener('click', closeSearch);
-          return wrapper;
-        }
-
-        function openSearch() {
-          if (searchModal) {
-            searchModal.style.display = '';
-            const input = searchModal.querySelector('input');
-            if (input) {
-              input.focus();
-              input.select();
-            }
-            document.addEventListener('keydown', handleEsc);
-            return;
-          }
-
-          searchModal = createModal();
-          document.addEventListener('keydown', handleEsc);
-
-          if (pagefindLoaded) return;
-          pagefindLoaded = true;
-
-          const script = document.createElement('script');
-          script.src = base + 'pagefind/pagefind-ui.js';
-          script.onload = function () {
-            new window.PagefindUI({
-              element: '#pagefind-search',
-              showSubResults: true,
-              showImages: false,
-            });
-            const input = searchModal?.querySelector('input');
-            if (input) input.focus();
-          };
-
-          script.onerror = function () {
-            pagefindLoaded = false;
-            const shell = searchModal?.querySelector('#pagefind-search');
-            if (shell) {
-              shell.innerHTML =
-                '<p style="padding:1.5rem;text-align:center;color:var(--text-muted)">Recherche indisponible. Lancez <code style="background:var(--surface-strong);padding:2px 6px;border-radius:6px">npm run build</code>.</p>';
-            }
-          };
-
-          document.head.appendChild(script);
-        }
-
-        searchTrigger?.addEventListener('click', openSearch);
-
-        document.addEventListener('keydown', (event) => {
-          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-            event.preventDefault();
-            if (searchModal && searchModal.style.display !== 'none') {
-              closeSearch();
-            } else {
-              openSearch();
-            }
-          }
-        });
       });
     </script>
   </body>
 </html>
-

@@ -20,6 +20,7 @@ const courses = defineCollection({
         objectifs: z.array(z.string()).optional(),
         livrable: z.string().optional(),
         exercices: z.array(z.string()).optional(),
+        released: z.boolean().optional(),
         lessons: z.array(
           z.object({
             slug: z.string(),

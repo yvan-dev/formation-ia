@@ -2,21 +2,24 @@ import { expect, test } from '@playwright/test';
 
 const BASE = '/formation-ia';
 
-test('active navigation tab updates between Formations and Quiz', async ({
-  page,
-  baseURL,
-}) => {
+test('navigation keeps one primary CTA focus', async ({ page, baseURL }) => {
   await page.goto(`${baseURL}${BASE}/`, { waitUntil: 'networkidle' });
 
-  const formationsTab = page.getByRole('link', { name: /^Formations$/i });
-  const quizTab = page.getByRole('link', { name: /^Quiz$/i });
+  const header = page.locator('header');
+  const formationCta = header.getByRole('link', {
+    name: /Découvrir notre première formation/i,
+  });
+  const quizCta = header.getByRole('link', {
+    name: /Faire un quiz de placement/i,
+  });
 
-  await expect(formationsTab).toHaveClass(/nav-tab-active/);
-  await expect(quizTab).not.toHaveClass(/nav-tab-active/);
+  await expect(formationCta).toHaveClass(/nav-main-cta-active/);
+  await expect(quizCta).toBeVisible();
 
-  await quizTab.click();
-  await expect(quizTab).toHaveClass(/nav-tab-active/);
-  await expect(formationsTab).not.toHaveClass(/nav-tab-active/);
+  await quizCta.first().click();
+  await expect(page).toHaveURL(/\/formation-ia\/quiz-niveau/);
+
+  await expect(quizCta).toHaveClass(/nav-main-cta-primary-active/);
 });
 
 test('theme toggle switches light and dark modes', async ({ page, baseURL }) => {
@@ -52,6 +55,5 @@ test('user can open lesson and mark it completed', async ({ page, baseURL }) => 
   });
 
   const progressText = page.locator('#progress-text');
-  await expect(progressText).toContainText(/1\s*\/\s*30\s*leçons/i);
+  await expect(progressText).toContainText(/1\s*\/\s*\d+\s*leçons/i);
 });
-

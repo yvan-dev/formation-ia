@@ -1,79 +1,85 @@
 {
   "title": "IA appliquée aux métiers tech",
-  "description": "Programme d'accompagnement pour passer d'un usage opportuniste de l'IA à une pratique industrielle: méthodes, sécurité, automatisation et exécution produit.",
+  "level": "Intermédiaire",
+  "description": "Parcours d'accompagnement pour structurer un workflow développeur assisté par IA: cadrage, production de code, validation et amélioration continue.",
   "image": "/formation-ia/images/course-ia.svg",
-  "publicCible": "Développeur·euses, architectes, DevOps, QA, PM techniques, analystes et responsables produit qui souhaitent industrialiser leurs workflows IA.",
-  "prerequis": "Aucun prérequis en IA. Les modules 6 à 8 sont orientés profils techniques et demandent une aisance avec les outils de développement.",
-  "format": "Présentiel ou distanciel, alternance théorie, ateliers, débriefs et exercices contextualisés.",
-  "livrableFinal": "Un AGENT.md opérationnel et un plan d'adoption IA directement réutilisables en équipe.",
+  "publicCible": "Collègues tech: développement, architecture, DevOps, QA, produit et profils techniques qui veulent adopter l'IA de façon pragmatique.",
+  "prerequis": "Aucun prérequis en IA. Une expérience projet côté tech suffit.",
+  "format": "Ateliers guidés, cas concrets et exercices d'équipe. Les modules non opérationnels sont indiqués comme à venir.",
+  "livrableFinal": "Un plan d'adoption IA d'équipe et un socle AGENT.md exploitable sur vos projets.",
   "objectifsGlobaux": [
-    "Comprendre les mécanismes des LLMs et leurs limites en production",
-    "Construire des prompts et system prompts robustes et auditables",
-    "Mettre en place un cadre de sécurité et de gouvernance IA",
-    "Appliquer spec-driven development et plan-first pour fiabiliser le delivery",
-    "Concevoir des workflows agentiques supervisés avec Human in the Loop"
+    "Adopter un workflow développeur IA concret dès les premières semaines",
+    "Rédiger des prompts et spécifications qui réduisent les allers-retours",
+    "Mettre en place des points de validation humaine sur les étapes critiques",
+    "Préparer la montée en maturité vers les niveaux 3, 4 puis 5"
   ],
   "modules": [
     {
-      "title": "Fondations et mindset",
+      "released": true,
+      "title": "Introduction: cap IA et maturité",
       "public": "tous",
       "objectifs": [
-        "Comprendre ce qui change réellement dans nos métiers",
-        "Identifier notre niveau de maturité IA",
-        "Construire une posture orientée preuves plutôt que hype"
+        "Poser un langage commun sur l'IA dans l'équipe",
+        "Identifier notre niveau de maturité actuel",
+        "Aligner un objectif de progression concret"
       ],
-      "livrable": "Auto-évaluation + objectif personnel de progression",
+      "livrable": "Auto-positionnement + objectif personnel de progression",
       "lessons": [
-        { "slug": "panorama-ia", "title": "Panorama de l'IA en 2024-2025" },
+        { "slug": "panorama-ia", "title": "Panorama IA 2026" },
         { "slug": "niveaux-maturite", "title": "Les 5 niveaux de maturité IA" },
         { "slug": "mindset-ia", "title": "L'IA comme copilote, pas comme remplaçant" },
         { "slug": "bon-ingenieur-ia", "title": "Ce qui différencie un bon usage de l'IA" }
       ]
     },
     {
-      "title": "Comprendre les LLMs",
+      "released": true,
+      "title": "Introduction: comprendre LLM et prompting",
       "public": "tous",
       "objectifs": [
-        "Comprendre le fonctionnement d'un LLM sans formalisme excessif",
-        "Maîtriser la fenêtre de contexte et ses impacts",
-        "Détecter et réduire les hallucinations"
+        "Comprendre les limites utiles des LLM",
+        "Rendre les prompts plus fiables et réutilisables",
+        "Réduire les erreurs fréquentes dès la phase de cadrage"
       ],
       "exercices": [
-        "Provoquer puis corriger une hallucination sur des cas métier"
+        "Réécrire des prompts flous en prompts exploitables",
+        "Identifier les causes d'hallucination sur des cas réels"
       ],
       "lessons": [
         { "slug": "fonctionnement-llm", "title": "Comment fonctionne un LLM" },
         { "slug": "memoire-llm", "title": "Mémoire des LLMs: contexte et context rot" },
-        { "slug": "hallucinations", "title": "Hallucinations: causes, détection, réduction" }
+        { "slug": "hallucinations", "title": "Hallucinations: causes, détection, réduction" },
+        { "slug": "bases-prompt", "title": "Les bases du prompt" },
+        { "slug": "system-prompts", "title": "System prompts" }
       ]
     },
     {
-      "title": "Prompt engineering",
-      "public": "tous",
+      "released": true,
+      "title": "Workflow développeur assisté par IA",
+      "public": "profils techniques",
       "objectifs": [
-        "Écrire des prompts reproductibles et testables",
-        "Structurer des system prompts robustes",
-        "Itérer rapidement avec des critères de qualité"
+        "Passer du prompt isolé à un flux de travail reproductible",
+        "Structurer plan-first et spec-driven dans le quotidien",
+        "Conserver la validation humaine aux points clés"
       ],
       "exercices": [
-        "Refonte de prompts faibles vers une version exploitable",
-        "Conception d'un system prompt métier",
-        "Atelier de prompting sur un scénario d'architecture"
+        "Conduire une tâche dev complète avec plan, exécution IA et revue",
+        "Mesurer le gain et les limites sur un vrai ticket"
       ],
       "lessons": [
-        { "slug": "bases-prompt", "title": "Les bases du prompt" },
-        { "slug": "system-prompts", "title": "System prompts" },
-        { "slug": "techniques-avancees-prompt", "title": "Techniques avancées de prompting" },
-        { "slug": "prompting-dev", "title": "L'art du prompting en développement" }
+        { "slug": "prompting-dev", "title": "L'art du prompting en développement" },
+        { "slug": "plan-first", "title": "Le principe plan-first" },
+        { "slug": "spec-driven-dev", "title": "Spec-driven development avec l'IA" },
+        { "slug": "workflow-complet", "title": "Exemple de workflow complet" },
+        { "slug": "assistant-vs-agent", "title": "De l'assistant à l'agent" }
       ]
     },
     {
-      "title": "Outils et stack",
+      "released": false,
+      "title": "Outils et stack (à venir)",
       "public": "tous",
       "objectifs": [
-        "Choisir une stack IA pertinente selon nos contraintes",
-        "Structurer un benchmark outillage",
-        "Mettre en place une veille actionnable"
+        "Comparer les outils selon les contraintes d'équipe",
+        "Construire un benchmark simple et actionnable"
       ],
       "lessons": [
         { "slug": "ecosysteme-outils", "title": "Écosystème des outils IA" },
@@ -83,15 +89,13 @@
       ]
     },
     {
-      "title": "Sécurité et limites",
+      "released": false,
+      "title": "Sécurité et limites (à venir)",
       "public": "tous",
       "objectifs": [
-        "Identifier les risques en contexte entreprise",
+        "Identifier les risques dans les contextes métier",
         "Protéger les données sensibles",
-        "Sécuriser les intégrations agentiques"
-      ],
-      "exercices": [
-        "Audit d'un workflow IA fictif et plan de mitigation"
+        "Sécuriser les workflows IA en équipe"
       ],
       "lessons": [
         { "slug": "donnees-sensibles", "title": "Données sensibles: ce qu'il faut exclure des prompts" },
@@ -102,53 +106,37 @@
       ]
     },
     {
-      "title": "Approche spec-driven et plan-first",
+      "released": false,
+      "title": "Approche spec-driven avancée (à venir)",
       "public": "profils techniques",
       "objectifs": [
-        "Mettre en place une culture plan-first",
-        "Transformer une intention produit en spec exécutable",
-        "Fiabiliser le delivery avec des checkpoints explicites"
-      ],
-      "exercices": [
-        "Rédiger une spécification complète d'une feature réellement priorisée"
+        "Industrialiser les specs avec IA sur des projets complexes",
+        "Améliorer la qualité de delivery sur plusieurs cycles"
       ],
       "lessons": [
-        { "slug": "plan-first", "title": "Le principe plan-first" },
-        { "slug": "spec-driven-dev", "title": "Spec-driven development avec l'IA" },
-        { "slug": "workflow-complet", "title": "Exemple de workflow complet" },
         { "slug": "approche-sommaire", "title": "Approche par sommaire" }
       ]
     },
     {
-      "title": "Développement agentique guidé",
+      "released": false,
+      "title": "Développement agentique guidé (à venir)",
       "public": "profils techniques",
       "objectifs": [
-        "Passer du copilote à l'exécution guidée",
-        "Orchestrer outils, contexte et objectifs",
-        "Maintenir la supervision humaine aux points critiques"
-      ],
-      "exercices": [
-        "Concevoir un mini-agent avec garde-fous, logs et critères de sortie"
+        "Structurer des tâches multi-étapes avec supervision",
+        "Concevoir des garde-fous opérationnels"
       ],
       "lessons": [
-        { "slug": "assistant-vs-agent", "title": "De l'assistant à l'agent" },
         { "slug": "concevoir-agent", "title": "Concevoir un bon agent" },
         { "slug": "human-in-the-loop", "title": "Human in the Loop" }
       ]
     },
     {
-      "title": "Projet capstone: construire son AGENT.md",
+      "released": false,
+      "title": "Projet capstone AGENT.md (à venir)",
       "public": "profils techniques",
       "objectifs": [
-        "Produire un AGENT.md opérationnel",
-        "Formaliser rôles, contraintes et workflows",
+        "Formaliser un AGENT.md opérationnel",
         "Mettre en place une boucle d'amélioration continue"
-      ],
-      "livrable": "AGENT.md individuel validé en peer review",
-      "exercices": [
-        "Rédiger son AGENT.md sur un vrai projet",
-        "Peer review croisée",
-        "Itération finale et validation"
       ],
       "lessons": [
         { "slug": "regles-agent-md", "title": "Règles de construction d'un AGENT.md efficace" },
@@ -158,4 +146,3 @@
     }
   ]
 }
-

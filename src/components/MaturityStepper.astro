@@ -44,6 +44,10 @@ const levels = [
 ];
 
 const isHome = variant === 'home';
+const actionHref = isHome
+  ? `${basePath}quiz-niveau`
+  : `${basePath}lessons/${courseSlug}/niveaux-maturite`;
+const actionLabel = isHome ? 'Me situer avec le quiz' : 'Voir le détail';
 ---
 
 <div class:list={['surface-card maturity-shell', isHome ? 'p-6 md:p-7' : 'p-5 md:p-6']}>
@@ -51,13 +55,16 @@ const isHome = variant === 'home';
     <div>
       <p class="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">Repère d'équipe</p>
       <h2 class="section-title mt-1 text-2xl md:text-3xl">Niveaux de maturité IA</h2>
+      <p class="mt-2 max-w-3xl text-sm text-[var(--text-muted)]">
+        Le quiz nous situe rapidement. Cette grille nous aide ensuite à choisir la prochaine étape de progression.
+      </p>
     </div>
 
     <a
-      href={`${basePath}lessons/${courseSlug}/niveaux-maturite`}
+      href={actionHref}
       class="btn-ghost !px-4 !py-2 !text-xs md:!text-sm"
     >
-      Voir les détails
+      {actionLabel}
     </a>
   </div>
 
@@ -68,24 +75,30 @@ const isHome = variant === 'home';
     <div class="relative grid min-w-[860px] gap-3 md:grid-cols-5 md:gap-4">
       {
         levels.map((level, index) => (
-          <article class="maturity-card rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 text-center" style={`--delay:${index * 90}ms`}>
-            <div class="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] shadow-sm">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={level.icon}></path>
-              </svg>
+          <article class="maturity-card h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 text-center" style={`--delay:${index * 90}ms`}>
+            <div class="flex h-full flex-col items-center">
+              <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] shadow-sm">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={level.icon}></path>
+                </svg>
+              </div>
+
+              <p class="mt-3 text-[11px] font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">Niveau {level.number}</p>
+              <p class="mt-1 text-base font-bold text-[var(--text-primary)]">{level.title}</p>
+              <p class="mt-0.5 text-sm text-[var(--text-muted)]">{level.subtitle}</p>
+
+              <div class="mt-auto pt-3">
+                {
+                  level.objective ? (
+                    <p class="inline-flex min-h-[30px] items-center rounded-full border border-[var(--brand-300)] bg-[rgba(23,229,23,0.12)] px-2.5 py-1 text-[11px] font-semibold text-[var(--brand-700)]">
+                      {level.objective}
+                    </p>
+                  ) : (
+                    <span class="inline-flex min-h-[30px] items-center px-2.5 py-1 text-[11px] opacity-0">objectif</span>
+                  )
+                }
+              </div>
             </div>
-
-            <p class="mt-3 text-[11px] font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">Niveau {level.number}</p>
-            <p class="mt-1 text-base font-bold text-[var(--text-primary)]">{level.title}</p>
-            <p class="mt-0.5 text-sm text-[var(--text-muted)]">{level.subtitle}</p>
-
-            {
-              level.objective && (
-                <p class="mt-2 inline-flex rounded-full border border-[var(--brand-300)] bg-[rgba(23,229,23,0.12)] px-2.5 py-1 text-[11px] font-semibold text-[var(--brand-700)]">
-                  {level.objective}
-                </p>
-              )
-            }
           </article>
         ))
       }
@@ -94,10 +107,9 @@ const isHome = variant === 'home';
 
   {
     isHome && (
-      <p class="mt-4 text-sm leading-relaxed text-[var(--text-muted)]">
+      <p class="mt-4 rounded-xl border border-[var(--brand-300)] bg-[rgba(23,229,23,0.09)] px-4 py-3 text-sm leading-relaxed font-semibold text-[var(--text-primary)]">
         Notre cap collectif: atteindre le niveau 3 à court terme, stabiliser le niveau 4 à moyen terme, puis industrialiser le niveau 5 à long terme.
       </p>
     )
   }
 </div>
-

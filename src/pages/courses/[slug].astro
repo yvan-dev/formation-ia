@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LevelQuiz from '../../components/LevelQuiz.tsx';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -36,12 +35,24 @@ interface Module {
   objectifs?: string[];
   livrable?: string;
   exercices?: string[];
+  released?: boolean;
   lessons: Lesson[];
 }
 
-const totalLessons = modules.reduce(
+const availableModules = modules.filter((module: Module, index: number) =>
+  typeof module.released === 'boolean' ? module.released : index < 3,
+);
+const comingSoonModules = modules.filter((module: Module, index: number) =>
+  typeof module.released === 'boolean' ? !module.released : index >= 3,
+);
+
+const totalLessons = availableModules.reduce(
   (a: number, m: Module) => a + m.lessons.length,
   0,
+);
+
+const availableLessonSlugs = availableModules.flatMap((module: Module) =>
+  module.lessons.map((lesson: Lesson) => lesson.slug),
 );
 
 const hasMetadata = publicCible || prerequis || format || livrableFinal;
@@ -65,11 +76,11 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
         <div class="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3 text-center">
-              <p class="text-xs text-[var(--text-faint)]">Modules</p>
-              <p class="section-title mt-1 text-2xl">{modules.length}</p>
+              <p class="text-xs text-[var(--text-faint)]">Modules actifs</p>
+              <p class="section-title mt-1 text-2xl">{availableModules.length}</p>
             </div>
             <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3 text-center">
-              <p class="text-xs text-[var(--text-faint)]">Leçons</p>
+              <p class="text-xs text-[var(--text-faint)]">Leçons disponibles</p>
               <p class="section-title mt-1 text-2xl">{totalLessons}</p>
             </div>
           </div>
@@ -80,15 +91,17 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
 
   <section class="container-shell grid gap-6 pb-4 md:grid-cols-[1.15fr_0.85fr]">
     <div class="surface-card p-6 md:p-7">
-      <h2 class="section-title text-2xl">Évaluation de niveau</h2>
-      <p class="mt-2 text-sm text-[var(--text-muted)]">Répondons au quiz pour obtenir une recommandation de parcours personnalisée.</p>
+      <p class="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">Étape recommandée</p>
+      <h2 class="section-title mt-2 text-2xl">Commencer par le quiz de placement</h2>
+      <p class="mt-2 text-sm text-[var(--text-muted)]">
+        Nous avons retiré le quiz de cette page pour garder un seul objectif: se positionner d'abord, puis suivre les modules adaptés.
+      </p>
       <div class="mt-4">
-        <LevelQuiz client:load basePath={base} />
+        <a href={`${base}quiz-niveau`} class="btn-primary">Faire un quiz de placement</a>
       </div>
     </div>
 
     <div class="space-y-6">
-
       {
         hasMetadata && (
           <div class="surface-card p-6">
@@ -129,7 +142,7 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
     objectifsGlobaux && objectifsGlobaux.length > 0 && (
       <section class="container-shell py-8">
         <div class="surface-card p-6 md:p-7">
-          <h2 class="section-title text-2xl">Objectifs globaux</h2>
+          <h2 class="section-title text-2xl">Objectifs du parcours</h2>
           <ul class="mt-4 grid gap-3 md:grid-cols-2">
             {objectifsGlobaux.map((obj: string) => (
               <li class="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--text-muted)]">
@@ -156,7 +169,7 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
 
   <section class="container-shell space-y-6 py-8">
     {
-      modules.map((module: Module, moduleIndex: number) => (
+      availableModules.map((module: Module, moduleIndex: number) => (
         <article class="surface-card overflow-hidden">
           <div class="border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 md:px-6">
             <div class="flex flex-wrap items-center justify-between gap-3">
@@ -181,7 +194,7 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
 
             {module.objectifs && module.objectifs.length > 0 && (
               <ul class="mt-3 space-y-1.5 text-sm text-[var(--text-muted)]">
-                {module.objectifs.map((obj: string) => (
+                {module.objectifs.slice(0, 3).map((obj: string) => (
                   <li class="flex items-start gap-2">
                     <span class="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-[var(--brand-400)]"></span>
                     <span>{obj}</span>
@@ -194,17 +207,6 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
               <p class="mt-3 text-sm text-[var(--text-muted)]">
                 <span class="font-semibold text-[var(--text-primary)]">Livrable:</span> {module.livrable}
               </p>
-            )}
-
-            {module.exercices && module.exercices.length > 0 && (
-              <div class="mt-3 text-sm text-[var(--text-muted)]">
-                <p class="text-xs font-semibold tracking-[0.12em] text-[var(--text-faint)] uppercase">Exercices</p>
-                <ul class="mt-1 space-y-1">
-                  {module.exercices.map((exercise: string) => (
-                    <li>{exercise}</li>
-                  ))}
-                </ul>
-              </div>
             )}
           </div>
 
@@ -230,11 +232,36 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
         </article>
       ))
     }
+
+    {
+      comingSoonModules.length > 0 && (
+        <div class="surface-card p-6 md:p-7">
+          <h2 class="section-title text-xl">Modules à venir</h2>
+          <p class="mt-2 text-sm text-[var(--text-muted)]">
+            Ces modules seront activés progressivement après stabilisation du socle opérationnel.
+          </p>
+          <ul class="mt-4 grid gap-3 md:grid-cols-2">
+            {comingSoonModules.map((module: Module) => (
+              <li class="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--text-muted)]">
+                <span class="inline-flex items-center gap-2 font-semibold text-[var(--text-primary)]">
+                  <span class="inline-flex h-2 w-2 rounded-full bg-[var(--text-faint)]"></span>
+                  {module.title}
+                </span>
+                <p class="mt-1 text-xs text-[var(--text-faint)]">Bientôt disponible</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
   </section>
 
-  <script is:inline define:vars={{ courseId: course.id, totalLessons }}>
+  <script is:inline define:vars={{ courseId: course.id, totalLessons, availableLessonSlugs }}>
     (function () {
-      const progress = JSON.parse(localStorage.getItem(`progress_${courseId}`) || '[]');
+      const allowed = new Set(availableLessonSlugs || []);
+      const progress = JSON.parse(localStorage.getItem(`progress_${courseId}`) || '[]').filter((slug) =>
+        allowed.has(slug),
+      );
       const pct = totalLessons > 0 ? Math.round((progress.length / totalLessons) * 100) : 0;
 
       const fill = document.getElementById('course-progress-fill');
@@ -259,4 +286,3 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
     })();
   </script>
 </BaseLayout>
-
