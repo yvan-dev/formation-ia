@@ -221,13 +221,19 @@ body::before {
 .maturity-track-fill {
   width: 0;
   background: linear-gradient(90deg, #78f55a, #17e517, #1b581c);
-  animation: maturityFill 1.7s ease-out 260ms forwards;
+}
+
+.maturity-shell:hover .maturity-track-fill {
+  animation: maturityFill 1.4s ease-out forwards;
 }
 
 .maturity-card {
-  opacity: 0;
-  transform: translateY(16px) scale(0.98);
-  animation: maturityCardIn 560ms cubic-bezier(0.2, 0.72, 0.2, 1) forwards;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.maturity-shell:hover .maturity-card {
+  animation: maturityCardHover 560ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
   animation-delay: var(--delay, 0ms);
 }
 
@@ -369,9 +375,14 @@ body::before {
   }
 }
 
-@keyframes maturityCardIn {
-  to {
-    opacity: 1;
+@keyframes maturityCardHover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.01);
+  }
+  100% {
     transform: translateY(0) scale(1);
   }
 }
