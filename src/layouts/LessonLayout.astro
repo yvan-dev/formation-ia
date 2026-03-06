@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import LessonSidebar from '../components/LessonSidebar.astro';
 import ProgressBar from '../components/ProgressBar.astro';
+import { getEntry } from 'astro:content';
 
 interface Props {
   title: string;
@@ -15,241 +16,137 @@ interface Props {
       title: string;
     }>;
   }>;
-  prevLesson?: { slug: string; title: string } | null;
-  nextLesson?: { slug: string; title: string } | null;
 }
 
 const props = Astro.props.frontmatter || Astro.props;
-const {
-  title,
-  courseSlug,
-  courseTitle,
-  lessonSlug,
-  duration,
-  modules,
-  prevLesson,
-  nextLesson,
-} = props;
-const base = import.meta.env.BASE_URL;
+const { title, courseSlug, lessonSlug, duration } = props;
 
+const courseEntry = await getEntry('courses', courseSlug);
+const courseTitle = courseEntry?.data.title || props.courseTitle;
+const modules = courseEntry?.data.modules || props.modules;
+
+const base = import.meta.env.BASE_URL;
 const allLessons = modules.flatMap((m) => m.lessons);
 const currentIndex = allLessons.findIndex((l) => l.slug === lessonSlug);
 const totalLessons = allLessons.length;
+const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+const nextLesson =
+  currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 ---
 
 <BaseLayout title={title}>
-  <div class="mx-auto flex max-w-7xl">
-    <!-- Sidebar -->
-    <aside
-      class="border-navy-800 sticky top-16 hidden min-h-[calc(100vh-4rem)] w-80 shrink-0 overflow-y-auto border-r lg:block"
-    >
-      <LessonSidebar
-        courseSlug={courseSlug}
-        courseTitle={courseTitle}
-        modules={modules}
-        currentLesson={lessonSlug}
-      />
-    </aside>
+  <div class="container-shell overflow-hidden py-3">
+    <div class="surface-card overflow-hidden">
+      <div class="grid lg:grid-cols-[300px_1fr]">
+        <aside class="hidden border-r border-[var(--border)] bg-[var(--surface-strong)] lg:block">
+          <LessonSidebar
+            courseSlug={courseSlug}
+            courseTitle={courseTitle}
+            modules={modules}
+            currentLesson={lessonSlug}
+          />
+        </aside>
 
-    <!-- Main content -->
-    <div class="min-w-0 flex-1">
-      <!-- Progress bar -->
-      <ProgressBar courseSlug={courseSlug} totalLessons={totalLessons} />
+        <div class="min-w-0">
+          <ProgressBar courseSlug={courseSlug} totalLessons={totalLessons} />
 
-      <!-- Breadcrumb -->
-      <div class="px-6 pt-6 lg:px-12">
-        <nav
-          class="text-navy-500 flex items-center gap-2 text-sm"
-          aria-label="Breadcrumb"
-        >
-          <a href={base} class="hover:text-navy-300 transition-colors"
-            >Accueil</a
-          >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"></path></svg
-          >
-          <a
-            href={`${base}courses/${courseSlug}`}
-            class="hover:text-navy-300 transition-colors">{courseTitle}</a
-          >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"></path></svg
-          >
-          <span class="text-navy-300">{title}</span>
-        </nav>
-      </div>
+          <div class="px-5 pt-5 md:px-8">
+            <nav class="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase" aria-label="Fil d'Ariane">
+              <a href={base} class="transition-colors hover:text-[var(--text-primary)]">Accueil</a>
+              <span>/</span>
+              <a href={`${base}courses/${courseSlug}`} class="transition-colors hover:text-[var(--text-primary)]">{courseTitle}</a>
+              <span>/</span>
+              <span class="text-[var(--text-muted)]">{title}</span>
+            </nav>
 
-      <!-- Lesson content -->
-      <article class="max-w-3xl px-6 py-8 lg:px-12" data-pagefind-body>
-        <div class="mb-8">
-          <div class="mb-3 flex items-center gap-3">
-            <span class="text-navy-500 text-sm"
-              >Leçon {currentIndex + 1} / {totalLessons}</span
-            >
-            <span class="bg-navy-600 h-1 w-1 rounded-full"></span>
-            <span class="text-navy-500 text-sm">{duration}</span>
+            <div class="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.1em] text-[var(--text-faint)] uppercase">
+              <span>Leçon {currentIndex + 1} / {totalLessons}</span>
+              {duration && <span>{duration}</span>}
+            </div>
+
+            <h1 class="section-title text-3xl text-[var(--text-primary)] md:text-4xl">{title}</h1>
           </div>
-          <h1 class="text-navy-100 text-3xl leading-tight font-bold">
-            {title}
-          </h1>
-        </div>
 
-        <div
-          class="prose prose-invert prose-navy [&_a]:text-acton-500 [&_a]:hover:text-acton-400 [&_blockquote]:border-acton-600 [&_blockquote]:text-navy-400 [&_code]:bg-navy-800 [&_code]:text-acton-500 [&_h2]:text-navy-100 [&_h3]:text-navy-200 [&_hr]:border-navy-700 [&_ol]:text-navy-300 [&_p]:text-navy-300 [&_pre]:border-navy-700 [&_pre]:bg-navy-900 [&_strong]:text-navy-100 [&_ul]:text-navy-300 max-w-none [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:pl-4 [&_blockquote]:italic [&_code]:rounded [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-sm [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_hr]:my-8 [&_li]:leading-relaxed [&_ol]:mb-4 [&_ol]:space-y-2 [&_p]:mb-4 [&_p]:leading-relaxed [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:p-4 [&_strong]:font-semibold [&_ul]:mb-4 [&_ul]:space-y-2"
-        >
-          <slot />
-        </div>
+          <article class="px-5 py-6 md:px-8 md:py-8" data-pagefind-body>
+            <div class="prose-shell max-w-none">
+              <slot />
+            </div>
 
-        <!-- Mark as complete button -->
-        <div class="mt-12 mb-8 flex justify-center">
-          <button
-            id="mark-complete-btn"
-            data-course={courseSlug}
-            data-lesson={lessonSlug}
-            class="bg-acton-700 hover:bg-acton-600 flex items-center gap-2 rounded-lg px-6 py-3 font-medium text-white transition-colors"
-          >
-            <svg
-              class="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span>Marquer comme terminée</span>
-          </button>
-        </div>
-
-        <!-- Prev/Next navigation -->
-        <nav
-          class="border-navy-800 flex justify-between gap-4 border-t pt-8"
-          aria-label="Navigation entre leçons"
-        >
-          {
-            prevLesson ? (
-              <a
-                href={`${base}lessons/${courseSlug}/${prevLesson.slug}`}
-                class="group border-navy-800 hover:border-navy-700 flex-1 rounded-lg border p-4 transition-colors"
+            <div class="mt-10">
+              <button
+                id="mark-complete-btn"
+                data-course={courseSlug}
+                data-lesson={lessonSlug}
+                class="btn-primary"
               >
-                <span class="text-navy-500 flex items-center gap-1 text-sm">
-                  <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span>Marquer la leçon comme terminée</span>
+              </button>
+            </div>
+
+            <nav class="mt-10 grid gap-3 border-t border-[var(--border)] pt-6 md:grid-cols-2" aria-label="Navigation des leçons">
+              {
+                prevLesson ? (
+                  <a
+                    href={`${base}lessons/${courseSlug}/${prevLesson.slug}`}
+                    class="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm transition-colors hover:bg-[var(--surface)]"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Précédent
-                </span>
-                <span class="text-navy-200 group-hover:text-acton-500 mt-1 block transition-colors">
-                  {prevLesson.title}
-                </span>
-              </a>
-            ) : (
-              <div />
-            )
-          }
-          {
-            nextLesson ? (
-              <a
-                href={`${base}lessons/${courseSlug}/${nextLesson.slug}`}
-                class="group border-navy-800 hover:border-navy-700 flex-1 rounded-lg border p-4 text-right transition-colors"
-              >
-                <span class="text-navy-500 flex items-center justify-end gap-1 text-sm">
-                  Suivant
-                  <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                    <p class="text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase">Précédent</p>
+                    <p class="mt-1 font-semibold text-[var(--text-primary)]">{prevLesson.title}</p>
+                  </a>
+                ) : (
+                  <div class="hidden md:block"></div>
+                )
+              }
+
+              {
+                nextLesson ? (
+                  <a
+                    href={`${base}lessons/${courseSlug}/${nextLesson.slug}`}
+                    class="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm transition-colors hover:bg-[var(--surface)] md:text-right"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-                <span class="text-navy-200 group-hover:text-acton-500 mt-1 block transition-colors">
-                  {nextLesson.title}
-                </span>
-              </a>
-            ) : (
-              <div />
-            )
-          }
-        </nav>
-      </article>
+                    <p class="text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase">Suivant</p>
+                    <p class="mt-1 font-semibold text-[var(--text-primary)]">{nextLesson.title}</p>
+                  </a>
+                ) : (
+                  <div class="hidden md:block"></div>
+                )
+              }
+            </nav>
+          </article>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Mobile sidebar toggle -->
   <button
     id="mobile-sidebar-toggle"
-    class="bg-acton-700 hover:bg-acton-600 fixed right-6 bottom-6 z-40 flex h-12 w-12 items-center justify-center rounded-full text-white shadow-lg transition-colors lg:hidden"
-    aria-label="Ouvrir le menu des leçons"
+    class="fixed right-5 bottom-5 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] shadow-[var(--shadow-soft)] lg:hidden"
+    aria-label="Afficher le menu des leçons"
   >
     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"></path>
+        d="M4 6h16M4 12h16M4 18h16"
+      ></path>
     </svg>
   </button>
 
-  <!-- Mobile sidebar overlay -->
   <div id="mobile-sidebar" class="fixed inset-0 z-50 hidden lg:hidden">
-    <div class="absolute inset-0 bg-black/60" id="mobile-sidebar-backdrop">
-    </div>
-    <div
-      class="border-navy-800 bg-navy-900 absolute top-0 left-0 h-full w-80 overflow-y-auto border-r"
-    >
-      <div class="flex justify-end p-4">
-        <button
-          id="mobile-sidebar-close"
-          class="text-navy-400 hover:text-navy-200"
-          aria-label="Fermer le menu"
-        >
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
+    <div class="absolute inset-0 bg-black/55" id="mobile-sidebar-backdrop"></div>
+    <div class="relative h-full w-[86%] max-w-[320px] overflow-y-auto border-r border-[var(--border)] bg-[var(--surface)]">
+      <div class="flex justify-end p-3">
+        <button id="mobile-sidebar-close" class="btn-ghost !rounded-lg !px-3 !py-1.5" aria-label="Fermer le menu">
+          Fermer
         </button>
       </div>
       <LessonSidebar
@@ -262,65 +159,52 @@ const totalLessons = allLessons.length;
   </div>
 
   <script is:inline>
-    // Mark as complete
-    document
-      .getElementById('mark-complete-btn')
-      ?.addEventListener('click', function (e) {
-        const btn = e.currentTarget;
-        const course = btn.dataset.course;
-        const lesson = btn.dataset.lesson;
-        const key = `progress_${course}`;
-        const progress = JSON.parse(localStorage.getItem(key) || '[]');
+    const completeBtn = document.getElementById('mark-complete-btn');
 
-        if (!progress.includes(lesson)) {
-          progress.push(lesson);
-          localStorage.setItem(key, JSON.stringify(progress));
-        }
-
-        btn.innerHTML = `
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    function setCompleteButton(btn) {
+      btn.innerHTML = `
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
         </svg>
-        <span>Terminée !</span>
+        <span>Leçon terminée</span>
       `;
-        btn.classList.remove('bg-acton-700', 'hover:bg-acton-600');
-        btn.classList.add('bg-green-600', 'cursor-default');
-        btn.disabled = true;
+      btn.style.background = 'var(--brand-700)';
+      btn.style.color = 'var(--ink-050)';
+      btn.disabled = true;
+      btn.classList.add('cursor-default');
+    }
 
-        // Update sidebar checkmarks
-        document
-          .querySelectorAll(`[data-lesson-link="${lesson}"]`)
-          .forEach((el) => {
-            el.querySelector('.lesson-check')?.classList.remove('hidden');
-          });
+    completeBtn?.addEventListener('click', (event) => {
+      const btn = event.currentTarget;
+      const course = btn.dataset.course;
+      const lesson = btn.dataset.lesson;
+      const key = `progress_${course}`;
+      const progress = JSON.parse(localStorage.getItem(key) || '[]');
 
-        // Update progress bar
-        window.dispatchEvent(new CustomEvent('lesson-completed'));
+      if (!progress.includes(lesson)) {
+        progress.push(lesson);
+        localStorage.setItem(key, JSON.stringify(progress));
+      }
+
+      setCompleteButton(btn);
+
+      document.querySelectorAll(`[data-lesson-link="${lesson}"]`).forEach((el) => {
+        el.querySelector('.lesson-check')?.classList.remove('hidden');
+        el.querySelector('.lesson-dot')?.classList.add('hidden');
       });
 
-    // Check if already completed
+      window.dispatchEvent(new CustomEvent('lesson-completed'));
+    });
+
     (function () {
       const btn = document.getElementById('mark-complete-btn');
       if (!btn) return;
       const course = btn.dataset.course;
       const lesson = btn.dataset.lesson;
-      const progress = JSON.parse(
-        localStorage.getItem(`progress_${course}`) || '[]',
-      );
-      if (progress.includes(lesson)) {
-        btn.innerHTML = `
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <span>Terminée !</span>
-        `;
-        btn.classList.remove('bg-acton-700', 'hover:bg-acton-600');
-        btn.classList.add('bg-green-600', 'cursor-default');
-        btn.disabled = true;
-      }
+      const progress = JSON.parse(localStorage.getItem(`progress_${course}`) || '[]');
+      if (progress.includes(lesson)) setCompleteButton(btn);
     })();
 
-    // Mobile sidebar
     const toggle = document.getElementById('mobile-sidebar-toggle');
     const sidebar = document.getElementById('mobile-sidebar');
     const backdrop = document.getElementById('mobile-sidebar-backdrop');
@@ -329,6 +213,7 @@ const totalLessons = allLessons.length;
     function openSidebar() {
       sidebar?.classList.remove('hidden');
     }
+
     function closeSidebar() {
       sidebar?.classList.add('hidden');
     }
@@ -338,3 +223,4 @@ const totalLessons = allLessons.length;
     closeBtn?.addEventListener('click', closeSidebar);
   </script>
 </BaseLayout>
+

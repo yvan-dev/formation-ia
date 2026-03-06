@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 interface Question {
   question: string;
@@ -12,158 +12,147 @@ const questions: Question[] = [
     question: "Qu'est-ce qu'un LLM (Large Language Model) ?",
     options: [
       'Un logiciel de traduction automatique',
-      'Un modele de langage entraine sur de grandes quantites de texte pour generer et comprendre du langage',
-      'Un algorithme de tri de donnees',
-      'Un type de base de donnees relationnelle',
+      'Un modèle de langage entraîné sur de grands corpus pour comprendre et générer du texte',
+      'Un algorithme de tri de données',
+      'Une base de données relationnelle',
     ],
     correct: 1,
     difficulty: 'debutant',
   },
   {
-    question:
-      "Qu'est-ce qu'une hallucination dans le contexte des modeles d'IA generative ?",
+    question: "Qu'est-ce qu'une hallucination en IA générative ?",
     options: [
-      'Un bug qui fait planter le modele',
-      'Une reponse generee avec assurance mais factuellement incorrecte',
-      'Un probleme de connexion au serveur',
-      'Une image generee de mauvaise qualite',
+      'Un bug système qui coupe la connexion',
+      'Une réponse convaincante mais factuellement fausse',
+      'Une erreur de compilation',
+      'Une image de mauvaise résolution',
     ],
     correct: 1,
     difficulty: 'debutant',
   },
   {
-    question: 'A quoi sert un system prompt ?',
+    question: 'À quoi sert un system prompt ?',
     options: [
-      "A redemarrer le modele en cas d'erreur",
-      "A definir le comportement, le role et les contraintes du modele avant l'interaction",
-      'A mesurer la performance du modele',
-      'A traduire le prompt dans une autre langue',
+      'À redémarrer le modèle',
+      'À fixer le rôle, les contraintes et les règles de réponse',
+      'À mesurer la latence du service',
+      'À traduire automatiquement les requêtes',
     ],
     correct: 1,
     difficulty: 'debutant',
   },
   {
-    question:
-      "Qu'est-ce que la fenetre de contexte (context window) d'un LLM ?",
+    question: "Que représente la fenêtre de contexte d'un LLM ?",
     options: [
-      "L'interface graphique du chatbot",
-      'Le nombre maximum de tokens que le modele peut traiter en une seule interaction',
-      'Le temps de reponse du modele',
-      "La taille de l'ecran recommandee pour utiliser l'outil",
+      'La taille de la fenêtre du navigateur',
+      'Le nombre maximal de tokens pris en compte dans une interaction',
+      'Le temps moyen de réponse',
+      "Le nombre d'utilisateurs simultanés",
     ],
     correct: 1,
     difficulty: 'intermediaire',
   },
   {
     question:
-      'Quelle technique de prompting consiste a fournir des exemples au modele avant de poser la question ?',
-    options: [
-      'Chain of Thought',
-      'Zero-shot prompting',
-      'Few-shot prompting',
-      'Prompt injection',
-    ],
+      'Quelle technique consiste à fournir des exemples avant la demande principale ?',
+    options: ['Zero-shot', 'Fine-tuning', 'Few-shot prompting', 'Prompt injection'],
     correct: 2,
     difficulty: 'intermediaire',
   },
   {
     question: "Qu'est-ce qu'une attaque par prompt injection ?",
     options: [
-      'Un virus informatique qui cible les GPU',
-      "Une technique qui manipule le modele en inserant des instructions malveillantes dans l'input",
-      'Une methode pour accelerer les reponses du modele',
-      'Un outil de debug pour tester les prompts',
+      'Une faille GPU',
+      "Une tentative de détournement des instructions du modèle via l'entrée utilisateur",
+      "Une méthode d'optimisation des tokens",
+      'Un protocole de test de charge',
     ],
     correct: 1,
     difficulty: 'intermediaire',
   },
   {
-    question:
-      "Dans l'approche Spec-Driven Development, quelle est la premiere etape avant de coder ?",
+    question: 'En Spec-Driven Development, quelle est la première étape ?',
     options: [
-      'Ecrire les tests unitaires',
-      "Configurer l'environnement de developpement",
-      "Rediger une specification detaillee que l'IA peut suivre",
-      'Choisir le framework frontend',
+      'Coder rapidement un prototype',
+      'Configurer les outils de build',
+      'Rédiger une spécification exploitable avant implémentation',
+      'Passer directement aux tests de charge',
     ],
     correct: 2,
     difficulty: 'intermediaire',
   },
   {
-    question:
-      'Quelle est la difference principale entre un assistant IA et un agent IA ?',
+    question: "Quelle est la différence principale entre assistant IA et agent IA ?",
     options: [
-      "L'assistant est gratuit, l'agent est payant",
-      "L'assistant repond a des questions, l'agent peut executer des actions de maniere autonome avec des outils",
-      "L'assistant utilise du texte, l'agent utilise des images",
-      "Il n'y a aucune difference, ce sont des synonymes",
+      'Aucune différence',
+      "L'assistant répond; l'agent orchestre des actions avec outils et objectifs",
+      "L'assistant ne peut produire que du texte",
+      "L'agent est uniquement visuel",
     ],
     correct: 1,
     difficulty: 'avance',
   },
   {
-    question: 'A quoi sert un fichier AGENT.md dans un projet de dev ?',
+    question: 'À quoi sert un fichier AGENT.md dans un projet ?',
     options: [
-      "A documenter l'API REST du projet",
-      'A lister les dependances npm du projet',
-      "A definir les regles, la structure et les bonnes pratiques qu'un agent IA doit suivre dans le projet",
-      'A configurer le pipeline CI/CD',
+      "À décrire l'API REST publique",
+      'À lister les dépendances npm',
+      'À cadrer les règles, contraintes et workflow pour les agents IA du projet',
+      'À piloter le déploiement Kubernetes',
     ],
     correct: 2,
     difficulty: 'avance',
   },
   {
-    question: "Que signifie 'Human in the Loop' dans un workflow agentique ?",
+    question: 'Que signifie Human in the Loop ?',
     options: [
-      "Un humain qui remplace completement l'IA pour les taches critiques",
-      "Un mecanisme ou l'humain valide ou intervient a des points cles du processus automatise",
-      'Un test utilisateur realise apres le deploiement',
-      "Un role de moderation sur un forum d'IA",
+      "L'humain remplace l'IA", 
+      'Des points de contrôle humains dans un processus automatisé',
+      'Un test utilisateur en fin de projet',
+      'Une option de modération de chat',
     ],
     correct: 1,
     difficulty: 'avance',
   },
 ];
 
-type Level = 'Debutant' | 'Intermediaire' | 'Avance';
+type Level = 'Débutant' | 'Intermédiaire' | 'Avancé';
 
 interface LevelResult {
   level: Level;
-  color: string;
-  bg: string;
-  border: string;
   description: string;
+  recommendation: string;
 }
 
-function getLevel(score: number, total: number): LevelResult {
-  const pct = (score / total) * 100;
+function getLevel(score: number): LevelResult {
+  const pct = (score / questions.length) * 100;
+
   if (pct <= 40) {
     return {
-      level: 'Debutant',
-      color: 'text-green-400',
-      bg: 'bg-green-500/10',
-      border: 'border-green-500/30',
+      level: 'Débutant',
       description:
-        "Vous debutez avec l'IA appliquee — c'est le moment ideal pour commencer ! Nous vous recommandons de demarrer par le Module 0 (Fondations et Mindset) pour poser les bases et progresser sereinement.",
+        'Nous posons les bases: fonctionnement des LLM, hygiène de prompt et sécurité essentielle.',
+      recommendation:
+        "Commençons par les modules Fondations, Comprendre les LLMs, puis Prompt Engineering avant de passer à l'agentique.",
     };
   }
+
   if (pct <= 70) {
     return {
-      level: 'Intermediaire',
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/30',
+      level: 'Intermédiaire',
       description:
-        'Vous avez de bonnes bases en IA. Pour aller plus loin, concentrez-vous sur les modules avances : Spec-Driven Development (M5), Developpement Agentique (M6) et le projet AGENT.md (M7).',
+        "Nous avons déjà de bons réflexes sur les usages quotidiens et les limites des modèles.",
+      recommendation:
+        'Renforçons Spec-Driven Development, architecture agentique guidée et gestion des risques opérationnels.',
     };
   }
+
   return {
-    level: 'Avance',
-    color: 'text-red-400',
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/30',
+    level: 'Avancé',
     description:
-      "Vous maitrisez bien les concepts de l'IA appliquee. Foncez directement vers le Module 7 pour realiser le projet capstone AGENT.md et structurer vos workflows agentiques.",
+      "Niveau opérationnel solide: nous pouvons structurer des workflows IA robustes à l'échelle de l'équipe.",
+    recommendation:
+      'Ciblons les modules capstone AGENT.md, gouvernance IA, supervision human-in-the-loop et industrialisation.',
   };
 }
 
@@ -179,6 +168,10 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
   const [answered, setAnswered] = useState(false);
 
   const q = questions[currentQ];
+  const progress = useMemo(
+    () => ((currentQ + (answered ? 1 : 0)) / questions.length) * 100,
+    [currentQ, answered],
+  );
 
   function handleSelect(index: number) {
     if (answered) return;
@@ -188,9 +181,7 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
   function handleSubmit() {
     if (selected === null) return;
     setAnswered(true);
-    if (selected === q.correct) {
-      setScore((s) => s + 1);
-    }
+    if (selected === q.correct) setScore((s) => s + 1);
   }
 
   function handleNext() {
@@ -198,9 +189,9 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
       setCurrentQ((c) => c + 1);
       setSelected(null);
       setAnswered(false);
-    } else {
-      setFinished(true);
+      return;
     }
+    setFinished(true);
   }
 
   function handleRestart() {
@@ -211,166 +202,151 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
     setAnswered(false);
   }
 
+  const difficultyMap = {
+    debutant: {
+      label: 'Facile',
+      className:
+        'border-[rgba(52,168,54,0.35)] bg-[rgba(52,168,54,0.12)] text-[var(--brand-700)]',
+    },
+    intermediaire: {
+      label: 'Moyen',
+      className:
+        'border-[rgba(23,229,23,0.36)] bg-[rgba(23,229,23,0.12)] text-[var(--brand-700)]',
+    },
+    avance: {
+      label: 'Avancé',
+      className:
+        'border-[rgba(0,0,0,0.35)] bg-[rgba(0,0,0,0.82)] text-[var(--brand-500)]',
+    },
+  };
+
   if (finished) {
-    const result = getLevel(score, questions.length);
+    const result = getLevel(score);
+    const ratio = Math.round((score / questions.length) * 100);
+
     return (
-      <div className="border-navy-700/40 bg-navy-900/80 rounded-2xl border p-8 text-center">
-        <div className="mb-6">
-          <div className="text-navy-500 mb-3 text-sm tracking-wider uppercase">
-            Votre niveau estime
-          </div>
-          <div
-            className={`font-sans inline-block rounded-xl border px-6 py-2 text-3xl font-bold ${result.bg} ${result.color} ${result.border}`}
-          >
-            {result.level}
-          </div>
+      <div className="rounded-[1rem] border border-[var(--border)] bg-[var(--surface)] p-6 text-center">
+        <p className="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">
+          Niveau estimé
+        </p>
+
+        <div className="mt-3 inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-2 text-2xl font-extrabold text-[var(--text-primary)]">
+          {result.level}
         </div>
 
-        <div className="mb-6">
-          <div className="font-sans text-navy-50 mb-1 text-4xl font-bold">
-            {score} / {questions.length}
-          </div>
-          <div className="text-navy-500 text-sm">bonnes reponses</div>
-        </div>
+        <p className="section-title mt-5 text-4xl text-[var(--text-primary)]">
+          {score} / {questions.length}
+        </p>
+        <p className="text-sm text-[var(--text-faint)]">bonnes réponses</p>
 
-        <div className="bg-navy-800 mx-auto mb-6 h-2.5 w-full max-w-xs rounded-full">
+        <div className="mx-auto mt-4 h-2.5 w-full max-w-sm overflow-hidden rounded-full bg-[var(--surface-strong)]">
           <div
-            className="from-acton-700 to-acton-500 h-full rounded-full bg-gradient-to-r transition-all duration-700"
-            style={{
-              width: `${Math.round((score / questions.length) * 100)}%`,
-            }}
+            className="h-full rounded-full"
+            style={{ width: `${ratio}%`, background: 'var(--gradient-brand)' }}
           />
         </div>
 
-        <p className="text-navy-300 mx-auto mb-8 max-w-md text-sm leading-relaxed">
+        <p className="mx-auto mt-5 max-w-2xl text-sm text-[var(--text-muted)]">
           {result.description}
         </p>
+        <p className="mx-auto mt-2 max-w-2xl text-sm font-semibold text-[var(--text-primary)]">
+          {result.recommendation}
+        </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={handleRestart}
-            className="border-navy-700/40 text-navy-200 hover:border-navy-600 hover:bg-navy-800/50 rounded-xl border px-5 py-2.5 text-sm font-semibold transition-all duration-200"
+            className="rounded-full border border-[var(--border)] px-5 py-2 text-sm font-semibold text-[var(--text-muted)] transition hover:bg-[var(--surface-strong)] hover:text-[var(--text-primary)]"
           >
             Refaire le quiz
           </button>
           <a
             href={`${basePath}courses/ia-appliquee-metiers-tech`}
-            className="from-acton-700 to-acton-600 text-navy-950 hover:shadow-acton-600/20 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg"
+            className="btn-primary text-sm"
           >
-            Commencer la formation
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            Ouvrir la formation
           </a>
         </div>
       </div>
     );
   }
 
-  const progress = (currentQ / questions.length) * 100;
-  const difficultyLabel =
-    q.difficulty === 'debutant'
-      ? 'Facile'
-      : q.difficulty === 'intermediaire'
-        ? 'Moyen'
-        : 'Difficile';
-  const difficultyColor =
-    q.difficulty === 'debutant'
-      ? 'text-green-400'
-      : q.difficulty === 'intermediaire'
-        ? 'text-blue-400'
-        : 'text-red-400';
+  const difficulty = difficultyMap[q.difficulty];
 
   return (
-    <div className="border-navy-700/40 bg-navy-900/80 overflow-hidden rounded-2xl border">
-      {/* Progress bar */}
-      <div className="bg-navy-800 h-1">
+    <div className="overflow-hidden rounded-[1rem] border border-[var(--border)] bg-[var(--surface)]">
+      <div className="h-1.5 bg-[var(--surface-strong)]">
         <div
-          className="from-acton-700 to-acton-500 h-full bg-gradient-to-r transition-all duration-500"
-          style={{ width: `${progress}%` }}
+          className="h-full transition-all duration-500"
+          style={{ width: `${progress}%`, background: 'var(--gradient-brand)' }}
         />
       </div>
 
-      {/* Header */}
-      <div className="border-navy-800/40 flex items-center justify-between border-b px-6 py-4">
-        <div className="flex items-center gap-3">
-          <span className="text-acton-500 text-sm font-semibold">
-            Question {currentQ + 1} / {questions.length}
-          </span>
-          <span
-            className={`rounded-md border border-current/20 px-2 py-0.5 text-xs ${difficultyColor}`}
-          >
-            {difficultyLabel}
-          </span>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-3">
+        <span className="text-xs font-semibold tracking-[0.09em] text-[var(--text-faint)] uppercase">
+          Question {currentQ + 1} / {questions.length}
+        </span>
+        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${difficulty.className}`}>
+          {difficulty.label}
+        </span>
       </div>
 
-      <div className="p-6">
-        <h4 className="font-sans text-navy-50 mb-6 text-lg font-semibold">
-          {q.question}
-        </h4>
+      <div className="p-5">
+        <h3 className="section-title text-xl text-[var(--text-primary)]">{q.question}</h3>
 
-        <div className="mb-6 space-y-3">
+        <div className="mt-5 space-y-3">
           {q.options.map((option, i) => {
             let classes =
-              'w-full text-left px-4 py-3.5 rounded-xl border text-sm transition-all duration-200 ';
+              'w-full rounded-xl border px-4 py-3 text-left text-sm transition ';
+
             if (answered) {
               if (i === q.correct) {
-                classes += 'border-green-500/40 bg-green-500/10 text-green-400';
+                classes +=
+                  'border-[rgba(52,168,54,0.45)] bg-[rgba(52,168,54,0.12)] text-[var(--brand-700)]';
               } else if (i === selected) {
-                classes += 'border-red-500/40 bg-red-500/10 text-red-400';
+                classes +=
+                  'border-[rgba(0,0,0,0.5)] bg-[rgba(0,0,0,0.82)] text-[var(--brand-500)]';
               } else {
-                classes += 'border-navy-700/30 bg-navy-800/30 text-navy-500';
+                classes +=
+                  'border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-faint)]';
               }
             } else if (i === selected) {
-              classes += 'border-acton-600/40 bg-acton-600/10 text-acton-500';
+              classes +=
+                'border-[var(--brand-400)] bg-[rgba(23,229,23,0.12)] text-[var(--text-primary)]';
             } else {
               classes +=
-                'border-navy-700/30 hover:border-navy-600 hover:bg-navy-800/50 text-navy-200';
+                'border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-strong)] hover:text-[var(--text-primary)]';
             }
 
             return (
               <button
                 key={i}
-                onClick={() => handleSelect(i)}
-                className={classes}
                 disabled={answered}
+                className={classes}
+                onClick={() => handleSelect(i)}
               >
-                <span className="inline-flex items-center gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-current/20 text-xs font-semibold">
+                <span className="inline-flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-current/25 text-xs font-semibold">
                     {String.fromCharCode(65 + i)}
                   </span>
-                  {option}
+                  <span>{option}</span>
                 </span>
               </button>
             );
           })}
         </div>
 
-        <div className="flex justify-end">
+        <div className="mt-5 flex justify-end">
           {!answered ? (
             <button
               onClick={handleSubmit}
               disabled={selected === null}
-              className="from-acton-700 to-acton-600 disabled:from-navy-700 disabled:to-navy-700 disabled:text-navy-500 text-navy-950 hover:shadow-acton-600/20 rounded-xl bg-gradient-to-r px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg"
+              className="btn-primary disabled:cursor-not-allowed disabled:opacity-45"
             >
               Valider
             </button>
           ) : (
-            <button
-              onClick={handleNext}
-              className="from-acton-700 to-acton-600 text-navy-950 hover:shadow-acton-600/20 rounded-xl bg-gradient-to-r px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:shadow-lg"
-            >
+            <button onClick={handleNext} className="btn-primary">
               {currentQ < questions.length - 1
                 ? 'Question suivante'
                 : 'Voir mon niveau'}
@@ -381,3 +357,4 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
     </div>
   );
 }
+

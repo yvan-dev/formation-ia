@@ -1,120 +1,115 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CourseCard from '../components/CourseCard.astro';
+import MaturityStepper from '../components/MaturityStepper.astro';
 import { getCollection } from 'astro:content';
 
 const courses = await getCollection('courses');
+const base = import.meta.env.BASE_URL;
+const totalLessons = courses.reduce(
+  (acc, c) => acc + c.data.modules.reduce((a, m) => a + m.lessons.length, 0),
+  0,
+);
 ---
 
 <BaseLayout title="Accueil">
-  <!-- Hero -->
-  <section class="relative overflow-hidden">
-    <!-- Warm gradient background -->
-    <div class="pointer-events-none absolute inset-0">
-      <div
-        class="from-acton-600/[0.07] via-acton-600/[0.02] absolute top-0 left-1/2 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-b to-transparent blur-3xl"
-      >
-      </div>
-      <div
-        class="absolute top-20 right-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-b from-red-500/[0.04] to-transparent blur-3xl"
-      >
+  <section class="container-shell relative overflow-hidden py-10 md:py-14">
+    <div class="surface-card relative overflow-hidden px-6 py-10 md:px-10 md:py-14">
+      <div class="grid-pattern"></div>
+
+      <div class="relative grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+        <div>
+          <p class="reveal text-xs font-semibold tracking-[0.18em] text-[var(--text-faint)] uppercase">
+            Accompagnement IA appliqué aux métiers tech
+          </p>
+
+          <h1 class="hero-text reveal reveal-2 mt-4 text-4xl leading-[1.02] font-semibold text-[var(--text-primary)] md:text-6xl">
+            Transformons nos méthodes de travail
+            <span class="brand-gradient-text">en prenant le tournant de l'IA</span>
+          </h1>
+
+          <p class="reveal reveal-3 mt-5 max-w-2xl text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
+            Ce parcours nous aide à adopter l'IA de manière progressive, responsable et concrète: pratiques de terrain, sécurité, automatisation et mise en production guidée.
+          </p>
+
+          <div class="reveal reveal-4 mt-7 flex flex-wrap items-center gap-3">
+            <a href="#formations" class="btn-primary">
+              Explorer les formations
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href={`${base}quiz-niveau`} class="btn-ghost">Passer le quiz de niveau</a>
+          </div>
+        </div>
+
+        <div class="reveal reveal-3 space-y-3 rounded-[1.1rem] border border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_90%,transparent)] p-5">
+          <div class="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+            <span class="text-sm text-[var(--text-muted)]">Formations disponibles</span>
+            <strong class="section-title text-2xl text-[var(--text-primary)]">{courses.length}</strong>
+          </div>
+          <div class="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+            <span class="text-sm text-[var(--text-muted)]">Leçons opérationnelles</span>
+            <strong class="section-title text-2xl text-[var(--text-primary)]">{totalLessons}</strong>
+          </div>
+          <div class="rounded-xl border border-[var(--border)] px-4 py-3">
+            <p class="text-sm text-[var(--text-muted)]">Objectif partagé</p>
+            <p class="mt-1 text-base font-semibold text-[var(--text-primary)]">Renforcer notre autonomie sur les workflows IA encadrés</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border)] px-4 py-3">
+            <p class="text-sm text-[var(--text-muted)]">Format</p>
+            <p class="mt-1 text-base font-semibold text-[var(--text-primary)]">Ateliers pratiques, cas métier et capstone AGENT.md</p>
+          </div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div
-      class="relative mx-auto max-w-5xl px-6 pt-24 pb-20 text-center lg:pt-32 lg:pb-28"
-    >
-      <h1
-        class="animate-fade-up stagger-1 text-navy-50 mb-6 text-5xl leading-[1.1] font-bold tracking-tight lg:text-7xl"
-      >
-        Apprenez l'Intelligence<br />
-        Artificielle <span class="text-acton-600 italic">à votre rythme</span>
-      </h1>
+  <section class="container-shell pb-3 md:pb-6">
+    <MaturityStepper basePath={base} courseSlug="ia-appliquee-metiers-tech" variant="home" />
+  </section>
 
-      <p
-        class="animate-fade-up stagger-2 text-navy-300 mx-auto mb-12 max-w-2xl text-lg leading-relaxed lg:text-xl"
-      >
-        Des cours structurés, des quiz interactifs et un suivi de progression.
-        Commencez votre parcours en IA dès maintenant.
+  <section class="container-shell py-5 md:py-8">
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="surface-card px-5 py-5">
+        <p class="text-xs font-semibold tracking-[0.13em] text-[var(--text-faint)] uppercase">01 Gouvernance</p>
+        <h2 class="section-title mt-2 text-xl">Cadre d'usage robuste</h2>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Nous alignons nos pratiques: sécurité, confidentialité, qualité de prompts et gestion des risques.</p>
+      </article>
+      <article class="surface-card px-5 py-5">
+        <p class="text-xs font-semibold tracking-[0.13em] text-[var(--text-faint)] uppercase">02 Exécution</p>
+        <h2 class="section-title mt-2 text-xl">Méthodes orientées delivery</h2>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Plan-first, spec-driven development, instrumentation et points de validation humaine.</p>
+      </article>
+      <article class="surface-card px-5 py-5">
+        <p class="text-xs font-semibold tracking-[0.13em] text-[var(--text-faint)] uppercase">03 Impact</p>
+        <h2 class="section-title mt-2 text-xl">Livrables réutilisables</h2>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Chaque personne repart avec un système de travail IA documenté et directement exploitable.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="formations" class="container-shell py-10 md:py-14">
+    <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.16em] text-[var(--text-faint)] uppercase">Catalogue</p>
+        <h2 class="section-title mt-2 text-3xl text-[var(--text-primary)] md:text-4xl">Toutes les formations</h2>
+      </div>
+      <p class="max-w-xl text-sm text-[var(--text-muted)] md:text-base">
+        Choisissons un parcours selon nos rôles et notre maturité IA, des fondamentaux jusqu'à l'implémentation agentique guidée.
       </p>
-
-      <div
-        class="animate-fade-up stagger-3 flex items-center justify-center gap-4"
-      >
-        <a
-          href="#courses"
-          class="group from-acton-700 to-acton-600 text-navy-950 hover:shadow-acton-600/20 relative rounded-xl bg-gradient-to-r px-7 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-        >
-          Découvrir les cours
-          <svg
-            class="ml-1.5 inline-block h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              d="M9 5l7 7-7 7"></path></svg
-          >
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="border-navy-800/40 bg-navy-900/30 border-y">
-    <div
-      class="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-6 py-10 text-center"
-    >
-      <div class="animate-fade-up stagger-3">
-        <div class="text-navy-50 text-3xl font-bold">
-          {courses.length}
-        </div>
-        <div class="text-navy-500 mt-1.5 text-sm tracking-wide uppercase">
-          Cours disponibles
-        </div>
-      </div>
-      <div class="animate-fade-up stagger-4">
-        <div class="text-navy-50 text-3xl font-bold">
-          {
-            courses.reduce(
-              (acc, c) =>
-                acc + c.data.modules.reduce((a, m) => a + m.lessons.length, 0),
-              0,
-            )
-          }
-        </div>
-        <div class="text-navy-500 mt-1.5 text-sm tracking-wide uppercase">
-          Leçons
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Courses grid -->
-  <section id="courses" class="mx-auto max-w-6xl px-6 py-20">
-    <div class="mb-10">
-      <h2 class="text-navy-50 mb-2 text-3xl font-bold">Tous les cours</h2>
-      <p class="text-navy-400">Choisissez un cours et commencez à apprendre</p>
     </div>
 
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
       {
         courses.map((course, i) => (
-          <div
-            class="animate-fade-up"
-            style={`animation-delay: ${0.1 + i * 0.1}s`}
-          >
+          <div style={`animation-delay:${0.06 * i}s`}>
             <CourseCard
               slug={course.id}
               title={course.data.title}
               description={course.data.description}
               level={course.data.level}
-              lessonCount={course.data.modules.reduce(
-                (a, m) => a + m.lessons.length,
-                0,
-              )}
+              lessonCount={course.data.modules.reduce((a, m) => a + m.lessons.length, 0)}
             />
           </div>
         ))
@@ -122,3 +117,4 @@ const courses = await getCollection('courses');
     </div>
   </section>
 </BaseLayout>
+

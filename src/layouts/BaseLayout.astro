@@ -8,9 +8,18 @@ interface Props {
 
 const {
   title,
-  description = 'Plateforme de formation en ligne - Apprenez à votre rythme',
+  description =
+    "Plateforme d'accompagnement pour monter en compétence sur les outils IA en contexte tech.",
 } = Astro.props;
+
 const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+const baseNoTrailingSlash = base.endsWith('/') ? base.slice(0, -1) : base;
+const relativePath = path.startsWith(baseNoTrailingSlash)
+  ? path.slice(baseNoTrailingSlash.length)
+  : path;
+const isQuizTab = relativePath.startsWith('/quiz-niveau');
+const isFormationsTab = !isQuizTab;
 ---
 
 <!doctype html>
@@ -19,118 +28,157 @@ const base = import.meta.env.BASE_URL;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/jpeg" href={`${base}favicon.jpg`} />
-    <title>{title} | Formation IA</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title} | AOT Academy</title>
+
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('aot-theme');
+        const preferred =
+          stored ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light');
+        document.documentElement.setAttribute('data-theme', preferred);
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="border-navy-800/60 bg-navy-950/90 sticky top-0 z-50 border-b backdrop-blur-md"
-    >
-      <nav
-        class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6"
-      >
-        <a href={base} class="group flex items-center gap-3">
-          <img
-            src={`${base}favicon.jpg`}
-            alt="Formation IA"
-            class="h-9 w-9 rounded-md shadow-lg"
-          />
-          <span class="text-navy-50 text-lg font-semibold tracking-tight"
-            >Formation <span class="text-acton-600">IA</span></span
-          >
-        </a>
-        <div class="flex items-center gap-6">
-          <a
-            href={base}
-            class="text-navy-400 hover:text-acton-500 text-sm transition-colors duration-200"
-            >Cours</a
-          >
-          <div id="search-container">
+
+  <body>
+    <div class="flex min-h-screen flex-col pb-8">
+      <header class="sticky top-4 z-50 px-4 md:px-6">
+        <nav class="container-shell glass-header mt-3 flex items-center justify-between rounded-[1.25rem] px-4 py-3 md:px-5">
+          <a href={base} class="flex items-center gap-3">
+            <img
+              src={`${base}brand/logo-mark.svg`}
+              alt="AOT Academy"
+              class="h-11 w-11"
+              loading="eager"
+            />
+            <div>
+              <p class="section-title text-base leading-none">AOT Academy</p>
+              <p class="text-xs text-[var(--text-faint)]">Think. Act. Code.</p>
+            </div>
+          </a>
+
+          <div class="hidden items-center gap-2 md:flex">
+            <a href={base} class:list={['nav-tab', isFormationsTab && 'nav-tab-active']}
+              >Formations</a
+            >
+            <a href={`${base}quiz-niveau`} class:list={['nav-tab', isQuizTab && 'nav-tab-active']}
+              >Quiz</a
+            >
+          </div>
+
+          <div class="flex items-center gap-2">
             <button
               id="search-trigger"
-              class="border-navy-700/50 text-navy-400 hover:border-acton-600/30 hover:text-acton-500 flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm transition-all duration-200"
-              aria-label="Rechercher"
+              class="btn-ghost text-xs md:text-sm"
+              aria-label="Ouvrir la recherche"
             >
-              <svg
-                class="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.2-5.2m1.6-4.6a6.2 6.2 0 11-12.4 0 6.2 6.2 0 0112.4 0z"></path>
               </svg>
-              <span class="hidden sm:inline">Rechercher</span>
-              <kbd
-                class="text-navy-500 bg-navy-800/50 border-navy-700/50 ml-2 hidden items-center gap-0.5 rounded border px-1.5 py-0.5 font-mono text-[10px] sm:inline-flex"
-              >
-                <span>&#8984;</span>K
-              </kbd>
+              <span class="hidden sm:inline">Recherche</span>
+            </button>
+
+            <button
+              id="theme-toggle"
+              class="btn-ghost"
+              aria-label="Basculer le thème"
+              title="Basculer le thème"
+            >
+              <span id="theme-toggle-dot" class="theme-toggle-dot inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-500)]"></span>
+              <span id="theme-toggle-label" class="text-xs font-semibold sm:text-sm">Thème</span>
             </button>
           </div>
-        </div>
-      </nav>
-    </header>
+        </nav>
+      </header>
 
-    <main class="flex-1">
-      <slot />
-    </main>
+      <main class="flex-1 pt-6">
+        <slot />
+      </main>
 
-    <footer class="border-navy-800/40 mt-auto border-t">
-      <div class="mx-auto max-w-7xl px-6 py-10">
-        <div
-          class="flex flex-col items-center justify-between gap-4 sm:flex-row"
-        >
-          <div class="flex items-center gap-2">
-            <img
-              src={`${base}favicon.jpg`}
-              alt="Formation IA"
-              class="h-6 w-6 rounded"
-            />
-            <span class="text-navy-500 text-sm">Formation IA</span>
+      <footer class="px-4 pt-10 md:px-6">
+        <div class="container-shell soft-border rounded-[1.25rem] bg-[color-mix(in_srgb,var(--surface)_84%,transparent)] px-6 py-5">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex items-center gap-3">
+              <img src={`${base}brand/logo-mark.svg`} alt="AOT" class="h-7 w-7" />
+              <p class="text-sm text-[var(--text-muted)]">AOT Academy - Accompagnement industriel aux outils IA</p>
+            </div>
+            <p class="text-xs text-[var(--text-faint)]">
+              &copy; {new Date().getFullYear()} AOT Academy. Tous droits réservés.
+            </p>
           </div>
-          <p class="text-navy-600 text-sm">
-            &copy; {new Date().getFullYear()} Formation IA - GUNEWOU TAKAM Yvan. Tous
-            droits réservés.
-          </p>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
 
     <link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
+
     <script is:inline define:vars={{ base }}>
       window.addEventListener('DOMContentLoaded', () => {
-        const trigger = document.getElementById('search-trigger');
-        if (!trigger) return;
+        const root = document.documentElement;
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeLabel = document.getElementById('theme-toggle-label');
+        const searchTrigger = document.getElementById('search-trigger');
+
+        function applyTheme(theme) {
+          root.setAttribute('data-theme', theme);
+          localStorage.setItem('aot-theme', theme);
+          if (themeLabel) {
+            themeLabel.textContent = theme === 'dark' ? 'Sombre' : 'Clair';
+          }
+        }
+
+        const initial =
+          root.getAttribute('data-theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light');
+        applyTheme(initial);
+
+        themeBtn?.addEventListener('click', () => {
+          const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+          applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
 
         let searchModal = null;
         let pagefindLoaded = false;
 
+        function closeSearch() {
+          if (searchModal) {
+            searchModal.style.display = 'none';
+          }
+          document.removeEventListener('keydown', handleEsc);
+        }
+
+        function handleEsc(event) {
+          if (event.key === 'Escape') closeSearch();
+        }
+
         function createModal() {
           const wrapper = document.createElement('div');
           wrapper.id = 'search-modal';
-          wrapper.className =
-            'fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4';
-          wrapper.style.animation = 'fadeIn 0.15s ease-out';
+          wrapper.style.position = 'fixed';
+          wrapper.style.inset = '0';
+          wrapper.style.zIndex = '120';
+          wrapper.style.padding = '6rem 1rem 1rem';
           wrapper.innerHTML = `
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="search-backdrop"></div>
-            <div class="relative w-full max-w-2xl bg-navy-900 border border-navy-700/50 rounded-2xl shadow-2xl shadow-black/40 overflow-hidden" style="animation: fadeUp 0.2s ease-out">
+            <div id="search-backdrop" style="position:absolute;inset:0;background:rgba(2,8,3,.68);backdrop-filter:blur(7px)"></div>
+            <div style="position:relative;max-width:840px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow-strong)">
               <div id="pagefind-search"></div>
             </div>
           `;
           document.body.appendChild(wrapper);
-          wrapper
-            .querySelector('#search-backdrop')
-            ?.addEventListener('click', closeSearch);
+          wrapper.querySelector('#search-backdrop')?.addEventListener('click', closeSearch);
           return wrapper;
         }
 
@@ -160,37 +208,27 @@ const base = import.meta.env.BASE_URL;
               showSubResults: true,
               showImages: false,
             });
-            const input = searchModal.querySelector('input');
+            const input = searchModal?.querySelector('input');
             if (input) input.focus();
           };
+
           script.onerror = function () {
             pagefindLoaded = false;
-            const el = searchModal.querySelector('#pagefind-search');
-            if (el) {
-              el.innerHTML =
-                '<p style="padding:1.5rem;text-align:center;color:#9ca3af;">La recherche n\u2019est pas disponible. Lancez <code style="background:#1e293b;padding:2px 6px;border-radius:4px;">npm run build</code> pour indexer le contenu.</p>';
+            const shell = searchModal?.querySelector('#pagefind-search');
+            if (shell) {
+              shell.innerHTML =
+                '<p style="padding:1.5rem;text-align:center;color:var(--text-muted)">Recherche indisponible. Lancez <code style="background:var(--surface-strong);padding:2px 6px;border-radius:6px">npm run build</code>.</p>';
             }
           };
+
           document.head.appendChild(script);
         }
 
-        function closeSearch() {
-          if (searchModal) {
-            searchModal.style.display = 'none';
-          }
-          document.removeEventListener('keydown', handleEsc);
-        }
+        searchTrigger?.addEventListener('click', openSearch);
 
-        function handleEsc(e) {
-          if (e.key === 'Escape') closeSearch();
-        }
-
-        trigger.addEventListener('click', openSearch);
-
-        // Cmd+K shortcut
-        document.addEventListener('keydown', function (e) {
-          if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-            e.preventDefault();
+        document.addEventListener('keydown', (event) => {
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
             if (searchModal && searchModal.style.display !== 'none') {
               closeSearch();
             } else {
@@ -202,3 +240,4 @@ const base = import.meta.env.BASE_URL;
     </script>
   </body>
 </html>
+

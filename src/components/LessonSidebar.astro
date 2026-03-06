@@ -16,28 +16,30 @@ const { courseSlug, courseTitle, modules, currentLesson } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 
-<div class="px-4 py-6">
+<div class="px-4 py-5">
   <a
     href={`${base}courses/${courseSlug}`}
-    class="text-navy-400 hover:text-acton-500 mb-6 flex items-center gap-2 text-sm transition-colors duration-200"
+    class="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
   >
     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
-        d="M15 19l-7-7 7-7"></path>
+        d="M15 19l-7-7 7-7"
+      />
     </svg>
     <span class="truncate">{courseTitle}</span>
   </a>
 
   {
     modules.map((module, moduleIndex) => (
-      <div class="mb-6">
-        <h4 class="text-navy-500 mb-3 px-3 text-xs font-semibold tracking-wider uppercase">
-          Module {moduleIndex + 1} — {module.title}
+      <div class="mb-5">
+        <h4 class="mb-2 px-2 text-xs font-semibold tracking-[0.1em] text-[var(--text-faint)] uppercase">
+          Module {moduleIndex + 1} · {module.title}
         </h4>
-        <ul class="space-y-0.5">
+
+        <ul class="space-y-1">
           {module.lessons.map((lesson) => {
             const isActive = lesson.slug === currentLesson;
             return (
@@ -46,19 +48,14 @@ const base = import.meta.env.BASE_URL;
                   href={`${base}lessons/${courseSlug}/${lesson.slug}`}
                   data-lesson-link={lesson.slug}
                   class:list={[
-                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200',
+                    'group flex items-center gap-2 rounded-lg border px-2.5 py-2 text-sm transition-colors',
                     isActive
-                      ? 'bg-acton-600/10 text-acton-500 border-acton-600/20 border'
-                      : 'text-navy-400 hover:text-navy-200 hover:bg-navy-800/50',
+                      ? 'border-[var(--brand-400)] bg-[rgba(23,229,23,0.11)] text-[var(--text-primary)]'
+                      : 'border-transparent text-[var(--text-muted)] hover:border-[var(--border)] hover:bg-[var(--surface-strong)] hover:text-[var(--text-primary)]',
                   ]}
                 >
-                  <span class="lesson-check hidden shrink-0 text-green-400">
-                    <svg
-                      class="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                  <span class="lesson-check hidden text-[var(--brand-400)]">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -67,12 +64,7 @@ const base = import.meta.env.BASE_URL;
                       />
                     </svg>
                   </span>
-                  <span
-                    class:list={[
-                      'lesson-dot h-1.5 w-1.5 shrink-0 rounded-full transition-colors',
-                      isActive ? 'bg-acton-500' : 'bg-navy-600',
-                    ]}
-                  />
+                  <span class="lesson-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--text-faint)]"></span>
                   <span class="flex-1 truncate">{lesson.title}</span>
                 </a>
               </li>
@@ -85,28 +77,23 @@ const base = import.meta.env.BASE_URL;
 </div>
 
 <script is:inline>
-  // Restore completed state from localStorage
   (function () {
-    const sidebar = document
-      .querySelector('[data-lesson-link]')
-      ?.closest('[class*="py-6"]');
-    if (!sidebar) return;
-    const firstLink = sidebar.querySelector('[data-lesson-link]');
+    const firstLink = document.querySelector('[data-lesson-link]');
     if (!firstLink) return;
 
     const href = firstLink.getAttribute('href') || '';
     const parts = href.split('/').filter(Boolean);
     const lessonsIdx = parts.indexOf('lessons');
     if (lessonsIdx === -1) return;
+
     const courseSlug = parts[lessonsIdx + 1];
     if (!courseSlug) return;
 
-    const progress = JSON.parse(
-      localStorage.getItem(`progress_${courseSlug}`) || '[]',
-    );
-    progress.forEach(function (slug) {
+    const progress = JSON.parse(localStorage.getItem(`progress_${courseSlug}`) || '[]');
+
+    progress.forEach((slug) => {
       const links = document.querySelectorAll(`[data-lesson-link="${slug}"]`);
-      links.forEach(function (link) {
+      links.forEach((link) => {
         const check = link.querySelector('.lesson-check');
         const dot = link.querySelector('.lesson-dot');
         if (check) check.classList.remove('hidden');
@@ -115,3 +102,4 @@ const base = import.meta.env.BASE_URL;
     });
   })();
 </script>
+

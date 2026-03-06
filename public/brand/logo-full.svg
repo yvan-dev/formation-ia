@@ -1,0 +1,17 @@
+<svg width="1200" height="620" viewBox="0 0 1200 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="620" rx="24" fill="transparent" />
+  <g transform="translate(70,20)">
+    <defs>
+      <linearGradient id="aotGradientFull" x1="32" y1="420" x2="448" y2="420" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#0E300F" />
+        <stop offset="0.55" stop-color="#1B581C" />
+        <stop offset="1" stop-color="#00FF00" />
+      </linearGradient>
+    </defs>
+    <path d="M32 420L240 56L448 420" stroke="url(#aotGradientFull)" stroke-width="62" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M320 420H448" stroke="#17E517" stroke-width="62" stroke-linecap="round" />
+    <circle cx="240" cy="400" r="32" fill="#000000" />
+  </g>
+  <text x="600" y="270" fill="#0B0D10" font-family="Sora, Arial, sans-serif" font-size="104" font-weight="700" letter-spacing="1">AOT Academy</text>
+  <text x="600" y="360" fill="#1F2937" font-family="Manrope, Arial, sans-serif" font-size="58" font-weight="500" letter-spacing="0.8">Think. Act. Code.</text>
+</svg>
