@@ -172,7 +172,8 @@ body::before {
   border-radius: 999px;
   padding: 0.78rem 1.25rem;
   font-weight: 700;
-  color: #031203;
+  color: #dcefd6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
   background: var(--gradient-brand);
   box-shadow: 0 14px 28px rgba(23, 229, 23, 0.28);
   transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
