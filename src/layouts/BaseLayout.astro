@@ -34,11 +34,7 @@ const isFormationsTab = !isQuizTab;
     <script is:inline>
       (() => {
         const stored = localStorage.getItem('aot-theme');
-        const preferred =
-          stored ||
-          (window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light');
+        const preferred = stored || 'light';
         document.documentElement.setAttribute('data-theme', preferred);
       })();
     </script>
@@ -138,11 +134,7 @@ const isFormationsTab = !isQuizTab;
           }
         }
 
-        const initial =
-          root.getAttribute('data-theme') ||
-          (window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light');
+        const initial = root.getAttribute('data-theme') || 'light';
         applyTheme(initial);
 
         themeBtn?.addEventListener('click', () => {
