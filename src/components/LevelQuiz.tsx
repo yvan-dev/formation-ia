@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { APPS_SCRIPT_URL } from '../config';
 
 interface Choice {
   label: string;
@@ -222,6 +223,10 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [finished, setFinished] = useState(false);
+  const [email, setEmail] = useState('');
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [detailedAnswers, setDetailedAnswers] = useState<Array<{ dimension: string; chosenLabel: string; points: number }>>([]);
 
   const q = questions[currentQ];
   const score = useMemo(
@@ -247,6 +252,8 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
     if (selected === null) return;
 
     const points = q.choices[selected].points;
+    const chosenLabel = q.choices[selected].label;
+    setDetailedAnswers((prev) => [...prev, { dimension: q.dimension, chosenLabel, points }]);
     const nextAnswers = [...answers, points];
     setAnswers(nextAnswers);
 
@@ -259,11 +266,59 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
     setFinished(true);
   }
 
+  async function handleSubmitEmail() {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setSubmitStatus('error');
+      setErrorMessage('Veuillez entrer une adresse email valide.');
+      return;
+    }
+
+    setSubmitStatus('loading');
+    setErrorMessage('');
+
+    const payload = {
+      email,
+      score,
+      scorePct: ratio,
+      level: result.level,
+      levelTitle: result.title,
+      diagnostic: result.diagnostic,
+      nextGoal: result.nextGoal,
+      plan: result.plan,
+      recommendation: result.recommendation,
+      answers: detailedAnswers,
+      siteUrl: window.location.origin + (basePath.endsWith('/') ? basePath : basePath + '/'),
+    };
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Erreur inconnue');
+
+      setSubmitStatus('success');
+    } catch (err) {
+      setSubmitStatus('error');
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Impossible d\'envoyer les résultats. Vérifiez votre connexion.',
+      );
+    }
+  }
+
   function handleRestart() {
     setCurrentQ(0);
     setSelected(null);
     setAnswers([]);
     setFinished(false);
+    setEmail('');
+    setSubmitStatus('idle');
+    setErrorMessage('');
+    setDetailedAnswers([]);
   }
 
   if (finished) {
@@ -306,6 +361,41 @@ export default function LevelQuiz({ basePath = '' }: LevelQuizProps) {
             ))}
           </ul>
           <p className="mt-3 text-sm font-semibold text-[var(--text-primary)]">{result.recommendation}</p>
+        </div>
+
+        <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-5">
+          <p className="text-sm font-semibold text-[var(--text-primary)]">
+            Recevez vos résultats et votre plan d'amélioration par email
+          </p>
+          {submitStatus === 'success' ? (
+            <p className="mt-3 text-sm font-semibold text-[var(--brand-400)]">
+              Résultats envoyés avec succès ! Vérifiez votre boîte de réception.
+            </p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+              <input
+                type="email"
+                placeholder="votre@email.com"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (submitStatus === 'error') setSubmitStatus('idle');
+                }}
+                className="flex-1 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:border-[var(--brand-400)] focus:outline-none"
+                disabled={submitStatus === 'loading'}
+              />
+              <button
+                onClick={handleSubmitEmail}
+                disabled={submitStatus === 'loading' || !email}
+                className="btn-primary text-sm disabled:cursor-not-allowed disabled:opacity-45"
+              >
+                {submitStatus === 'loading' ? 'Envoi…' : 'Envoyer'}
+              </button>
+            </div>
+          )}
+          {submitStatus === 'error' && errorMessage && (
+            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+          )}
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">

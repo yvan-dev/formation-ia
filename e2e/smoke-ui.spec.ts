@@ -57,3 +57,17 @@ test('user can open lesson and mark it completed', async ({ page, baseURL }) => 
   const progressText = page.locator('#progress-text');
   await expect(progressText).toContainText(/1\s*\/\s*\d+\s*leçons/i);
 });
+
+test('quiz shows email input after completion', async ({ page, baseURL }) => {
+  await page.goto(`${baseURL}${BASE}/quiz-niveau`, { waitUntil: 'networkidle' });
+
+  for (let i = 0; i < 10; i++) {
+    await page.locator('button').filter({ hasText: /^[A-E]/ }).first().click();
+    const nextBtn = page.locator('button').filter({ hasText: /Continuer|Voir mon niveau/ });
+    await nextBtn.click();
+  }
+
+  await expect(page.locator('text=Résultat du diagnostic')).toBeVisible();
+  await expect(page.locator('input[type="email"]')).toBeVisible();
+  await expect(page.getByRole('button', { name: /Envoyer/i })).toBeVisible();
+});
