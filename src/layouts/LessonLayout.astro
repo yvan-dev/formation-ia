@@ -24,9 +24,13 @@ const { title, courseSlug, lessonSlug, duration } = props;
 const courseEntry = await getEntry('courses', courseSlug);
 const courseTitle = courseEntry?.data.title || props.courseTitle;
 const modules = courseEntry?.data.modules || props.modules;
+const showAllModules = import.meta.env.DEV;
+const visibleModules = showAllModules
+  ? modules
+  : modules.filter((module, index) => (typeof module.released === 'boolean' ? module.released : index < 3));
 
 const base = import.meta.env.BASE_URL;
-const allLessons = modules.flatMap((m) => m.lessons);
+const allLessons = visibleModules.flatMap((m) => m.lessons);
 const currentIndex = allLessons.findIndex((l) => l.slug === lessonSlug);
 const totalLessons = allLessons.length;
 const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
@@ -42,7 +46,7 @@ const nextLesson =
           <LessonSidebar
             courseSlug={courseSlug}
             courseTitle={courseTitle}
-            modules={modules}
+            modules={visibleModules}
             currentLesson={lessonSlug}
           />
         </aside>
@@ -152,7 +156,7 @@ const nextLesson =
       <LessonSidebar
         courseSlug={courseSlug}
         courseTitle={courseTitle}
-        modules={modules}
+        modules={visibleModules}
         currentLesson={lessonSlug}
       />
     </div>
