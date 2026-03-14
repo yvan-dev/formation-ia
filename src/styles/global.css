@@ -444,6 +444,31 @@ body::before {
 }
 
 @media (max-width: 900px) {
+  .maturity-grid {
+    min-width: 0;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .maturity-card {
+    text-align: left;
+    padding: 1.1rem 1.2rem;
+  }
+
+  .maturity-card-inner {
+    align-items: flex-start;
+  }
+
+  .maturity-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  .maturity-shell .maturity-track,
+  .maturity-shell .maturity-track-fill {
+    display: none;
+  }
+
   .floating-theme-btn {
     right: 0.9rem;
     bottom: 0.9rem;

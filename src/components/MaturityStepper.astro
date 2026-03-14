@@ -72,12 +72,12 @@ const actionLabel = isHome ? 'Me situer avec le quiz' : 'Voir le détail';
     <div class="maturity-track absolute top-[57px] right-8 left-8 hidden h-1 rounded-full bg-[var(--border)] md:block"></div>
     <div class="maturity-track-fill absolute top-[57px] left-8 hidden h-1 rounded-full md:block"></div>
 
-    <div class="relative grid min-w-[860px] gap-3 md:grid-cols-5 md:gap-4">
+    <div class="maturity-grid relative grid min-w-[860px] gap-3 md:grid-cols-5 md:gap-4">
       {
         levels.map((level, index) => (
           <article class="maturity-card h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 text-center" style={`--delay:${index * 90}ms`}>
-            <div class="flex h-full flex-col items-center">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] shadow-sm">
+            <div class="maturity-card-inner flex h-full flex-col items-center">
+              <div class="maturity-icon inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-primary)] shadow-sm">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={level.icon}></path>
                 </svg>
