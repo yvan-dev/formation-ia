@@ -1,151 +1,139 @@
 ---
+import Icon from '../components/Icon.astro';
 import '../styles/global.css';
-
+import displayFont from '../assets/fonts/dm-sans.woff2?url';
 interface Props {
   title: string;
   description?: string;
 }
-
 const {
   title,
-  description =
-    "Plateforme d'accompagnement pour monter en compétence sur les outils IA en contexte tech.",
+  description = 'Un parcours concret pour mieux concevoir, coder et décider avec l’IA.',
 } = Astro.props;
-
 const base = import.meta.env.BASE_URL;
-const path = Astro.url.pathname;
-const baseNoTrailingSlash = base.endsWith('/') ? base.slice(0, -1) : base;
-const relativePath = path.startsWith(baseNoTrailingSlash)
-  ? path.slice(baseNoTrailingSlash.length)
-  : path;
-const isQuizPage = relativePath.startsWith('/quiz-niveau');
+const relativePath = Astro.url.pathname.slice(base.length).replace(/\/$/, '');
+const isCourse =
+  relativePath.startsWith('courses/') || relativePath.startsWith('lessons/');
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-    <title>{title} | AOT Academy</title>
-
-    <script is:inline>
-      (() => {
-        const stored = localStorage.getItem('aot-theme');
-        const preferred = stored || 'light';
-        document.documentElement.setAttribute('data-theme', preferred);
-      })();
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href={displayFont}
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-  </head>
-
-  <body>
-    <div class="flex min-h-screen flex-col pb-8">
-      <header class="sticky top-4 z-50 px-4 md:px-6">
-        <nav class="container-shell glass-header mt-3 flex items-center justify-between rounded-[1.25rem] px-4 py-3 md:px-5">
-          <a href={base} class="flex items-center gap-3">
-            <img
-              src={`${base}brand/logo-mark.svg`}
-              alt="AOT Academy"
-              class="h-11 w-11"
-              loading="eager"
-            />
-            <div>
-              <p class="section-title text-base leading-none">AOT Academy</p>
-              <p class="text-xs text-[var(--text-faint)]">Think. Act. Code.</p>
-            </div>
-          </a>
-
-          <div class="hidden items-center gap-2 md:flex">
-            <a
-              href={`${base}courses/ia-appliquee-metiers-tech`}
-              class:list={[
-                'btn-ghost nav-main-cta',
-                !isQuizPage && 'nav-main-cta-active',
-              ]}
-            >
-              Découvrir notre première formation
-            </a>
-            <a
-              href={`${base}quiz-niveau`}
-              class:list={[
-                'btn-primary nav-main-cta',
-                isQuizPage && 'nav-main-cta-primary-active',
-              ]}
-            >
-              Faire un quiz de placement
-            </a>
-          </div>
-
-          <div class="flex items-center gap-2 md:hidden">
-            <a href={`${base}courses/ia-appliquee-metiers-tech`} class="btn-ghost !px-3 !py-2 text-xs">
-              Formation
-            </a>
-            <a href={`${base}quiz-niveau`} class="btn-primary !px-3 !py-2 text-xs">
-              Quiz
-            </a>
-          </div>
-        </nav>
-      </header>
-
-      <main class="flex-1 pt-6">
-        <slot />
-      </main>
-
-      <footer class="px-4 pt-10 md:px-6">
-        <div class="container-shell soft-border rounded-[1.25rem] bg-[color-mix(in_srgb,var(--surface)_84%,transparent)] px-6 py-5">
-          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div class="flex items-center gap-3">
-              <img src={`${base}brand/logo-mark.svg`} alt="AOT" class="h-7 w-7" />
-              <p class="text-sm text-[var(--text-muted)]">AOT Academy - Accompagnement IA pour équipes tech</p>
-            </div>
-            <p class="text-xs text-[var(--text-faint)]">
-              &copy; {new Date().getFullYear()} AOT Academy. Tous droits réservés.
-            </p>
-          </div>
-        </div>
-      </footer>
-    </div>
-
-    <button
-      id="theme-toggle"
-      class="floating-theme-btn"
-      aria-label="Basculer le thème"
-      title="Basculer le thème"
-    >
-      <span id="theme-toggle-dot" class="theme-toggle-dot inline-flex h-2.5 w-2.5 rounded-full bg-[var(--brand-500)]"></span>
-      <span id="theme-toggle-label" class="text-xs font-semibold">Mode clair</span>
-    </button>
-
+    <title>{title} | AOT Academy</title>
     <script is:inline>
-      window.addEventListener('DOMContentLoaded', () => {
-        const root = document.documentElement;
-        const themeBtn = document.getElementById('theme-toggle');
-        const themeLabel = document.getElementById('theme-toggle-label');
-
-        function applyTheme(theme) {
-          root.setAttribute('data-theme', theme);
-          localStorage.setItem('aot-theme', theme);
-          if (themeLabel) {
-            themeLabel.textContent = theme === 'dark' ? 'Mode sombre' : 'Mode clair';
-          }
+      try {
+        const theme = localStorage.getItem('aot-theme');
+        document.documentElement.dataset.theme =
+          theme === 'light' ? 'light' : 'dark';
+      } catch {
+        /* The default theme also works without storage. */
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <header class="site-header">
+      <div class="container-shell header-inner">
+        <a class="brand" href={base} aria-label="AOT Academy — Accueil">
+          <img
+            src={`${base}brand/logo-mark.svg`}
+            width="34"
+            height="34"
+            alt=""
+          />
+          <span>AOT<span class="brand-secondary">Academy</span></span>
+        </a>
+        <nav class="navigation" aria-label="Navigation principale">
+          <a href={base} aria-current={relativePath === '' ? 'page' : undefined}
+            >Accueil</a
+          >
+          <a
+            href={`${base}courses/ia-appliquee-metiers-tech`}
+            aria-current={isCourse ? 'page' : undefined}>Le parcours</a
+          >
+          <a
+            class="mobile-quiz-link"
+            href={`${base}quiz-niveau`}
+            aria-current={relativePath === 'quiz-niveau' ? 'page' : undefined}
+            >Me positionner</a
+          >
+        </nav>
+        <div class="header-actions">
+          <button
+            id="theme-toggle"
+            class="icon-button"
+            type="button"
+            aria-label="Basculer le thème : activer le mode clair"
+            title="Activer le mode clair"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+              ><circle cx="12" cy="12" r="4"></circle><path
+                d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+              ></path></svg
+            >
+          </button>
+          <a
+            class="btn-primary header-quiz"
+            href={`${base}quiz-niveau`}
+            aria-current={relativePath === 'quiz-niveau' ? 'page' : undefined}
+            >Me positionner <span aria-hidden="true"
+              ><Icon name="arrow-up" /></span
+            ></a
+          >
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div class="container-shell footer-inner">
+        <span>AOT Academy · Think. Act. Code.</span>
+        <span
+          >© {new Date().getFullYear()} · Accompagnement IA pour équipes tech</span
+        >
+        <a class="text-link" href={`${base}courses/ia-appliquee-metiers-tech`}
+          >Explorer le parcours <span aria-hidden="true"
+            ><Icon name="arrow-up" /></span
+          ></a
+        >
+      </div>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('#theme-toggle');
+      const root = document.documentElement;
+      function updateThemeLabel() {
+        const label = `Activer le mode ${root.dataset.theme === 'dark' ? 'clair' : 'sombre'}`;
+        toggle?.setAttribute(
+          'aria-label',
+          `Basculer le thème : ${label.toLowerCase()}`,
+        );
+        if (toggle) toggle.title = label;
+      }
+      toggle?.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try {
+          localStorage.setItem('aot-theme', root.dataset.theme);
+        } catch {
+          /* Keep the current choice for this page. */
         }
-
-        const initial = root.getAttribute('data-theme') || 'light';
-        applyTheme(initial);
-
-        themeBtn?.addEventListener('click', () => {
-          const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-          applyTheme(current === 'dark' ? 'light' : 'dark');
-        });
+        updateThemeLabel();
       });
+      updateThemeLabel();
     </script>
   </body>
 </html>

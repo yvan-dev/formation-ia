@@ -55,3 +55,7 @@ frontend/
 - [MDX](https://mdxjs.com) - Markdown with JSX
 - [Tailwind CSS v4](https://tailwindcss.com) - Utility-first CSS
 - [Pagefind](https://pagefind.app) - Static search (runs at build time)
+
+## Direction artistique
+
+La palette graphite/violet, les polices locales, les illustrations et les principes de composition communs sont documentés dans [le système de design](docs/design-system.md).

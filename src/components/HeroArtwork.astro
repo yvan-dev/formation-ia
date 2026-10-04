@@ -1,0 +1,318 @@
+---
+import { Image } from 'astro:assets';
+import hero from '../assets/illustrations/hero.webp';
+---
+
+<figure class="hero-art" data-animation="paused">
+  <Image
+    src={hero}
+    widths={[320, 640, 960, 1200]}
+    sizes="(max-width: 850px) 90vw, 45vw"
+    width={1200}
+    height={1200}
+    loading="eager"
+    alt="Une méthode de travail illustrée : préparer un plan, produire avec l’IA, puis faire valider le résultat par un humain."
+    fetchpriority="high"
+    decoding="async"
+  />
+  <svg
+    class="future-layer"
+    viewBox="0 0 1000 1000"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g class="hud-frame" stroke="currentColor" stroke-width="1"
+      ><path d="M144 289v-18h18M818 271h18v18M836 744v18h-18M162 762h-18v-18"
+      ></path><path d="M749 304h30m-15-5v10M182 712h30m-15-5v10"></path></g
+    >
+    <g class="core-aura" stroke="currentColor" stroke-width="1"
+      ><circle r="72"></circle><path d="M-87 0h9M78 0h9M0-87v9M0 78v9"
+      ></path></g
+    >
+    <circle
+      class="core-aura aura-echo"
+      r="72"
+      stroke="currentColor"
+      stroke-width="1"></circle>
+    <path
+      class="scan-beam"
+      d="M405 356L626 427"
+      stroke="currentColor"
+      stroke-width="1.5"></path>
+    <circle class="energy-dot" r="3.5" fill="currentColor"></circle>
+    <circle class="energy-dot dot-two" r="2.5" fill="#EEF1F6"></circle>
+    <circle class="energy-dot dot-three" r="3" fill="currentColor"></circle>
+    <circle
+      class="ambient-dot ambient-one"
+      cx="267"
+      cy="303"
+      r="2"
+      fill="currentColor"></circle>
+    <circle
+      class="ambient-dot ambient-two"
+      cx="739"
+      cy="719"
+      r="2"
+      fill="currentColor"></circle>
+    <circle
+      class="ambient-dot ambient-three"
+      cx="783"
+      cy="391"
+      r="1.5"
+      fill="#EEF1F6"></circle>
+  </svg>
+  <button
+    class="hero-motion-toggle"
+    type="button"
+    aria-label="Mettre l’animation en pause"
+    aria-pressed="false"
+    title="Mettre l’animation en pause"
+    hidden
+  >
+    <svg
+      class="pause-glyph"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg
+    >
+    <svg
+      class="play-glyph"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"><path d="M9 5l10 7-10 7z"></path></svg
+    >
+  </button>
+</figure>
+
+<script>
+  const heroArtwork = document.querySelector<HTMLElement>('.hero-art');
+  const toggle = heroArtwork?.querySelector<HTMLButtonElement>(
+    '.hero-motion-toggle',
+  );
+  if (heroArtwork && toggle) {
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let userPaused = false;
+    let inViewport = false;
+
+    const syncHeroMotion = () => {
+      const reduced = reducedMotion.matches;
+      const running = !reduced && !userPaused && inViewport && !document.hidden;
+      heroArtwork.dataset.animation = reduced
+        ? 'reduced'
+        : running
+          ? 'running'
+          : 'paused';
+      toggle.hidden = reduced;
+      toggle.setAttribute('aria-pressed', String(userPaused));
+      const label = userPaused
+        ? 'Reprendre l’animation'
+        : 'Mettre l’animation en pause';
+      toggle.setAttribute('aria-label', label);
+      toggle.title = label;
+    };
+
+    toggle.addEventListener('click', () => {
+      userPaused = !userPaused;
+      syncHeroMotion();
+    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewport = entry.isIntersecting;
+        syncHeroMotion();
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(heroArtwork);
+    reducedMotion.addEventListener('change', syncHeroMotion);
+    document.addEventListener('visibilitychange', syncHeroMotion);
+    syncHeroMotion();
+  }
+</script>
+<style>
+  /* Futuristic motion stays on small overlay layers, never on the large image. */
+  .hero-art {
+    position: relative;
+  }
+  .future-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: #b366f5;
+    pointer-events: none;
+  }
+  .hud-frame {
+    opacity: 0.32;
+  }
+  .core-aura {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation: core-aura 6s ease-out infinite;
+    opacity: 0;
+  }
+  .aura-echo {
+    animation-delay: 3s;
+  }
+  .scan-beam {
+    transform-box: view-box;
+    animation: scan-beam 7s ease-out infinite;
+    opacity: 0;
+  }
+  .energy-dot {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation: energy-flow 5s linear infinite;
+    opacity: 0;
+  }
+  .dot-two {
+    animation-delay: 1.7s;
+  }
+  .dot-three {
+    animation-delay: 3.4s;
+  }
+  .ambient-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ambient-drift 8s ease-out infinite;
+    opacity: 0;
+  }
+  .ambient-two {
+    animation-delay: 2.6s;
+  }
+  .ambient-three {
+    animation-delay: 5.2s;
+  }
+  .hero-art .future-layer * {
+    animation-play-state: paused;
+  }
+  .hero-art[data-animation='running'] .future-layer * {
+    animation-play-state: running;
+  }
+  .hero-art[data-animation='reduced'] .future-layer {
+    display: none;
+  }
+  .hero-motion-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #7080a0;
+    border-radius: 50%;
+    background: #1a1e2a;
+    color: #eef1f6;
+    padding: 0;
+  }
+  .hero-motion-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+  .hero-motion-toggle .play-glyph {
+    display: none;
+  }
+  .hero-motion-toggle[aria-pressed='true'] .pause-glyph {
+    display: none;
+  }
+  .hero-motion-toggle[aria-pressed='true'] .play-glyph {
+    display: block;
+  }
+  .hero-motion-toggle:hover {
+    background: #2a3045;
+  }
+  @keyframes core-aura {
+    0% {
+      transform: translate(52%, 43%) scale(0.72);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.42;
+    }
+    100% {
+      transform: translate(52%, 43%) scale(1.24);
+      opacity: 0;
+    }
+  }
+  @keyframes scan-beam {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.65;
+    }
+    66% {
+      transform: translate(-1.5%, 14%);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-1.5%, 14%);
+      opacity: 0;
+    }
+  }
+  @keyframes energy-flow {
+    0% {
+      transform: translate(24.5%, 46.5%);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.95;
+    }
+    28% {
+      transform: translate(35%, 51%);
+      opacity: 0.95;
+    }
+    33% {
+      opacity: 0;
+    }
+    48% {
+      transform: translate(64%, 65%);
+      opacity: 0;
+    }
+    55% {
+      opacity: 0.95;
+    }
+    79% {
+      transform: translate(77%, 67%);
+      opacity: 0.95;
+    }
+    87% {
+      opacity: 0;
+    }
+    100% {
+      transform: translate(77%, 67%);
+      opacity: 0;
+    }
+  }
+  @keyframes ambient-drift {
+    0% {
+      transform: translateY(4px) scale(0.7);
+      opacity: 0;
+    }
+    25% {
+      opacity: 0.5;
+    }
+    75% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-10px) scale(1);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-art .future-layer,
+    .hero-motion-toggle {
+      display: none !important;
+    }
+    .hero-art .future-layer * {
+      animation: none !important;
+    }
+  }
+</style>

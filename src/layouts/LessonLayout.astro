@@ -1,230 +1,190 @@
 ---
+import Icon from '../components/Icon.astro';
 import BaseLayout from './BaseLayout.astro';
 import LessonSidebar from '../components/LessonSidebar.astro';
 import ProgressBar from '../components/ProgressBar.astro';
-import { getEntry } from 'astro:content';
+import { getEntry, type CollectionEntry } from 'astro:content';
 
-interface Props {
+interface LessonFrontmatter {
   title: string;
   courseSlug: string;
-  courseTitle: string;
   lessonSlug: string;
-  modules: Array<{
-    title: string;
-    lessons: Array<{
-      slug: string;
-      title: string;
-    }>;
-  }>;
+  courseTitle?: string;
+  modules?: CollectionEntry<'courses'>['data']['modules'];
+  duration?: string;
 }
-
+interface Props extends LessonFrontmatter {
+  frontmatter?: LessonFrontmatter;
+}
 const props = Astro.props.frontmatter || Astro.props;
 const { title, courseSlug, lessonSlug, duration } = props;
-
 const courseEntry = await getEntry('courses', courseSlug);
-const courseTitle = courseEntry?.data.title || props.courseTitle;
-const modules = courseEntry?.data.modules || props.modules;
-const showAllModules = import.meta.env.DEV;
-const visibleModules = showAllModules
+const courseTitle = courseEntry?.data.title ?? props.courseTitle ?? 'Formation';
+const modules = courseEntry?.data.modules ?? props.modules ?? [];
+const visibleModules = import.meta.env.DEV
   ? modules
-  : modules.filter((module, index) => (typeof module.released === 'boolean' ? module.released : index < 3));
-
+  : modules.filter((module, index) => module.released ?? index < 3);
 const base = import.meta.env.BASE_URL;
 const allLessons = visibleModules.flatMap((m) => m.lessons);
 const currentIndex = allLessons.findIndex((l) => l.slug === lessonSlug);
-const totalLessons = allLessons.length;
 const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
 const nextLesson =
-  currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  currentIndex >= 0 && currentIndex < allLessons.length - 1
+    ? allLessons[currentIndex + 1]
+    : null;
 ---
 
 <BaseLayout title={title}>
-  <div class="container-shell overflow-hidden py-3">
-    <div class="surface-card overflow-hidden">
-      <div class="grid lg:grid-cols-[300px_1fr]">
-        <aside class="hidden border-r border-[var(--border)] bg-[var(--surface-strong)] lg:block">
-          <LessonSidebar
-            courseSlug={courseSlug}
-            courseTitle={courseTitle}
-            modules={visibleModules}
-            currentLesson={lessonSlug}
-          />
-        </aside>
-
-        <div class="min-w-0">
-          <ProgressBar courseSlug={courseSlug} totalLessons={totalLessons} />
-
-          <div class="px-5 pt-5 md:px-8">
-            <nav class="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase" aria-label="Fil d'Ariane">
-              <a href={base} class="transition-colors hover:text-[var(--text-primary)]">Accueil</a>
-              <span>/</span>
-              <a href={`${base}courses/${courseSlug}`} class="transition-colors hover:text-[var(--text-primary)]">{courseTitle}</a>
-              <span>/</span>
-              <span class="text-[var(--text-muted)]">{title}</span>
-            </nav>
-
-            <div class="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold tracking-[0.1em] text-[var(--text-faint)] uppercase">
-              <span>Leçon {currentIndex + 1} / {totalLessons}</span>
-              {duration && <span>{duration}</span>}
-            </div>
-
-            <h1 class="section-title text-3xl text-[var(--text-primary)] md:text-4xl">{title}</h1>
-          </div>
-
-          <article class="px-5 py-6 md:px-8 md:py-8" data-pagefind-body>
-            <div class="prose-shell max-w-none">
-              <slot />
-            </div>
-
-            <div class="mt-10">
-              <button
-                id="mark-complete-btn"
-                data-course={courseSlug}
-                data-lesson={lessonSlug}
-                class="btn-primary"
-              >
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span>Marquer la leçon comme terminée</span>
-              </button>
-            </div>
-
-            <nav class="mt-10 grid gap-3 border-t border-[var(--border)] pt-6 md:grid-cols-2" aria-label="Navigation des leçons">
-              {
-                prevLesson ? (
-                  <a
-                    href={`${base}lessons/${courseSlug}/${prevLesson.slug}`}
-                    class="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm transition-colors hover:bg-[var(--surface)]"
-                  >
-                    <p class="text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase">Précédent</p>
-                    <p class="mt-1 font-semibold text-[var(--text-primary)]">{prevLesson.title}</p>
-                  </a>
-                ) : (
-                  <div class="hidden md:block"></div>
-                )
-              }
-
-              {
-                nextLesson ? (
-                  <a
-                    href={`${base}lessons/${courseSlug}/${nextLesson.slug}`}
-                    class="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm transition-colors hover:bg-[var(--surface)] md:text-right"
-                  >
-                    <p class="text-xs font-semibold tracking-[0.08em] text-[var(--text-faint)] uppercase">Suivant</p>
-                    <p class="mt-1 font-semibold text-[var(--text-primary)]">{nextLesson.title}</p>
-                  </a>
-                ) : (
-                  <div class="hidden md:block"></div>
-                )
-              }
-            </nav>
-          </article>
-        </div>
-      </div>
-    </div>
+  <div class="container-shell lesson-breadcrumb">
+    <nav class="breadcrumb" aria-label="Fil d’Ariane">
+      <a href={base}>Accueil</a><span aria-hidden="true">/</span><a
+        href={`${base}courses/${courseSlug}`}>{courseTitle}</a
+      >
+    </nav><span class="mono muted"
+      >{
+        currentIndex >= 0
+          ? `Leçon ${currentIndex + 1} / ${allLessons.length}`
+          : 'Leçon en préparation'
+      }</span
+    >
   </div>
-
-  <button
-    id="mobile-sidebar-toggle"
-    class="fixed right-5 bottom-5 z-40 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] shadow-[var(--shadow-soft)] lg:hidden"
-    aria-label="Afficher le menu des leçons"
-  >
-    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4 6h16M4 12h16M4 18h16"
-      ></path>
-    </svg>
-  </button>
-
-  <div id="mobile-sidebar" class="fixed inset-0 z-50 hidden lg:hidden">
-    <div class="absolute inset-0 bg-black/55" id="mobile-sidebar-backdrop"></div>
-    <div class="relative h-full w-[86%] max-w-[320px] overflow-y-auto border-r border-[var(--border)] bg-[var(--surface)]">
-      <div class="flex justify-end p-3">
-        <button id="mobile-sidebar-close" class="btn-ghost !rounded-lg !px-3 !py-1.5" aria-label="Fermer le menu">
-          Fermer
-        </button>
-      </div>
+  <div class="container-shell lesson-layout">
+    <aside class="desktop-lesson-nav">
       <LessonSidebar
         courseSlug={courseSlug}
         courseTitle={courseTitle}
         modules={visibleModules}
         currentLesson={lessonSlug}
       />
+    </aside>
+    <div class="lesson-main">
+      <details class="mobile-lesson-nav">
+        <summary>Le programme et les autres leçons</summary><LessonSidebar
+          courseSlug={courseSlug}
+          courseTitle={courseTitle}
+          modules={visibleModules}
+          currentLesson={lessonSlug}
+        />
+      </details>
+      <ProgressBar
+        courseSlug={courseSlug}
+        lessonSlugs={allLessons.map((lesson) => lesson.slug)}
+      />
+      <header class="lesson-heading">
+        <p class="eyebrow">
+          {currentIndex >= 0 ? `Leçon ${currentIndex + 1}` : 'En préparation'}{
+            duration ? ` / ${duration}` : ''
+          }
+        </p><h1>{title}</h1>
+      </header>
+      <article class="prose-shell" data-pagefind-body><slot /></article>
+      <div class="lesson-completion">
+        <div>
+          <strong>Une étape de plus.</strong><p
+            id="completion-status"
+            role="status"
+          >
+            Validez cette leçon pour suivre votre progression.
+          </p>
+        </div><button
+          id="mark-complete-btn"
+          class="btn-primary"
+          type="button"
+          data-course={courseSlug}
+          data-lesson={lessonSlug}
+          ><span data-complete-label>Marquer la leçon comme terminée</span>
+          <span aria-hidden="true"><Icon name="check" /></span></button
+        >
+      </div>
+      <nav class="lesson-pagination" aria-label="Leçons précédente et suivante">
+        {
+          prevLesson ? (
+            <a href={`${base}lessons/${courseSlug}/${prevLesson.slug}`}>
+              <>
+                <span class="eyebrow">
+                  <Icon name="arrow-left" /> Précédente
+                </span>
+                <strong>{prevLesson.title}</strong>
+              </>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          nextLesson ? (
+            <a href={`${base}lessons/${courseSlug}/${nextLesson.slug}`}>
+              <>
+                <span class="eyebrow">
+                  Suivante <Icon name="arrow-right" />
+                </span>
+                <strong>{nextLesson.title}</strong>
+              </>
+            </a>
+          ) : (
+            <a href={`${base}courses/${courseSlug}`}>
+              <>
+                <span class="eyebrow">
+                  Retour au programme <Icon name="arrow-right" />
+                </span>
+                <strong>{courseTitle}</strong>
+              </>
+            </a>
+          )
+        }
+      </nav>
     </div>
+    <aside class="lesson-toc">
+      <nav aria-label="Dans cette leçon">
+        <p class="mono muted">Dans cette leçon</p><div id="lesson-toc-links">
+        </div>
+      </nav>
+    </aside>
   </div>
-
-  <script is:inline>
-    const completeBtn = document.getElementById('mark-complete-btn');
-
-    function setCompleteButton(btn) {
-      btn.innerHTML = `
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <span>Leçon terminée</span>
-      `;
-      btn.style.background = 'var(--brand-700)';
-      btn.style.color = 'var(--ink-050)';
-      btn.disabled = true;
-      btn.classList.add('cursor-default');
-    }
-
-    completeBtn?.addEventListener('click', (event) => {
-      const btn = event.currentTarget;
-      const course = btn.dataset.course;
-      const lesson = btn.dataset.lesson;
-      const key = `progress_${course}`;
-      const progress = JSON.parse(localStorage.getItem(key) || '[]');
-
-      if (!progress.includes(lesson)) {
-        progress.push(lesson);
-        localStorage.setItem(key, JSON.stringify(progress));
+  <script>
+    import {
+      completeLesson,
+      readProgress,
+      refreshProgress,
+    } from '../lib/progress';
+    const button =
+      document.querySelector<HTMLButtonElement>('#mark-complete-btn');
+    const status = document.querySelector('#completion-status');
+    function updateCompletion() {
+      if (!button) return;
+      const done = readProgress(button.dataset.course ?? '').includes(
+        button.dataset.lesson ?? '',
+      );
+      button.disabled = done;
+      button.dataset.completed = String(done);
+      if (done) {
+        const label = button.querySelector('[data-complete-label]');
+        if (label) label.textContent = 'Leçon terminée';
+        if (status)
+          status.textContent =
+            'Votre progression est enregistrée sur cet appareil.';
       }
-
-      setCompleteButton(btn);
-
-      document.querySelectorAll(`[data-lesson-link="${lesson}"]`).forEach((el) => {
-        el.querySelector('.lesson-check')?.classList.remove('hidden');
-        el.querySelector('.lesson-dot')?.classList.add('hidden');
-      });
-
-      window.dispatchEvent(new CustomEvent('lesson-completed'));
+      refreshProgress();
+    }
+    button?.addEventListener('click', () => {
+      const saved = completeLesson(
+        button.dataset.course ?? '',
+        button.dataset.lesson ?? '',
+      );
+      if (saved) updateCompletion();
+      else if (status)
+        status.textContent =
+          'La progression n’a pas pu être enregistrée. Autorisez le stockage du navigateur, puis réessayez.';
     });
-
-    (function () {
-      const btn = document.getElementById('mark-complete-btn');
-      if (!btn) return;
-      const course = btn.dataset.course;
-      const lesson = btn.dataset.lesson;
-      const progress = JSON.parse(localStorage.getItem(`progress_${course}`) || '[]');
-      if (progress.includes(lesson)) setCompleteButton(btn);
-    })();
-
-    const toggle = document.getElementById('mobile-sidebar-toggle');
-    const sidebar = document.getElementById('mobile-sidebar');
-    const backdrop = document.getElementById('mobile-sidebar-backdrop');
-    const closeBtn = document.getElementById('mobile-sidebar-close');
-
-    function openSidebar() {
-      sidebar?.classList.remove('hidden');
-    }
-
-    function closeSidebar() {
-      sidebar?.classList.add('hidden');
-    }
-
-    toggle?.addEventListener('click', openSidebar);
-    backdrop?.addEventListener('click', closeSidebar);
-    closeBtn?.addEventListener('click', closeSidebar);
+    updateCompletion();
+    const toc = document.querySelector('#lesson-toc-links');
+    document
+      .querySelectorAll<HTMLElement>('[data-pagefind-body] h2[id]')
+      .forEach((heading) => {
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        toc?.append(link);
+      });
   </script>
 </BaseLayout>
-

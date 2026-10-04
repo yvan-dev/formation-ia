@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 
-/** Serve pagefind files from dist/ during dev */
+/** Serve pagefind files from dist/ during dev.
+ * @returns {import("vite").Plugin}
+ */
 function pagefindDevPlugin() {
   let basePath = '/';
   return {
@@ -24,6 +26,7 @@ function pagefindDevPlugin() {
           if (existsSync(distPath)) {
             const content = readFileSync(distPath);
             const ext = relPath.split('.').pop();
+            /** @type {Record<string, string>} */
             const types = {
               js: 'application/javascript',
               css: 'text/css',
@@ -32,7 +35,7 @@ function pagefindDevPlugin() {
             };
             res.setHeader(
               'Content-Type',
-              types[ext] || 'application/octet-stream',
+              types[ext ?? ''] || 'application/octet-stream',
             );
             res.end(content);
             return;
@@ -53,4 +56,13 @@ export default defineConfig({
     plugins: [tailwindcss(), pagefindDevPlugin()],
   },
   integrations: [mdx(), react()],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light-high-contrast',
+        dark: 'github-dark-high-contrast',
+      },
+      defaultColor: false,
+    },
+  },
 });

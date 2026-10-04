@@ -1,68 +1,75 @@
 ---
+import Icon from './Icon.astro';
 interface Props {
   slug: string;
   title: string;
   description: string;
   level?: string;
-  lessonCount: number;
-  moduleCount?: number;
-  ctaLabel?: string;
+  modules: Array<{
+    title: string;
+    released?: boolean;
+    lessons: Array<{ slug: string; title: string }>;
+  }>;
 }
-
-const { slug, title, description, level, lessonCount, moduleCount, ctaLabel = 'Programme détaillé' } = Astro.props;
+const { slug, title, description, level, modules } = Astro.props;
 const base = import.meta.env.BASE_URL;
-
-const levelMap: Record<string, string> = {
-  Débutant: 'bg-[rgba(52,168,54,0.16)] text-[var(--brand-700)]',
-  Intermédiaire: 'bg-[rgba(23,229,23,0.16)] text-[var(--brand-900)]',
-  Avancé: 'bg-[rgba(0,0,0,0.82)] text-[var(--brand-500)]',
-};
+const available = modules.filter(
+  (module, index) => module.released ?? index < 3,
+);
+const lessonCount = available.reduce(
+  (count, module) => count + module.lessons.length,
+  0,
+);
 ---
 
-<a
-  href={`${base}courses/${slug}`}
-  class="group surface-card reveal block overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-strong)]"
->
-  <div class="relative overflow-hidden border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface-strong)_78%,transparent)] px-5 py-5">
-    <div class="grid-pattern"></div>
-    <div class="relative flex items-start justify-between gap-4">
+<article class="course-feature">
+  <div class="course-intro">
+    <span class="badge">Disponible maintenant{level ? ` · ${level}` : ''}</span>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class="course-stats">
       <div>
-        {
-          level && (
-            <span class:list={['course-badge', levelMap[level] || 'bg-[var(--surface-strong)] text-[var(--text-muted)]']}>
-              {level}
-            </span>
-          )
-        }
+        <strong>{String(available.length).padStart(2, '0')}</strong><span
+          >modules disponibles</span
+        >
+      </div><div>
+        <strong>{lessonCount}</strong><span>leçons accessibles</span>
       </div>
-      {
-        typeof moduleCount === 'number' ? (
-          <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-xs font-mono font-semibold text-[var(--text-faint)]">
-            {String(moduleCount).padStart(2, '0')} modules actifs
-          </div>
-        ) : (
-          <div class="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-xs font-mono font-semibold text-[var(--text-faint)]">
-            {String(lessonCount).padStart(2, '0')} leçons
-          </div>
-        )
-      }
     </div>
-
-    <h3 class="section-title relative mt-4 text-xl text-[var(--text-primary)]">{title}</h3>
+    <a class="text-link accent" href={`${base}courses/${slug}`}
+      >Découvrir la formation <span aria-hidden="true"
+        ><Icon name="arrow-up" /></span
+      ></a
+    >
   </div>
-
-  <div class="p-5">
-    <p class="line-clamp-3 text-sm leading-relaxed text-[var(--text-muted)]">{description}</p>
-
-    <div class="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-4">
-      <span class="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">
-        {ctaLabel}
-      </span>
-      <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface-strong)] text-[var(--text-muted)] transition-all duration-300 group-hover:border-[var(--brand-400)] group-hover:text-[var(--brand-400)]">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-      </span>
-    </div>
+  <div class="course-outline">
+    <p class="mono outline-label">Votre feuille de route</p>
+    {
+      available.map((module, index) => (
+        <a
+          class="module-row"
+          href={`${base}courses/${slug}#module-${index + 1}`}
+        >
+          <>
+            <span class="mono">{String(index + 1).padStart(2, '0')}</span>
+            <h4>{module.title}</h4>
+            <span class="module-meta">
+              {module.lessons.length} leçons{' '}
+              <span aria-hidden="true">
+                <Icon name="arrow-up" />
+              </span>
+            </span>
+          </>
+        </a>
+      ))
+    }
+    {
+      modules.length > available.length && (
+        <p class="roadmap-note">
+          {modules.length - available.length} modules supplémentaires en
+          préparation.
+        </p>
+      )
+    }
   </div>
-</a>
+</article>
