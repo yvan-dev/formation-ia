@@ -41,7 +41,7 @@ Les cinq illustrations générées pour cette évolution de la DA sont intégré
 
 L’image du hero représente un noyau neuronal de verre et de titane, entouré d’orbites et de panneaux holographiques, sans texte visible. Les cinq fichiers possèdent un canal alpha : aucun fond noir incrusté, aucune inversion de couleur selon le thème. Les matériaux clairs et violets fonctionnent sur les surfaces sombres comme claires. La galerie montre développement, architecture, DevOps/QA et produit, chacun avec une légende discrète. Ces visuels représentent les métiers, pas des références clients.
 
-`HeroArtwork.astro` contient l’unique animation du site : orbites SVG en rotation (14 et 20 secondes), balises, pulsation du noyau et panneaux flottants (4 à 6 secondes). Seuls `transform` et `opacity` sont animés ; le bitmap reste immobile. Le bouton natif permet la pause/reprise. `IntersectionObserver`, la visibilité de l’onglet et `prefers-reduced-motion` suspendent les effets lorsque nécessaire. Aucun moteur d’animation supplémentaire.
+`HeroArtwork.astro` contient l’unique animation du site : orbites SVG en rotation (14 et 20 secondes), balises, pulsation du noyau et panneaux flottants (4 à 6 secondes). Seuls `transform` et `opacity` sont animés ; le bitmap reste immobile. Le bouton natif permet la pause/reprise. `IntersectionObserver`, la visibilité de l’onglet et `prefers-reduced-motion` suspendent les effets lorsque nécessaire. Aucun moteur d’animation supplémentaire. [Voir un extrait de l’animation réelle](previews/animation-ia.webp).
 
 ## Comportements et contenu
 
