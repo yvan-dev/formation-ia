@@ -41,12 +41,14 @@ const stages = [
       <div class="course-stats">
         <div>
           <strong>{String(available.length).padStart(2, '0')}</strong><span
-            >modules disponibles</span>
+            >modules disponibles</span
+          >
         </div><div>
           <strong>{lessonCount}</strong><span>leçons accessibles</span>
         </div>
       </div><a class="btn-primary" href={`${base}courses/${slug}`}
-        >Découvrir la formation <Icon name="arrow-up" /></a>
+        >Découvrir la formation <Icon name="arrow-up" /></a
+      >
     </div>
   </div>
   <ol class="learning-path" aria-label="Les étapes du parcours">
