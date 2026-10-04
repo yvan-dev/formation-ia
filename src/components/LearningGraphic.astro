@@ -1,0 +1,73 @@
+---
+interface Props {
+  kind: 'foundations' | 'models' | 'workflow';
+}
+const { kind } = Astro.props;
+---
+
+<svg
+  class="learning-graphic"
+  viewBox="0 0 260 140"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <g stroke="currentColor" stroke-width="1.5">
+    {
+      kind === 'foundations' && (
+        <>
+          <>
+            <path
+              class="graphic-faint"
+              d="M30 105h200M60 105V75h40v30m-20-30V47h100v58m-20-58V20h40v85"
+            />
+            <path d="m53 62 30-20 46 19 53-34 35 13" />
+            <circle cx="83" cy="42" r="5" class="graphic-node" />
+            <circle cx="129" cy="61" r="5" class="graphic-node" />
+            <circle cx="182" cy="27" r="5" class="graphic-node" />
+            <path class="graphic-faint" d="M38 113h170M53 121h160" />
+          </>
+        </>
+      )
+    }
+    {
+      kind === 'models' && (
+        <>
+          <>
+            <path
+              class="graphic-faint"
+              d="M68 28h124v84H68zM46 44H28v52h18m168-52h18v52h-18"
+            />
+            <circle cx="130" cy="70" r="30" />
+            <path d="m105 51 50 38m-50 0 50-38M130 40v60M100 70h60" />
+            <circle cx="130" cy="70" r="7" class="graphic-node" />
+            <circle cx="105" cy="51" r="4" class="graphic-node" />
+            <circle cx="155" cy="89" r="4" class="graphic-node" />
+            <path
+              class="graphic-faint"
+              d="M85 22v-9m20 9v-9m25 9v-9m25 9v-9m20 9v-9M85 117v9m20-9v9m25-9v9m25-9v9m20-9v9"
+            />
+          </>
+        </>
+      )
+    }
+    {
+      kind === 'workflow' && (
+        <>
+          <>
+            <path
+              class="graphic-faint"
+              d="M55 73h148M87 73v-40h54v40m-54 0v34h54V73"
+            />
+            <rect x="25" y="53" width="48" height="40" rx="9" />
+            <rect x="93" y="12" width="48" height="40" rx="9" />
+            <rect x="93" y="88" width="48" height="40" rx="9" />
+            <rect x="177" y="53" width="48" height="40" rx="9" />
+            <path d="m40 68-6 5 6 5m18-10 6 5-6 5m47-41 7 7 13-13m-18 75h20m-10-10v20m77-42 7 7 13-13" />
+            <circle cx="160" cy="73" r="5" class="graphic-node" />
+          </>
+        </>
+      )
+    }
+  </g>
+</svg>

@@ -99,7 +99,7 @@ test('hero motion moves, pauses with the keyboard and suspends offscreen', async
   await page.goto(`${BASE}/`);
   const hero = page.locator('.hero-art');
   await expect(hero).toHaveAttribute('data-animation', 'running');
-  const dot = hero.locator('.energy-dot').first();
+  const dot = hero.locator('.orbital-rotation').first();
   const initial = await dot.evaluate((el) => getComputedStyle(el).transform);
   await expect
     .poll(() => dot.evaluate((el) => getComputedStyle(el).transform))
@@ -270,4 +270,34 @@ test('storage failures leave lesson completion retryable and the quiz result rea
   await expect(page.locator('.storage-error')).toContainText(
     'empêche son enregistrement',
   );
+});
+
+test('illustrations retain transparent backgrounds in the light theme', async ({
+  page,
+}) => {
+  await page.goto(`${BASE}/`);
+  await page.getByRole('button', { name: /Basculer le thème/ }).click();
+  const images = page.locator('.hero-art img, .team-visual img');
+  await expect(images).toHaveCount(5);
+  for (const image of await images.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (el: HTMLImageElement) => el.complete && el.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+    const alpha = await image.evaluate((el: HTMLImageElement) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = el.naturalWidth;
+      canvas.height = el.naturalHeight;
+      const context = canvas.getContext('2d')!;
+      context.drawImage(el, 0, 0);
+      return context.getImageData(0, 0, 1, 1).data[3];
+    });
+    expect(alpha).toBe(0);
+  }
+  await expect(page.locator('.learning-path svg')).toHaveCount(9);
+  await expect(page.locator('.maturity-symbol svg')).toHaveCount(5);
 });

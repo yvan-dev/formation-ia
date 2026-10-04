@@ -4,16 +4,30 @@ import hero from '../assets/illustrations/hero.webp';
 ---
 
 <figure class="hero-art" data-animation="paused">
+  <svg
+    class="neural-backdrop"
+    viewBox="0 0 1000 1000"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+    ><circle cx="500" cy="490" r="360" fill="var(--accent-soft)"></circle><g
+      stroke="currentColor"
+      stroke-width="1"
+      ><circle cx="500" cy="490" r="420"></circle><path
+        d="M65 490h65m740 0h65M500 55v65m0 740v65M165 185l35 35m600 600 35 35M165 835l35-35m600-580 35-35"
+      ></path></g
+    ></svg
+  >
   <Image
+    class="neural-emblem"
     src={hero}
     widths={[320, 640, 960, 1200]}
     sizes="(max-width: 850px) 90vw, 45vw"
     width={1200}
     height={1200}
     loading="eager"
-    alt="Une méthode de travail illustrée : préparer un plan, produire avec l’IA, puis faire valider le résultat par un humain."
     fetchpriority="high"
-    decoding="async"
+    alt="Un noyau d’intelligence artificielle : réseau neuronal lumineux violet, cœur cristallin et orbites en titane."
   />
   <svg
     class="future-layer"
@@ -22,45 +36,84 @@ import hero from '../assets/illustrations/hero.webp';
     aria-hidden="true"
     focusable="false"
   >
-    <g class="hud-frame" stroke="currentColor" stroke-width="1"
-      ><path d="M144 289v-18h18M818 271h18v18M836 744v18h-18M162 762h-18v-18"
-      ></path><path d="M749 304h30m-15-5v10M182 712h30m-15-5v10"></path></g
+    <g transform="rotate(-28 500 490)"
+      ><g class="orbital-rotation orbit-one"
+        ><ellipse
+          cx="500"
+          cy="490"
+          rx="425"
+          ry="210"
+          stroke="currentColor"
+          stroke-width="1.7"></ellipse><path
+          d="M75 490a425 210 0 0 1 425-210"
+          stroke="currentColor"
+          stroke-width="3.5"></path><circle
+          class="energy-dot"
+          cx="925"
+          cy="490"
+          r="7"
+          fill="currentColor"></circle><circle
+          cx="500"
+          cy="280"
+          r="4"
+          fill="currentColor"></circle></g
+      ></g
     >
-    <g class="core-aura" stroke="currentColor" stroke-width="1"
-      ><circle r="72"></circle><path d="M-87 0h9M78 0h9M0-87v9M0 78v9"
-      ></path></g
+    <g transform="rotate(55 500 490)"
+      ><g class="orbital-rotation orbit-two"
+        ><ellipse
+          cx="500"
+          cy="490"
+          rx="385"
+          ry="200"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-dasharray="8 18"></ellipse><circle
+          class="energy-dot dot-two"
+          cx="115"
+          cy="490"
+          r="6"
+          fill="currentColor"></circle><path
+          d="M500 690a385 200 0 0 1-385-200"
+          stroke="currentColor"
+          stroke-width="2.5"></path></g
+      ></g
     >
-    <circle
-      class="core-aura aura-echo"
-      r="72"
-      stroke="currentColor"
-      stroke-width="1"></circle>
-    <path
-      class="scan-beam"
-      d="M405 356L626 427"
-      stroke="currentColor"
-      stroke-width="1.5"></path>
-    <circle class="energy-dot" r="3.5" fill="currentColor"></circle>
-    <circle class="energy-dot dot-two" r="2.5" fill="#EEF1F6"></circle>
-    <circle class="energy-dot dot-three" r="3" fill="currentColor"></circle>
-    <circle
-      class="ambient-dot ambient-one"
-      cx="267"
-      cy="303"
-      r="2"
-      fill="currentColor"></circle>
-    <circle
-      class="ambient-dot ambient-two"
-      cx="739"
-      cy="719"
-      r="2"
-      fill="currentColor"></circle>
-    <circle
-      class="ambient-dot ambient-three"
-      cx="783"
-      cy="391"
-      r="1.5"
-      fill="#EEF1F6"></circle>
+    <g class="signal-packet packet-one"
+      ><rect
+        x="135"
+        y="240"
+        width="58"
+        height="38"
+        rx="7"
+        fill="var(--surface)"
+        stroke="currentColor"></rect><path
+        d="M146 252h35m-35 10h22"
+        stroke="currentColor"
+        stroke-width="2"></path></g
+    >
+    <g class="signal-packet packet-two"
+      ><rect
+        x="785"
+        y="674"
+        width="62"
+        height="44"
+        rx="8"
+        fill="var(--surface)"
+        stroke="currentColor"></rect><path
+        d="m798 697 10 9 23-24"
+        stroke="currentColor"
+        stroke-width="2"></path></g
+    >
+    <g class="core-pulse" stroke="currentColor" stroke-width="1.8"
+      ><circle cx="500" cy="490" r="75"></circle><path
+        d="M500 400v15m0 150v15M410 490h15m150 0h15"></path></g
+    >
+    <g class="data-wave" stroke="currentColor" stroke-width="1.5"
+      ><path d="m172 746 90-72 110 34 116-107 148 89 125-117 80 41"
+      ></path><circle cx="372" cy="708" r="5" fill="currentColor"
+      ></circle><circle cx="636" cy="690" r="5" fill="currentColor"></circle></g
+    >
   </svg>
   <button
     class="hero-motion-toggle"
@@ -88,7 +141,6 @@ import hero from '../assets/illustrations/hero.webp';
     >
   </button>
 </figure>
-
 <script>
   const heroArtwork = document.querySelector<HTMLElement>('.hero-art');
   const toggle = heroArtwork?.querySelector<HTMLButtonElement>(
@@ -134,58 +186,65 @@ import hero from '../assets/illustrations/hero.webp';
   }
 </script>
 <style>
-  /* Futuristic motion stays on small overlay layers, never on the large image. */
   .hero-art {
     position: relative;
+    isolation: isolate;
+    background: transparent;
+    overflow: visible;
   }
+  .neural-backdrop,
   .future-layer {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    color: #b366f5;
+    color: var(--accent);
     pointer-events: none;
   }
-  .hud-frame {
-    opacity: 0.32;
+  .neural-backdrop {
+    z-index: -1;
   }
-  .core-aura {
+  .neural-backdrop g {
+    opacity: 0.24;
+  }
+  .neural-emblem {
+    position: relative;
+    padding: 12px;
+  }
+  .future-layer {
+    opacity: 0.84;
+  }
+  .orbital-rotation {
     transform-box: view-box;
-    transform-origin: 0 0;
-    animation: core-aura 6s ease-out infinite;
-    opacity: 0;
+    transform-origin: 500px 490px;
+    animation: orbital-spin 14s linear infinite;
   }
-  .aura-echo {
-    animation-delay: 3s;
-  }
-  .scan-beam {
-    transform-box: view-box;
-    animation: scan-beam 7s ease-out infinite;
-    opacity: 0;
+  .orbit-two {
+    animation-duration: 20s;
+    animation-direction: reverse;
+    opacity: 0.75;
   }
   .energy-dot {
-    transform-box: view-box;
-    transform-origin: 0 0;
-    animation: energy-flow 5s linear infinite;
-    opacity: 0;
+    animation: signal-beacon 3.6s ease-out infinite;
   }
   .dot-two {
-    animation-delay: 1.7s;
+    animation-delay: 1.8s;
   }
-  .dot-three {
-    animation-delay: 3.4s;
-  }
-  .ambient-dot {
+  .signal-packet {
     transform-box: fill-box;
     transform-origin: center;
-    animation: ambient-drift 8s ease-out infinite;
-    opacity: 0;
+    animation: packet-float 5s ease-out infinite;
   }
-  .ambient-two {
-    animation-delay: 2.6s;
+  .packet-two {
+    animation-delay: 2.5s;
   }
-  .ambient-three {
-    animation-delay: 5.2s;
+  .core-pulse {
+    transform-box: view-box;
+    transform-origin: 500px 490px;
+    animation: core-signal 4s ease-out infinite;
+  }
+  .data-wave {
+    animation: data-signal 6s ease-out infinite;
   }
   .hero-art .future-layer * {
     animation-play-state: paused;
@@ -198,16 +257,16 @@ import hero from '../assets/illustrations/hero.webp';
   }
   .hero-motion-toggle {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 8px;
+    right: 8px;
     display: grid;
     place-items: center;
     width: 44px;
     height: 44px;
-    border: 1px solid #7080a0;
+    border: 1px solid var(--border);
     border-radius: 50%;
-    background: #1a1e2a;
-    color: #eef1f6;
+    background: var(--surface);
+    color: var(--text);
     padding: 0;
   }
   .hero-motion-toggle svg {
@@ -224,86 +283,57 @@ import hero from '../assets/illustrations/hero.webp';
     display: block;
   }
   .hero-motion-toggle:hover {
-    background: #2a3045;
+    background: var(--surface-strong);
   }
-  @keyframes core-aura {
-    0% {
-      transform: translate(52%, 43%) scale(0.72);
-      opacity: 0;
+  @keyframes orbital-spin {
+    from {
+      transform: rotate(0deg);
     }
-    20% {
-      opacity: 0.42;
-    }
-    100% {
-      transform: translate(52%, 43%) scale(1.24);
-      opacity: 0;
+    to {
+      transform: rotate(360deg);
     }
   }
-  @keyframes scan-beam {
-    0% {
-      transform: translate(0, 0);
-      opacity: 0;
-    }
-    14% {
-      opacity: 0.65;
-    }
-    66% {
-      transform: translate(-1.5%, 14%);
-      opacity: 0;
-    }
+  @keyframes signal-beacon {
+    0%,
     100% {
-      transform: translate(-1.5%, 14%);
-      opacity: 0;
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
     }
   }
-  @keyframes energy-flow {
+  @keyframes packet-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  @keyframes core-signal {
     0% {
-      transform: translate(24.5%, 46.5%);
+      transform: scale(0.8);
       opacity: 0;
     }
-    8% {
-      opacity: 0.95;
-    }
-    28% {
-      transform: translate(35%, 51%);
-      opacity: 0.95;
-    }
-    33% {
-      opacity: 0;
-    }
-    48% {
-      transform: translate(64%, 65%);
-      opacity: 0;
-    }
-    55% {
-      opacity: 0.95;
-    }
-    79% {
-      transform: translate(77%, 67%);
-      opacity: 0.95;
-    }
-    87% {
-      opacity: 0;
+    30% {
+      opacity: 0.7;
     }
     100% {
-      transform: translate(77%, 67%);
+      transform: scale(1.65);
       opacity: 0;
     }
   }
-  @keyframes ambient-drift {
-    0% {
-      transform: translateY(4px) scale(0.7);
-      opacity: 0;
-    }
-    25% {
-      opacity: 0.5;
-    }
-    75% {
-      opacity: 0.5;
-    }
+  @keyframes data-signal {
+    0%,
     100% {
-      transform: translateY(-10px) scale(1);
       opacity: 0;
+      transform: translateY(12px);
+    }
+    45%,
+    65% {
+      opacity: 0.7;
+      transform: translateY(0);
     }
   }
   @media (prefers-reduced-motion: reduce) {
