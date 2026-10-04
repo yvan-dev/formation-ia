@@ -1,111 +1,125 @@
 ---
+import Icon from '../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroArtwork from '../components/HeroArtwork.astro';
 import CourseCard from '../components/CourseCard.astro';
 import MaturityStepper from '../components/MaturityStepper.astro';
-import { getCollection } from 'astro:content';
-
+import developpement from '../assets/illustrations/developpement.webp';
+import architecture from '../assets/illustrations/architecture.webp';
+import devops from '../assets/illustrations/devops-qa.webp';
+import produit from '../assets/illustrations/produit.webp';
 const courses = await getCollection('courses');
 const base = import.meta.env.BASE_URL;
-const primaryCourse = courses.find((course) => course.id === 'ia-appliquee-metiers-tech') ?? courses[0];
-
-if (!primaryCourse) {
-  throw new Error('Aucune formation disponible');
-}
-
-const releasedModules = primaryCourse.data.modules.filter((module, index) =>
-  typeof module.released === 'boolean' ? module.released : index < 3,
-);
-
-const operationalModules = releasedModules.length;
-const operationalLessons = releasedModules.reduce((acc, module) => acc + module.lessons.length, 0);
+const primaryCourse =
+  courses.find((course) => course.id === 'ia-appliquee-metiers-tech') ??
+  courses[0];
+if (!primaryCourse) throw new Error('Aucune formation disponible');
+const teams = [
+  {
+    image: developpement,
+    caption: 'Développement',
+    alt: 'Ordinateur portable et symboles de code.',
+  },
+  {
+    image: architecture,
+    caption: 'Architecture',
+    alt: 'Composants logiciels organisés en réseau.',
+  },
+  {
+    image: devops,
+    caption: 'DevOps & QA',
+    alt: 'Serveurs reliés à un bouclier de validation.',
+  },
+  {
+    image: produit,
+    caption: 'Produit',
+    alt: 'Une équipe travaille sur des interfaces et un parcours utilisateur.',
+  },
+];
 ---
 
 <BaseLayout title="Accueil">
-  <section class="container-shell relative overflow-hidden py-10 md:py-14">
-    <div class="surface-card relative overflow-hidden px-6 py-10 md:px-10 md:py-14">
-      <div class="grid-pattern"></div>
-
-      <div class="relative grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-        <div>
-          <p class="reveal text-xs font-semibold tracking-[0.18em] text-[var(--text-faint)] uppercase">
-            Accompagnement IA appliqué aux métiers tech
-          </p>
-
-          <h1 class="hero-text reveal reveal-2 mt-4 text-4xl leading-[1.02] font-semibold text-[var(--text-primary)] md:text-6xl">
-            Positionnons-nous avec un quiz
-            <span class="brand-gradient-text">avant de lancer la formation</span>
-          </h1>
-
-          <p class="reveal reveal-3 mt-5 max-w-2xl text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            En 4 minutes, nous identifions notre niveau actuel et la prochaine étape utile pour progresser ensemble, sans détour théorique inutile.
-          </p>
-
-          <div class="reveal reveal-4 mt-7 flex flex-wrap items-center gap-3">
-            <a href={`${base}courses/${primaryCourse.id}`} class="btn-ghost">Découvrir notre première formation</a>
-            <a href={`${base}quiz-niveau`} class="btn-primary">
-              Faire un quiz de placement
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="reveal reveal-3 space-y-3 rounded-[1.1rem] border border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_90%,transparent)] p-5">
-          <div class="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
-            <span class="text-sm text-[var(--text-muted)]">Modules opérationnels aujourd'hui</span>
-            <strong class="section-title text-2xl text-[var(--text-primary)]">{operationalModules}</strong>
-          </div>
-          <div class="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
-            <span class="text-sm text-[var(--text-muted)]">Leçons disponibles immédiatement</span>
-            <strong class="section-title text-2xl text-[var(--text-primary)]">{operationalLessons}</strong>
-          </div>
-          <div class="rounded-xl border border-[var(--brand-300)] bg-[rgba(23,229,23,0.12)] px-4 py-3">
-            <p class="text-sm font-semibold text-[var(--brand-700)]">
-              Objectif immédiat: nous amener collectivement au niveau 3 (Agent guidé).
-            </p>
-          </div>
-        </div>
+  <section class="container-shell hero">
+    <div class="hero-copy">
+      <p class="eyebrow">
+        <span class="small-line" aria-hidden="true"></span>L’IA appliquée aux
+        métiers tech
+      </p>
+      <h1>
+        L’IA devient <br />une compétence. <br /><span class="accent"
+          >Faites-en la vôtre.</span
+        >
+      </h1>
+      <p class="hero-description">
+        Du premier prompt au workflow maîtrisé. <br />Un parcours concret pour
+        mieux concevoir, coder et décider avec l’IA.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href={`${base}quiz-niveau`}
+          >Trouver mon point de départ <span aria-hidden="true"
+            ><Icon name="arrow-up" /></span
+          ></a
+        >
+        <a class="text-link" href={`${base}courses/${primaryCourse.id}`}
+          >Explorer le parcours <span aria-hidden="true"
+            ><Icon name="arrow-right" /></span
+          ></a
+        >
       </div>
-    </div>
-  </section>
-
-  <section class="container-shell pb-3 md:pb-6">
-    <div class="mb-4 rounded-2xl border border-[var(--brand-300)] bg-[rgba(23,229,23,0.09)] px-5 py-4">
-      <p class="text-xs font-semibold tracking-[0.14em] text-[var(--text-faint)] uppercase">Repère de progression</p>
-      <p class="mt-2 text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
-        Le quiz vous positionne rapidement. La grille ci-dessous sert à rendre le chemin de progression visible pour toute l'équipe.
+      <p class="microcopy">
+        Quiz de placement · 4 minutes · Sans prérequis en IA
       </p>
     </div>
-
-    <MaturityStepper basePath={base} courseSlug={primaryCourse.id} variant="home" />
+    <HeroArtwork />
   </section>
-
-  <section id="formations" class="container-shell py-10 md:py-14">
-    <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
+  <section
+    class="container-shell team-gallery"
+    aria-label="Les équipes qui construisent avec l’IA"
+  >
+    {
+      teams.map((team) => (
+        <figure>
+          <>
+            <div class="team-visual">
+              <Image
+                src={team.image}
+                alt={team.alt}
+                widths={[240, 480, 720]}
+                sizes="(max-width: 600px) 44vw, 22vw"
+                width={720}
+                height={720}
+              />
+            </div>
+            <figcaption>{team.caption}</figcaption>
+          </>
+        </figure>
+      ))
+    }
+  </section>
+  <section
+    id="formations"
+    class="container-shell course-section"
+    aria-labelledby="course-title"
+  >
+    <div class="section-heading">
       <div>
-        <p class="text-xs font-semibold tracking-[0.16em] text-[var(--text-faint)] uppercase">Formation</p>
-        <h2 class="section-title mt-2 text-3xl text-[var(--text-primary)] md:text-4xl">Découvrir notre première formation</h2>
-      </div>
-      <p class="max-w-xl text-sm text-[var(--text-muted)] md:text-base">
-        Un parcours concret pour passer d'usages ponctuels à un workflow développeur assisté par IA, étape par étape.
+        <p class="eyebrow">01 / Le parcours</p><h2 id="course-title">
+          Apprendre pour faire.
+        </h2>
+      </div><p>
+        Des fondamentaux solides.<br />Des pratiques à appliquer sur vos
+        projets.
       </p>
     </div>
-
-    <div class="grid grid-cols-1 gap-6 md:max-w-[460px]">
-      {
-        primaryCourse && (
-          <CourseCard
-            slug={primaryCourse.id}
-            title={primaryCourse.data.title}
-            description={primaryCourse.data.description}
-            level={primaryCourse.data.level}
-            lessonCount={operationalLessons}
-            moduleCount={operationalModules}
-            ctaLabel="Découvrir notre première formation"
-          />
-        )
-      }
-    </div>
+    <CourseCard slug={primaryCourse.id} {...primaryCourse.data} />
+  </section>
+  <section class="container-shell maturity-section">
+    <MaturityStepper
+      basePath={base}
+      courseSlug={primaryCourse.id}
+      variant="home"
+    />
   </section>
 </BaseLayout>

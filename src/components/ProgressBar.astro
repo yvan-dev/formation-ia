@@ -1,37 +1,29 @@
 ---
 interface Props {
   courseSlug: string;
-  totalLessons: number;
+  lessonSlugs: string[];
 }
-
-const { courseSlug, totalLessons } = Astro.props;
+const { courseSlug, lessonSlugs } = Astro.props;
 ---
 
 <div
-  class="h-1.5 overflow-hidden border-b border-[var(--border)] bg-[var(--surface-strong)]"
-  id="progress-bar-container"
-  data-course={courseSlug}
-  data-total={totalLessons}
+  class="lesson-progress"
+  data-course-progress={courseSlug}
+  data-lessons={JSON.stringify(lessonSlugs)}
 >
-  <div id="progress-bar-fill" class="h-full transition-all duration-500 ease-out" style="width:0%;background:var(--gradient-brand)"></div>
+  <div class="progress-label">
+    <span>Votre progression</span><span data-progress-text
+      >0 / {lessonSlugs.length} leçons</span
+    >
+  </div>
+  <progress
+    value="0"
+    max={Math.max(1, lessonSlugs.length)}
+    aria-label="Progression de la formation"></progress>
 </div>
-
-<script is:inline>
-  (function () {
-    const container = document.getElementById('progress-bar-container');
-    const fill = document.getElementById('progress-bar-fill');
-    if (!container || !fill) return;
-
-    const course = container.dataset.course;
-    const total = parseInt(container.dataset.total || '0');
-
-    function updateBar() {
-      const progress = JSON.parse(localStorage.getItem(`progress_${course}`) || '[]');
-      const pct = total > 0 ? Math.round((progress.length / total) * 100) : 0;
-      fill.style.width = pct + '%';
-    }
-
-    updateBar();
-    window.addEventListener('lesson-completed', updateBar);
-  })();
+<script>
+  import { refreshProgress } from '../lib/progress';
+  refreshProgress();
+  window.addEventListener('lesson-completed', refreshProgress);
+  window.addEventListener('storage', refreshProgress);
 </script>
