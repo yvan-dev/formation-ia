@@ -69,7 +69,9 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
     <p class="eyebrow">
       Formation{course.data.level ? ` / ${course.data.level}` : ''}
     </p>
-    <h1>{title}</h1>
+    <div class="course-title-row">
+      <span class="course-emblem"><Icon name="brain" /></span><h1>{title}</h1>
+    </div>
     <p class="hero-description">{description}</p>
   </div>
   <div class="container-shell course-layout">
@@ -106,9 +108,20 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
             >
               <summary>
                 <>
-                  <span class="mono">
-                    {String(moduleIndex + 1).padStart(2, '0')}
-                  </span>
+                  <>
+                    <span class="module-summary-symbol">
+                      <Icon
+                        name={
+                          (['compass', 'brain', 'code'] as const)[
+                            moduleIndex
+                          ] ?? 'book'
+                        }
+                      />
+                    </span>
+                    <span class="mono">
+                      {String(moduleIndex + 1).padStart(2, '0')}
+                    </span>
+                  </>
                   <div>
                     <>
                       <h3>{module.title}</h3>
@@ -217,6 +230,7 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
       }
     </div>
     <aside class="course-aside">
+      <span class="aside-symbol"><Icon name="target" /></span>
       <p class="eyebrow">Votre point de départ</p><h2>
         Le bon parcours commence avec vous.
       </h2><p>
@@ -235,25 +249,33 @@ const hasMetadata = publicCible || prerequis || format || livrableFinal;
               <dl>
                 {publicCible && (
                   <div>
-                    <dt>Pour qui ?</dt>
+                    <dt>
+                      <Icon name="users" /> Pour qui ?
+                    </dt>
                     <dd>{publicCible}</dd>
                   </div>
                 )}
                 {prerequis && (
                   <div>
-                    <dt>Prérequis</dt>
+                    <dt>
+                      <Icon name="compass" /> Prérequis
+                    </dt>
                     <dd>{prerequis}</dd>
                   </div>
                 )}
                 {format && (
                   <div>
-                    <dt>Format</dt>
+                    <dt>
+                      <Icon name="flask" /> Format
+                    </dt>
                     <dd>{format}</dd>
                   </div>
                 )}
                 {livrableFinal && (
                   <div>
-                    <dt>À la clé</dt>
+                    <dt>
+                      <Icon name="target" /> À la clé
+                    </dt>
                     <dd>{livrableFinal}</dd>
                   </div>
                 )}

@@ -7,12 +7,28 @@ interface Props {
 }
 const { basePath, courseSlug, variant = 'default' } = Astro.props;
 const levels = [
-  { title: 'Chat', description: 'Poser les bonnes questions.' },
-  { title: 'Copilote', description: 'Travailler avec du contexte.' },
-  { title: 'Agent guidé', description: 'Déléguer avec supervision.' },
-  { title: 'Human in the Loop', description: 'Automatiser avec contrôle.' },
-  { title: 'Swarm', description: 'Orchestrer plusieurs agents.' },
-];
+  { title: 'Chat', description: 'Poser les bonnes questions.', icon: 'chat' },
+  {
+    title: 'Copilote',
+    description: 'Travailler avec du contexte.',
+    icon: 'code',
+  },
+  {
+    title: 'Agent guidé',
+    description: 'Déléguer avec supervision.',
+    icon: 'agent',
+  },
+  {
+    title: 'Human in the Loop',
+    description: 'Automatiser avec contrôle.',
+    icon: 'shield',
+  },
+  {
+    title: 'Swarm',
+    description: 'Orchestrer plusieurs agents.',
+    icon: 'network',
+  },
+] as const;
 ---
 
 <div class="section-heading">
@@ -26,7 +42,7 @@ const levels = [
       ? `${basePath}quiz-niveau`
       : `${basePath}lessons/${courseSlug}/niveaux-maturite`}
     >{variant === 'home' ? 'Situer mon niveau' : 'Voir le détail'}
-    <span aria-hidden="true"><Icon name="arrow-up" /></span></a
+    <Icon name="arrow-up" /></a
   >
 </div>
 <ol class="maturity-grid" aria-label="Les cinq niveaux de maturité IA">
@@ -34,12 +50,20 @@ const levels = [
     levels.map((level, index) => (
       <li class:list={[index === 2 && 'maturity-target']}>
         <>
-          <span class="mono">
-            {String(index + 1).padStart(2, '0')}
+          <div class="maturity-top">
+            <span class="mono">{String(index + 1).padStart(2, '0')}</span>
             {index === 2 && <span class="target-label">Notre cap</span>}
+          </div>
+          <span class="maturity-symbol">
+            <Icon name={level.icon} />
           </span>
           <h3>{level.title}</h3>
           <p>{level.description}</p>
+          <span class="maturity-dots" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((dot) => (
+              <i data-filled={dot <= index} />
+            ))}
+          </span>
         </>
       </li>
     ))

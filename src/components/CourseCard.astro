@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import LearningGraphic from './LearningGraphic.astro';
 interface Props {
   slug: string;
   title: string;
@@ -20,56 +21,79 @@ const lessonCount = available.reduce(
   (count, module) => count + module.lessons.length,
   0,
 );
+const stages = [
+  { icon: 'compass', title: 'Poser les fondations', kind: 'foundations' },
+  { icon: 'brain', title: 'Comprendre & mieux prompter', kind: 'models' },
+  { icon: 'code', title: 'Construire son workflow', kind: 'workflow' },
+] as const;
 ---
 
-<article class="course-feature">
-  <div class="course-intro">
-    <span class="badge">Disponible maintenant{level ? ` · ${level}` : ''}</span>
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <div class="course-stats">
-      <div>
-        <strong>{String(available.length).padStart(2, '0')}</strong><span
-          >modules disponibles</span
-        >
-      </div><div>
-        <strong>{lessonCount}</strong><span>leçons accessibles</span>
-      </div>
+<article class="course-experience">
+  <div class="course-summary">
+    <div>
+      <span class="badge"
+        ><Icon name="spark" /> Disponible maintenant{
+          level ? ` · ${level}` : ''
+        }</span
+      ><h3>{title}</h3><p>{description}</p>
     </div>
-    <a class="text-link accent" href={`${base}courses/${slug}`}
-      >Découvrir la formation <span aria-hidden="true"
-        ><Icon name="arrow-up" /></span
-      ></a
-    >
+    <div class="course-entry">
+      <div class="course-stats">
+        <div>
+          <strong>{String(available.length).padStart(2, '0')}</strong><span
+            >modules disponibles</span
+          >
+        </div><div>
+          <strong>{lessonCount}</strong><span>leçons accessibles</span>
+        </div>
+      </div><a class="btn-primary" href={`${base}courses/${slug}`}
+        >Découvrir la formation <Icon name="arrow-up" /></a
+      >
+    </div>
   </div>
-  <div class="course-outline">
-    <p class="mono outline-label">Votre feuille de route</p>
+  <ol class="learning-path" aria-label="Les étapes du parcours">
     {
-      available.map((module, index) => (
-        <a
-          class="module-row"
-          href={`${base}courses/${slug}#module-${index + 1}`}
-        >
-          <>
-            <span class="mono">{String(index + 1).padStart(2, '0')}</span>
-            <h4>{module.title}</h4>
-            <span class="module-meta">
-              {module.lessons.length} leçons{' '}
-              <span aria-hidden="true">
-                <Icon name="arrow-up" />
-              </span>
-            </span>
-          </>
-        </a>
-      ))
+      available.map((module, index) => {
+        const stage = stages[index] ?? stages[2];
+        return (
+          <li>
+            <a
+              class="module-row"
+              href={`${base}courses/${slug}#module-${index + 1}`}
+            >
+              <>
+                <div class="path-card-top">
+                  <>
+                    <span class="mono">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span class="path-icon">
+                      <Icon name={stage.icon} />
+                    </span>
+                  </>
+                </div>
+                <LearningGraphic kind={stage.kind} />
+                <h4>{stage.title}</h4>
+                <p>{module.title}</p>
+                <div class="path-card-bottom">
+                  <>
+                    <span>{module.lessons.length} leçons</span>
+                    <Icon name="arrow-up" />
+                  </>
+                </div>
+              </>
+            </a>
+          </li>
+        );
+      })
     }
-    {
-      modules.length > available.length && (
-        <p class="roadmap-note">
-          {modules.length - available.length} modules supplémentaires en
-          préparation.
-        </p>
-      )
-    }
-  </div>
+  </ol>
+  {
+    modules.length > available.length && (
+      <p class="roadmap-note">
+        <Icon name="route" /> {modules.length - available.length} modules
+        supplémentaires en préparation.
+      </p>
+    )
+  }
 </article>

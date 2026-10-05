@@ -37,18 +37,18 @@ Les couleurs sont définies dans `src/styles/global.css`. Réutiliser leurs rôl
 
 ## Illustrations et mouvement
 
-Les cinq illustrations originales générées pour la maquette validée sont intégrées dans `src/assets/illustrations` en WebP. Astro produit leurs variantes responsives, avec dimensions explicites et `srcset`. Le hero est chargé en priorité, les quatre métiers en chargement différé.
+Les cinq illustrations générées pour cette évolution de la DA sont intégrées dans `src/assets/illustrations` en WebP. Astro produit leurs variantes responsives, avec dimensions explicites et `srcset`. Le hero est chargé en priorité, les quatre métiers en chargement différé.
 
-L’image du hero illustre **cadrer → produire → valider**, sans texte visible. La galerie montre développement, architecture, DevOps/QA et produit, chacun avec une légende discrète. Ces visuels représentent les métiers, pas des références clients.
+L’image du hero représente un noyau neuronal de verre et de titane, entouré d’orbites et de panneaux holographiques, sans texte visible. Les cinq fichiers possèdent un canal alpha : aucun fond noir incrusté, aucune inversion de couleur selon le thème. Les matériaux clairs et violets fonctionnent sur les surfaces sombres comme claires. La galerie montre développement, architecture, DevOps/QA et produit, chacun avec une légende discrète. Ces visuels représentent les métiers, pas des références clients.
 
-`HeroArtwork.astro` contient l’unique animation du site : petites couches SVG décoratives autour du noyau IA et du flux de données, cycles de 5 à 8 secondes. Seuls `transform` et `opacity` sont animés ; le bitmap reste immobile. Le bouton natif permet la pause/reprise. `IntersectionObserver`, la visibilité de l’onglet et `prefers-reduced-motion` suspendent les effets lorsque nécessaire. Aucun moteur d’animation supplémentaire.
+`HeroArtwork.astro` contient l’unique animation du site : orbites SVG en rotation (14 et 20 secondes), balises, pulsation du noyau et panneaux flottants (4 à 6 secondes). Seuls `transform` et `opacity` sont animés ; le bitmap reste immobile. Le bouton natif permet la pause/reprise. `IntersectionObserver`, la visibilité de l’onglet et `prefers-reduced-motion` suspendent les effets lorsque nécessaire. Aucun moteur d’animation supplémentaire. [Voir un extrait de l’animation réelle](previews/animation-ia.webp).
 
 ## Comportements et contenu
 
-- Accueil : une promesse, une action principale vers le quiz, un lien vers le programme, une illustration sans texte et quatre images métiers.
+- Accueil : une promesse, une action principale vers le quiz, un lien vers le programme, un noyau IA et quatre images métiers. Le parcours utilise trois cartes illustrées par des schémas SVG ; la progression possède cinq cartes à icônes et repères visuels.
 - Programme : contenu issu de la collection Astro, modules publiés dans des accordéons natifs et modules en préparation explicitement séparés. Les liens vers un module ouvrent la bonne section.
-- Leçons : MDX conservé, navigation du programme, sommaire sur grand écran, programme dépliable sur mobile, coloration du code selon le thème, pagination et validation de progression.
-- Quiz : les 10 questions, options, seuils des cinq niveaux, diagnostic, recommandations et plan à 30 jours sont conservés. Les choix sont des radios natives.
+- Leçons : contenu MDX conservé, identité du module et icônes décoratives des sections, navigation du programme, sommaire sur grand écran, programme dépliable sur mobile, coloration du code selon le thème, pagination et validation de progression.
+- Quiz : illustration transparente et repères visuels ; les 10 questions, options, seuils des cinq niveaux, diagnostic, recommandations et plan à 30 jours sont conservés. Les choix sont des radios natives.
 - Stockage compatible : `aot-theme`, `progress_<course>`, `placement_quiz_done`, `placement_quiz_level`, `placement_quiz_score`. La progression exclut les doublons et les leçons hors programme publié. Un stockage indisponible ne casse pas l’interface et les échecs d’enregistrement sont signalés.
 - Les routes et le préfixe `/formation-ia/` restent ceux du site. Le contenu des 30 leçons continue d’être indexé par Pagefind.
 
@@ -60,7 +60,7 @@ Avant de modifier cette DA : lancer le build, le lint et les tests Playwright ; 
 
 ## Aperçus de l’intégration
 
-Captures du site compilé en thème sombre, fournies comme référence visuelle de cette intégration. Le site possède également un thème clair et des mises en page mobiles.
+Captures du site compilé, fournies comme référence visuelle. [Accueil clair](previews/accueil-clair.webp) · [Accueil mobile](previews/accueil-mobile.webp).
 
 | Accueil                                | Programme                               | Leçon                                | Quiz                                |
 | -------------------------------------- | --------------------------------------- | ------------------------------------ | ----------------------------------- |
