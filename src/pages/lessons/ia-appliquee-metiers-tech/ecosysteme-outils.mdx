@@ -1,173 +1,88 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "L'écosystème des outils IA"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "ecosysteme-outils"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "prompting-dev"
-  title: "L'art du prompting en développement"
-nextLesson: 
-  slug: "stack-retenue"
-  title: "La stack retenue pour ce projet"
+title: 'Écosystème des outils IA'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'ecosysteme-outils'
 ---
 
-## L'écosystème des outils IA
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Il sort un nouvel outil IA chaque semaine. C'est impossible de tout suivre, et c'est normal. L'objectif n'est pas de tout connaitre, mais de savoir naviguer dans l'écosystème pour choisir le bon outil au bon moment.
+Les outils IA combinent modèles, interfaces et capacités d’exécution. Pour les comparer, examinez ce qu’ils permettent dans votre workflow plutôt qu’un classement figé de marques ou de prix.
 
-### Les grandes catégories d'outils
+## Objectifs de la leçon
 
-L'écosystème IA pour les professionnels tech se découpe en plusieurs familles.
+- Distinguer interfaces, modèles et frameworks.
+- Construire une grille d’évaluation adaptée à l’équipe.
+- Vérifier permissions, données et intégration avant adoption.
 
-#### Assistants de code
+## Quatre familles utiles
 
-Ces outils s'intègrent directement dans votre éditeur ou votre terminal. Ils complètent du code, génèrent des fonctions, et répondent à des questions sur votre codebase.
+| Famille                   | Usages possibles                      | Point de contrôle                       |
+| ------------------------- | ------------------------------------- | --------------------------------------- |
+| Assistant conversationnel | Explication, synthèse, exploration    | Sources et contexte transmis            |
+| Assistant dans l’éditeur  | Suggestions et modifications de code  | Diff et configuration des accès         |
+| Agent CLI ou service      | Tâches multi-étapes et commandes      | Permissions, budgets et effets externes |
+| SDK / framework d’agents  | Construction d’un workflow sur mesure | Architecture, tests et observabilité    |
 
-| Outil | Type | Points forts |
-|-------|------|-------------|
-| GitHub Copilot | Extension IDE | Intégration VS Code native, large base d'utilisateurs |
-| Cursor | IDE complet | IDE dédié IA, édition multi-fichiers, context awareness |
-| Claude Code | CLI | Agentique, accès filesystem, autonomie élevée |
-| Cody (Sourcegraph) | Extension IDE | Recherche sémantique sur le codebase |
-| Windsurf | IDE complet | Flows agentiques, bonne UX |
+Les catégories se recouvrent. Un outil d’éditeur peut proposer un mode agent ; une application de chat peut utiliser des connecteurs et des outils. Vérifiez les fonctions disponibles pour le compte et la version employés.
 
-#### Chatbots généralistes
+Les plugins, connecteurs et serveurs d’outils élargissent les capacités. Ils élargissent aussi les flux de données et les permissions. L’accès à un connecteur n’autorise pas automatiquement une action d’écriture dans le service connecté.
 
-Pour la réflexion, l'exploration, le brainstorming, la rédaction. Pas limités au code.
+## Une grille de sélection
 
-| Outil | Éditeur | Spécificités |
-|-------|---------|-------------|
-| ChatGPT | OpenAI | Écosystème plugins, GPT Store, multimodal |
-| Claude | Anthropic | Raisonnement long, fenêtre de contexte large, sécurité |
-| Gemini | Google | Intégration Google Workspace, multimodal |
-| Mistral (Le Chat) | Mistral AI | Modèles européens, open-weight |
+Commencez par deux ou trois tâches réelles, rendues fictives si elles contiennent des données sensibles. Évaluez la qualité finale, le temps total, la facilité de revue, la compatibilité avec les conventions et la maîtrise des accès.
 
-#### Outils spécialisés
+Ajoutez les contraintes de l’équipe : environnement local ou cloud, langage, réseau, budget, politique de données, accessibilité et intégration CI. Vérifiez les coûts actuels auprès du fournisseur ; des tarifs présentés sans date ni périmètre peuvent rapidement devenir faux.
 
-Des outils construits pour un cas d'usage précis.
+```markdown
+# Fiche d’essai
 
-- **v0 (Vercel)** : génération d'interfaces UI à partir d'un prompt
-- **Bolt / Lovable** : prototypage d'apps complètes
-- **Midjourney / DALL-E** : génération d'images
-- **NotebookLM (Google)** : analyse de documents, génération de podcasts
-- **Perplexity** : recherche avec citations et sources
+Outil, version et modèle : ...
+Tâche et critère de réussite : ...
+Accès aux fichiers, au réseau et aux services : ...
+Données transmises et politique applicable : ...
+Résultat, corrections, temps total et coût observé : ...
+Limites : ...
+```
 
-### Critères de sélection
+## Cas concret : choisir un outil de code
 
-Quand vous évaluez un outil IA, cinq critères comptent vraiment.
+Une équipe veut traiter des tickets de documentation et de petits correctifs. Essayez un changement connu avec un résultat de référence. Observez si l’outil lit les bons fichiers, conserve les conventions, teste son travail et reste dans le périmètre.
 
-**1. Qualité de sortie.** Le modèle produit-il du contenu fiable pour votre cas d'usage ? Testez-le sur vos problèmes réels, pas sur des démos.
+Un outil qui génère rapidement davantage de code peut demander plus de revue. Un outil plus lent peut produire un changement plus simple. Mesurez le temps jusqu’à une PR acceptable, pas seulement jusqu’à la première réponse.
 
-**2. Confidentialité.** Vos données servent-elles à entrainer le modèle ? Y a-t-il une option "zero data retention" ? Pour du code propriétaire, c'est un critère bloquant.
+## Examiner le traitement des données
 
-**3. Intégration.** L'outil s'insère-t-il dans votre workflow existant ? Un outil génial mais qui casse votre flow ne sera pas adopté.
+Distinguez absence d’usage pour l’entraînement, rétention, journaux, accès du support, localisation, sous-traitants et suppression. Ces garanties dépendent du produit, du contrat et de la configuration ; « version payante » ne signifie pas automatiquement « zéro rétention ».
 
-**4. Cout.** La plupart des outils pro coutent entre 20 et 200 dollars par mois. Comparez le cout au temps gagné, pas au prix absolu.
+Un modèle local peut encore être entouré d’un éditeur, d’une extension ou d’un service qui transmet de la télémétrie. Cartographiez les flux réels et vérifiez la configuration. Ne basez pas une décision de confidentialité sur le seul nom du modèle.
 
-**5. Écosystème.** L'outil a-t-il une API ? Des extensions ? Une communauté active ? Un outil isolé devient vite un cul-de-sac.
+## Déployer progressivement
 
-### Comparatif synthétique des assistants code
+Commencez sur un périmètre limité avec des cas de référence. Documentez les autorisations et une procédure de retrait. Après une mise à jour du modèle ou du produit, rejouez les cas importants avant d’étendre l’usage.
 
-| Critère | Copilot | Cursor | Claude Code |
-|---------|---------|--------|-------------|
-| Mode d'interaction | Autocomplétion + chat | IDE + chat + agent | CLI agentique |
-| Contexte codebase | Fichier ouvert | Multi-fichiers, indexation | Filesystem complet |
-| Autonomie | Faible | Moyenne | Élevée |
-| Courbe d'apprentissage | Faible | Moyenne | Plus élevée |
-| Prix (individuel) | ~10$/mois | ~20$/mois | Basé sur l'usage API |
-| Confidentialité | Options entreprise | Options entreprise | Zero retention (API) |
+La formation et la revue restent nécessaires. Un outil présenté comme autonome n’enlève pas le besoin de critères de qualité ni de responsabilités claires.
 
-### Ne vous attachez pas à un outil
+<LessonPractice
+  task="Évaluez deux outils disponibles pour une modification de documentation et un correctif de formulaire sur données fictives."
+  deliverable="Une grille de sélection avec une recommandation conditionnelle."
+  criteria={[
+    'Le temps de correction et de revue est inclus.',
+    'Les permissions et les flux de données sont décrits.',
+    'Les limites de l’essai sont explicites.',
+  ]}
+  solution="Retenez par exemple un outil pour la documentation s’il produit des changements justes et faciles à relire, tout en réservant le correctif d’interface à un workflow mieux testé. Deux tâches ne suffisent pas à classer tous les outils ; la recommandation doit préciser le périmètre évalué et les contraintes qui la justifient."
+/>
 
-C'est le conseil le plus important de cette leçon. L'outil que vous utilisez aujourd'hui sera probablement dépassé dans 12 mois. Ce qui reste, ce sont les compétences :
+## À retenir
 
-- Savoir formuler un bon prompt
-- Comprendre les limites d'un modèle
-- Évaluer la qualité d'une sortie
-- Intégrer l'IA dans un workflow structuré
+Le meilleur choix est celui qui respecte vos contraintes et produit des résultats vérifiables. Comparez des workflows complets plutôt que des promesses de produit.
 
-Investissez dans ces compétences, pas dans la maitrise d'un outil spécifique. Si vous savez bien utiliser Claude, vous saurez bien utiliser le prochain modèle d'OpenAI ou de Google.
+## Sources et mise à jour
 
-### En résumé
+Révision : **4 octobre 2026**. Vérifiez les fonctions et contrats de la version utilisée.
 
-- L'écosystème IA est vaste et évolue vite. Cartographier les catégories vaut mieux que mémoriser les outils.
-- Choisissez vos outils selon la qualité, la confidentialité, l'intégration, le cout et l'écosystème.
-- Les compétences fondamentales (prompting, évaluation, workflow) sont transférables d'un outil à l'autre.
+- [Claude Code : présentation et installation](https://github.com/anthropics/claude-code).
+- [OpenAI Agents SDK](https://github.com/openai/openai-agents-python).
+- [Microsoft Agent Framework](https://github.com/microsoft/agent-framework).

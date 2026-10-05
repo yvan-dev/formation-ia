@@ -1,182 +1,87 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Le principe Plan First"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "plan-first"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "responsabilite-legal"
-  title: "Responsabilité et cadre légal"
-nextLesson: 
-  slug: "spec-driven-dev"
-  title: "Spec-Driven Development avec l'IA"
+title: 'Le principe plan-first'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'plan-first'
 ---
 
-## Le principe Plan First
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-La majorité des erreurs dans un projet assisté par IA ne viennent pas du code généré. Elles viennent de l'absence de plan. Quand on demande directement du code à une IA, on obtient une solution techniquement correcte mais souvent mal alignée avec le besoin réel.
+Planifier avant un changement complexe permet de repérer les inconnues et les dépendances à un moment où les corriger coûte encore peu. Le principe « plan-first » doit aider le travail, pas imposer un document volumineux à chaque correction.
 
-Le principe Plan First est simple : toujours commencer par un plan, jamais directement par le code.
+## Objectifs de la leçon
 
-### Pourquoi l'IA a besoin d'un plan
+- Choisir le niveau de planification adapté au changement.
+- Écrire un plan fondé sur les fichiers et contraintes réels.
+- Réviser le plan lorsqu’une nouvelle preuve apparaît.
 
-Un LLM fonctionne par prédiction de tokens. Sans contrainte claire, il emprunte le chemin le plus probable, pas le plus pertinent pour votre contexte. Un plan agit comme un cadre de contraintes qui oriente la génération vers le bon résultat.
+## Quand un plan apporte de la valeur
 
-Les bénéfices concrets :
+Un changement de texte peut se résumer à un fichier et une vérification visuelle. Une migration, une modification d’authentification ou un changement traversant plusieurs composants justifie un plan plus explicite.
 
-- **Moins de retravail** : un plan validé en amont évite les allers-retours sur du code qui part dans la mauvaise direction
-- **Meilleure architecture** : l'IA découpe mieux quand on lui dit quoi découper
-- **Traçabilité** : le plan documente les décisions prises avant l'implémentation
-- **Collaboration** : un plan se review et se discute, du code mal orienté se jette
+Le plan est utile quand il rend visibles le périmètre, les étapes, les critères de réussite et les risques. Il ne garantit pas que l’implémentation sera correcte, et il ne remplace pas la revue du résultat.
 
-### Demander un plan avant d'implémenter
+| Changement                       | Plan raisonnable                                         |
+| -------------------------------- | -------------------------------------------------------- |
+| Faute dans une légende           | Fichier concerné et contrôle de rendu                    |
+| Nouveau comportement d’interface | Composants, états, tests et accessibilité                |
+| Migration de données             | Préparation, exécution testée, contrôles et restauration |
 
-Le réflexe à acquérir : quand vous avez une tâche, commencez par demander un plan à l'IA. Pas du code, pas un prototype. Un plan.
+## Lire avant de planifier
 
-```text
-Prompt (mauvais) :
-"Code-moi un système d'authentification avec JWT et refresh tokens."
+Un agent peut proposer des chemins plausibles qui n’existent pas. Faites lire la structure réelle, les composants analogues et les scripts disponibles. Un plan doit préciser ce qui est observé et ce qui reste une hypothèse.
 
-Prompt (bon) :
-"Je dois ajouter un système d'authentification JWT avec refresh tokens
-à mon API Express/TypeScript. Avant de coder quoi que ce soit, propose
-un plan détaillé : architecture, fichiers à créer, dépendances,
-flux d'authentification, et gestion des erreurs."
+Pour une fonctionnalité, décrivez d’abord les critères de réussite. Les tests et le plan doivent découler du comportement attendu ; ils ne doivent pas être inventés après avoir vu le code généré.
+
+## Un plan en cinq parties
+
+```markdown
+# Changement : état vide de recherche
+
+Besoin : distinguer zéro résultat d’une erreur de chargement.
+Périmètre : composant de recherche et ses styles ; route inchangée.
+Étapes : lire le contrat, ajouter l’état vide, relier les messages accessibles.
+Vérification : zéro résultat, erreur simulée, cas nominal et clavier.
+Inconnue : le moteur expose-t-il déjà un état d’erreur ? À vérifier avant modification.
 ```
 
-La différence est significative. Le premier prompt produit du code immédiatement, avec des choix architecturaux implicites que vous n'avez jamais validés. Le second vous donne un document de travail que vous pouvez challenger.
+Pour une action sur des données, ajoutez l’impact, les préconditions et le moyen de retour arrière. Pour un déploiement, précisez le point de décision et les observations après mise en ligne.
 
-### Valider le plan : le moment décisif
+## Valider les décisions utiles
 
-C'est à l'étape de validation que se joue la qualité du résultat final. Un plan non validé est un plan inutile.
+La revue du plan cherche les erreurs de besoin, les changements superflus et les risques oubliés. Il n’est pas nécessaire de faire approuver chaque petit choix de nommage. Une autorisation déjà donnée pour préparer une PR ne doit pas être redemandée à chaque étape réversible.
 
-Quand vous recevez un plan de l'IA, vérifiez :
+Une question devient nécessaire lorsqu’une information manquante empêche de choisir correctement, ou lorsqu’une action dépasse le périmètre autorisé. Continuez les parties indépendantes pendant que cette décision est attendue.
 
-1. **La complétude** : est-ce que tous les cas sont couverts ? Erreurs, edge cases, sécurité ?
-2. **La cohérence** : est-ce que le plan respecte les conventions du projet existant ?
-3. **Les hypothèses** : est-ce que l'IA a fait des suppositions sur votre stack ou votre architecture ?
-4. **L'ordre** : est-ce que les étapes sont dans le bon ordre avec les bonnes dépendances ?
+## Adapter le plan à l’exécution
 
-```text
-Prompt de validation :
-"Ce plan ne mentionne pas la révocation des refresh tokens.
-Ajoute cette gestion. Aussi, on utilise Prisma et non TypeORM,
-adapte le plan en conséquence."
-```
+Si la lecture d’un fichier révèle un composant réutilisable, mettez le plan à jour plutôt que d’ajouter celui prévu initialement. Si un test montre une hypothèse fausse, corrigez le diagnostic avant de poursuivre.
 
-Itérer sur le plan est rapide. Itérer sur du code mal conçu est coûteux.
+Une boucle de correction doit être bornée par le temps, le coût ou des conditions d’arrêt pertinentes. « Toujours trois tentatives » n’est pas une règle universelle. Arrêtez une répétition qui n’apporte aucune information nouvelle et rapportez le blocage précis.
 
-### Anti-pattern : le "code-moi ça"
+## Cas concret : ajout d’une notification
 
-Le pattern le plus courant et le plus coûteux :
+Un plan incomplet peut oublier l’autorisation, les doublons ou l’échec du fournisseur. Un plan utile prévoit l’événement déclencheur, l’idempotence, le contenu minimal et un environnement de test qui n’envoie pas de message réel. L’envoi en production constitue une action distincte de la préparation du code.
 
-| Approche | Ce qui se passe |
-|----------|-----------------|
-| "Code-moi cette feature" | L'IA choisit l'architecture, les patterns, les noms. Vous perdez le contrôle. |
-| "Propose un plan pour cette feature" | Vous validez chaque décision. Le code qui suit est aligné avec vos attentes. |
+<LessonPractice
+  task="Écrivez un plan pour ajouter une notification d’inscription dans une application fictive qui possède déjà un service d’envoi."
+  deliverable="Un plan d’une page avec périmètre, critères, tests et condition d’arrêt."
+  criteria={[
+    'Le service existant est lu avant de proposer une nouvelle dépendance.',
+    'Le test utilise un destinataire fictif ou un fournisseur simulé.',
+    'Les doublons et l’échec d’envoi sont prévus.',
+  ]}
+  solution="Un plan possible : lire le service et l’événement d’inscription, définir le contenu et l’idempotence, ajouter le déclenchement, tester succès/échec/doublon, puis relire le diff. Si l’événement n’est pas fiable ou si l’envoi réel n’est pas autorisé, préparez le changement et signalez le point de décision sans exécuter l’envoi."
+/>
 
-Le "code-moi ça" fonctionne pour des tâches isolées et triviales (un helper, un test unitaire). Pour tout ce qui touche à l'architecture ou implique plusieurs fichiers, c'est un piège.
+## À retenir
 
-### Le plan comme contrat
+Un plan utile rend les décisions et les inconnues visibles. Il doit évoluer avec les preuves recueillies pendant le travail.
 
-Une fois validé, le plan devient un contrat entre vous et l'IA. Ce qui a été validé est ce qui sera implémenté, rien de plus, rien de moins.
+## Sources et mise à jour
 
-```text
-Prompt d'implémentation (après validation du plan) :
-"Implémente l'étape 1 du plan : le middleware d'authentification.
-Suis exactement le plan validé. Si tu rencontres un cas non couvert
-par le plan, signale-le au lieu de prendre une décision seul."
-```
+Révision : **4 octobre 2026**.
 
-Cette approche a trois avantages :
-
-- **Prévisibilité** : vous savez ce que l'IA va produire avant qu'elle le produise
-- **Scope control** : l'IA ne va pas ajouter des fonctionnalités non demandées
-- **Debugging facilité** : quand le résultat diverge du plan, vous savez exactement où chercher
-
-### En pratique
-
-Le workflow Plan First en trois étapes :
-
-1. **Demander le plan** : décrivez l'objectif, le contexte, les contraintes. Demandez un plan, pas du code.
-2. **Valider et affiner** : challengez les choix, corrigez les hypothèses, ajoutez les cas manquants. Deux à trois itérations suffisent en général.
-3. **Implémenter par étapes** : référencez le plan validé à chaque étape d'implémentation. Une étape = un prompt.
-
-Ce n'est pas plus lent. C'est plus rapide, parce que le code produit est aligné dès le premier essai.
+- [GitHub Spec Kit : spécifier, planifier et découper les tâches](https://github.com/github/spec-kit).
+- [Google Engineering Practices : conception et complexité](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).

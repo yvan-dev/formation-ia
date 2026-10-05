@@ -1,0 +1,210 @@
+[
+  {
+    "name": "openai-models",
+    "url": "https://github.com/openai/openai-python/blob/main/src/openai/types/shared/chat_model.py",
+    "sha": "b3f4b8db0b68696fca82dea7d85e610f5ea7759f",
+    "bytes": 5961,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "openai-prompting",
+    "url": "https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5_prompting_guide.ipynb",
+    "sha": "954e295278e35f9c5358c1546da0f3b0c75706c1",
+    "bytes": 47740,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "openai-agents",
+    "url": "https://github.com/openai/openai-agents-python/blob/main/README.md",
+    "sha": "40f490c110cd584f7034bd221c6da37379fc41ff",
+    "bytes": 9009,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "anthropic-models",
+    "url": "https://github.com/anthropics/anthropic-sdk-python/blob/main/src/anthropic/types/model_param.py",
+    "sha": "3c53b6285c65f98ce195d3955d5c85c263838174",
+    "bytes": 755,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "claude-code",
+    "url": "https://github.com/anthropics/claude-code/blob/main/README.md",
+    "sha": "80aa75edf74a5f9e1269811b4e8b5852be91e66e",
+    "bytes": 2873,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "claude-changelog",
+    "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
+    "sha": "01850852fc812fbc135ee713c88212326ccc19b1",
+    "bytes": 903315,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "google-genai",
+    "url": "https://github.com/googleapis/python-genai/blob/main/README.md",
+    "sha": "af3209e3ecb959463dc97bb5bcd1c35efffc38e7",
+    "bytes": 54529,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "langgraph",
+    "url": "https://github.com/langchain-ai/langgraph/blob/main/README.md",
+    "sha": "97c31e9cb4d8fe56be8d768ce3eb5e22400e897e",
+    "bytes": 6351,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "microsoft-agents",
+    "url": "https://github.com/microsoft/agent-framework/blob/main/README.md",
+    "sha": "ede113551eb66b54a5dd87f8ef778d5ef922952f",
+    "bytes": 13310,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "agents-md",
+    "url": "https://github.com/agentsmd/agents.md/blob/main/README.md",
+    "sha": "8ce701e74909d5f08e2810380e0ff15f547aa0c8",
+    "bytes": 2011,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "owasp-llm",
+    "url": "https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/blob/main/README.md",
+    "sha": "4fcff09b318d46394fd5b15d506000165937f8d7",
+    "bytes": 3950,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "owasp-injection",
+    "url": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md",
+    "sha": "e8c8b650e1ecc9a19ab23d69cf5166c6464ea605",
+    "bytes": 29972,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "spec-kit",
+    "url": "https://github.com/github/spec-kit/blob/main/README.md",
+    "sha": "4b463b2e599a2e8881b898ac7a4701fb23c0c91c",
+    "bytes": 9134,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "code-review",
+    "url": "https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md",
+    "sha": "c27e26edbf0f42603a16dd719c825f6801226191",
+    "bytes": 11320,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "curriculum-stack",
+    "url": "https://github.com/yvan-dev/formation-ia/blob/main/package.json",
+    "sha": "addcf4421418098dcfb92d31c11fb9a4a9b4e9b2",
+    "bytes": 1408,
+    "consultedAt": "2026-10-04",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "ai-act-current",
+    "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:02024R1689-20260727",
+    "consultedAt": "2026-10-05",
+    "sha256": "b67df1fefefa62db23ee80c62679776e6d6d68d9c4cc81a7f6c039637ea0c6bf",
+    "bytes": 1176299,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "gdpr-current",
+    "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:02016R0679-20160504",
+    "consultedAt": "2026-10-05",
+    "sha256": "937b938ced4d2a975166d7f378e3fb7f5f1e9eb6ca0be97b8fae45a31e63fdf6",
+    "bytes": 747891,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "claude-data",
+    "url": "https://code.claude.com/docs/en/data-usage",
+    "consultedAt": "2026-10-05",
+    "sha256": "7c8549930e7cfac3443808e0415d227b487a45fbd7064e33b8b8a4a601cfa75b",
+    "bytes": 462167,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "claude-memory",
+    "url": "https://code.claude.com/docs/en/memory",
+    "consultedAt": "2026-10-05",
+    "sha256": "3efd816883c1acad8b2f8afe5d770a2ac5d5bc8a83bcfd898c9ac39acd631adb",
+    "bytes": 774756,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "claude-permissions",
+    "url": "https://code.claude.com/docs/en/permissions",
+    "consultedAt": "2026-10-05",
+    "sha256": "63b0857e0e70f01bf684852d80529e7815e8921741726f43070aae129dc70b9a",
+    "bytes": 791431,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "openai-catalog",
+    "url": "https://developers.openai.com/api/docs/models",
+    "consultedAt": "2026-10-05",
+    "sha256": "1bf32c32791c85e10103e2ca0e71c5c362a814043094a7651e9180fdfbbe0964",
+    "bytes": 379462,
+    "verification": "Page officielle consultée ; passages pertinents relus"
+  },
+  {
+    "name": "owasp-forgot",
+    "url": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Forgot_Password_Cheat_Sheet.md",
+    "sha": "d42b843a433df4f4e68aaf32307fd984680a3e8e",
+    "bytes": 11948,
+    "consultedAt": "2026-10-05",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "owasp-auth",
+    "url": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authorization_Cheat_Sheet.md",
+    "sha": "d22e6c01055f9ef6fdb039c7344fae9b86a77aea",
+    "bytes": 31019,
+    "consultedAt": "2026-10-05",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "owasp-sql",
+    "url": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md",
+    "sha": "20499e640284b415d2a0c0cbfa29962c6a10beda",
+    "bytes": 17871,
+    "consultedAt": "2026-10-05",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "owasp-jwt",
+    "url": "https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_Cheat_Sheet.md",
+    "sha": "001d2b938d6e377781f5ab16c41d20b261e0e185",
+    "bytes": 36158,
+    "consultedAt": "2026-10-05",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  },
+  {
+    "name": "astro-package",
+    "url": "https://github.com/withastro/astro/blob/main/packages/astro/package.json",
+    "sha": "5a44df3a208d1078870df72425caefc23a8e80bd",
+    "bytes": 12010,
+    "consultedAt": "2026-10-05",
+    "verification": "GitHub API: contenu du dépôt officiel"
+  }
+]

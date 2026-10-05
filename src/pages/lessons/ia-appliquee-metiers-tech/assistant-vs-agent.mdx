@@ -1,196 +1,87 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
 title: "De l'assistant à l'agent"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "assistant-vs-agent"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "approche-sommaire"
-  title: "Approche par sommaire"
-nextLesson: 
-  slug: "concevoir-agent"
-  title: "Concevoir un bon agent"
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'assistant-vs-agent'
 ---
 
-## De l'assistant à l'agent
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Quand on parle d'IA en tant qu'outil de développement, deux modèles coexistent : l'assistant et l'agent. Comprendre la différence entre les deux, c'est comprendre ce qu'on peut attendre de l'IA aujourd'hui et comment structurer son travail autour.
+Un assistant répond à une demande dans une application. Un agent utilise un modèle pour décider d’actions et poursuivre un objectif en observant leurs résultats. La différence utile porte sur la boucle d’exécution et le contrôle, pas sur une séparation absolue entre deux familles de produits.
 
-### Assistant : une interaction ponctuelle
+## Objectifs de la leçon
 
-Un assistant IA fonctionne en mode requête/réponse. Vous posez une question, il répond. Vous lui donnez du code, il le commente. La relation est synchrone et sans mémoire d'une session à l'autre.
+- Reconnaître une boucle agentique dans un outil.
+- Définir les limites d’autonomie nécessaires.
+- Vérifier que les permissions sont réellement appliquées.
 
-Caractéristiques d'un assistant :
+## Une continuité de capacités
 
-- **Pas d'initiative** : il ne fait rien sans qu'on lui demande
-- **Pas de contexte persistant** : chaque conversation repart souvent de zéro
-- **Pas d'accès au système** : il ne lit pas vos fichiers, ne lance pas de commandes
-- **Réponse unique** : une question donne une réponse, fin de l'interaction
+Un assistant peut consulter des fichiers, utiliser une recherche ou appeler des outils. Un agent peut être limité à la lecture, fonctionner sans mémoire persistante ou demander une décision à chaque action sensible. Les capacités dépendent du produit et de sa configuration.
 
-Exemple typique : vous ouvrez Claude Chat, vous collez une fonction et demandez "Explique-moi ce code". Vous obtenez une explication. C'est tout.
+| Aspect    | Question à poser                                                 |
+| --------- | ---------------------------------------------------------------- |
+| Contexte  | Quels fichiers ou messages sont réellement fournis ?             |
+| Outils    | Quels appels sont disponibles et avec quels paramètres ?         |
+| Autonomie | Quelles décisions peuvent être prises sans nouvelle validation ? |
+| Mémoire   | Quel état est conservé, où et combien de temps ?                 |
+| Contrôle  | Quelles restrictions sont imposées par l’environnement ?         |
 
-### Agent : une mission déléguée
+## La boucle agentique
 
-Un agent IA reçoit un objectif et travaille de manière autonome pour l'atteindre. Il planifie, exécute des actions, observe les résultats, et ajuste son approche. Il peut lire des fichiers, exécuter du code, naviguer dans un projet.
-
-Caractéristiques d'un agent :
-
-- **Autonomie** : il décompose une mission en sous-tâches
-- **Accès aux outils** : il peut lire/écrire des fichiers, lancer des commandes shell, chercher dans le codebase
-- **Boucle d'exécution** : il observe, agit, vérifie, corrige
-- **Persistance du contexte** : il travaille dans un contexte projet continu
-
-Exemple typique : vous demandez à Claude Code "Ajoute des tests unitaires pour le module auth". L'agent explore le code existant, identifie les fonctions à tester, écrit les tests, les exécute, corrige les erreurs, et vous présente le résultat.
-
-### Le spectre assistant/agent
-
-Ce n'est pas binaire. Il existe un continuum entre les deux extrêmes.
-
-| Niveau | Comportement | Exemple |
-|--------|-------------|---------|
-| Assistant pur | Réponse ponctuelle sans contexte | ChatGPT en mode conversation |
-| Assistant augmenté | Réponse avec accès à des documents | Claude avec upload de fichiers |
-| Agent guidé | Exécution avec validation humaine à chaque étape | Claude Code en mode normal |
-| Agent autonome | Exécution complète avec validation finale | Claude Code avec `--auto-accept` |
-
-En pratique, le mode "agent guidé" est le sweet spot pour le développement. L'agent fait le travail, l'humain valide les étapes critiques.
-
-### Ce qu'un ingénieur peut déléguer à un agent
-
-Les agents excellent sur les tâches répétitives, bien définies, et vérifiables automatiquement.
-
-**Bons candidats pour la délégation :**
-
-- Génération de boilerplate (composants, endpoints CRUD, migrations)
-- Écriture de tests unitaires et d'intégration
-- Refactoring mécanique (renommage, extraction de fonctions)
-- Génération de documentation à partir du code
-- Correction de bugs simples avec un message d'erreur clair
-- Conversion de formats (REST vers GraphQL, JSON vers TypeScript)
-
-### Ce qu'un ingénieur ne doit PAS déléguer
-
-Les décisions qui engagent l'architecture, la sécurité, ou la direction du produit restent humaines.
-
-**Mauvais candidats pour la délégation :**
-
-- Choix d'architecture (monolithe vs microservices, choix de base de données)
-- Décisions de sécurité (modèle d'authentification, gestion des secrets)
-- Arbitrages métier (quelles fonctionnalités prioriser)
-- Validation finale du code (review avant merge)
-- Choix de dépendances (évaluation de la maintenabilité long terme)
-
-La règle : si une mauvaise décision coûte cher à corriger, c'est une décision humaine.
-
-### En pratique : Claude Chat vs Claude Code
-
-Pour rendre ça concret, voici comment le même besoin se traite différemment selon le mode.
-
-**Besoin** : "Je veux ajouter de la validation sur mon formulaire d'inscription."
-
-Avec un **assistant** (Claude Chat) :
-
-```
-Vous : "Comment valider un email en TypeScript ?"
-Claude : "Voici une regex et une fonction de validation..."
-→ Vous copiez-collez et adaptez manuellement.
+```text
+Objectif → observation → proposition d’action
+                           ↓
+              contrôle d’accès et validation
+                           ↓
+                  exécution de l’outil
+                           ↓
+              résultat → suite ou arrêt
 ```
 
-Avec un **agent** (Claude Code) :
+La sortie du modèle est une proposition d’appel. Le logiciel qui exécute l’outil doit vérifier les permissions et les arguments, y compris lorsque le modèle semble suivre correctement les instructions.
 
-```
-Vous : "Ajoute la validation email et mot de passe
-        sur le formulaire d'inscription dans src/components/SignupForm.tsx"
-Claude Code :
-  1. Lit le composant existant
-  2. Identifie la structure du formulaire
-  3. Ajoute les règles de validation
-  4. Met à jour les messages d'erreur
-  5. Lance les tests existants pour vérifier la non-régression
-  → Vous reviewez le diff et validez.
-```
+Une boucle sans limite peut répéter une erreur, consommer un budget ou accumuler des changements. Définissez des conditions d’arrêt : réussite vérifiée, budget dépassé, manque d’autorisation ou incertitude bloquante.
 
-La différence fondamentale : avec l'assistant, vous faites le travail d'intégration. Avec l'agent, vous faites le travail de supervision.
+## Cas concret : préparer une PR de documentation
 
-### Ce qu'il faut retenir
+La mission est de mettre à jour un guide à partir du code existant. L’agent peut lire les sources, modifier le guide et vérifier le rendu. Il n’a pas besoin de données de production ni d’un accès de déploiement.
 
-L'évolution de l'assistant vers l'agent change le rôle de l'ingénieur. Moins de temps à taper du code, plus de temps à spécifier, superviser, et valider. C'est un changement de posture, pas une perte de compétence.
+Si la demande autorise la création de la PR, l’agent peut la préparer et l’ouvrir. Il ne doit pas en déduire l’autorisation de merger. Distinguez les actions réversibles prévues par la mission des effets externes sensibles.
 
-Le module suivant explique comment concevoir un agent qui fait exactement ce qu'on attend de lui, ni plus, ni moins.
+## Configurer l’autonomie dans l’outil
+
+Dans Claude Code, la commande `/permissions` permet d’examiner les règles, et les modes de permissions modifient le traitement des appels. Les noms, la portée et les options évoluent : vérifiez la documentation de votre version.
+
+N’utilisez pas une option inventée comme `--auto-accept`, et ne désactivez pas toutes les protections simplement pour éviter des interruptions. Préautorisez les commandes nécessaires et limitez les chemins, le réseau et les identifiants selon le besoin. Les instructions dans `CLAUDE.md` ne modifient pas les permissions effectives.
+
+Les mêmes principes s’appliquent aux autres outils, même si leur syntaxe diffère. Une phrase « lecture seule » n’est pas suffisante si l’environnement conserve des outils d’écriture ou des identifiants donnant accès à un service distant.
+
+## Observer et reprendre
+
+Conservez une trace des actions, des résultats et des décisions, en excluant les secrets. Un état de reprise doit distinguer travail réalisé et travail prévu. Avant de reprendre une tâche interrompue, vérifiez ce qui a déjà été exécuté pour éviter les doublons.
+
+Pour un agent de code, la trace doit rendre visibles les fichiers modifiés et les contrôles. Pour un agent métier, elle doit aussi couvrir les effets externes : un message peut avoir été envoyé même si la réponse finale n’apparaît pas.
+
+<LessonPractice
+  task="Définissez le périmètre d’un agent qui prépare une PR de documentation sans modifier l’application ni publier le site."
+  deliverable="Une mission, une liste d’outils nécessaires et deux conditions d’arrêt."
+  criteria={[
+    'Les écritures sont limitées à la documentation par la configuration disponible.',
+    'La création de PR est distinguée du merge et du déploiement.',
+    'Le budget et l’absence d’information sont traités explicitement.',
+  ]}
+  solution="Autorisez la lecture des sources et l’écriture dans le guide concerné ; autorisez le build si nécessaire au rendu. La mission peut inclure l’ouverture d’une PR, sans merge. Arrêtez si le changement exige une modification de production hors périmètre ou si les sources ne permettent pas de décrire le comportement ; consignez ce qui manque."
+/>
+
+## À retenir
+
+L’agent ajoute une boucle d’action. Sa qualité dépend autant de la configuration, des limites et des observations que du modèle.
+
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**.
+
+- [OpenAI Agents : boucle, outils, sessions et contrôles](https://github.com/openai/openai-agents-python).
+- [Claude Code : permissions et modes](https://code.claude.com/docs/en/permissions).

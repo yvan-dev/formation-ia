@@ -1,278 +1,95 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Concevoir un bon agent"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "concevoir-agent"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "assistant-vs-agent"
-  title: "De l'assistant à l'agent"
-nextLesson: 
-  slug: "human-in-the-loop"
-  title: "Human in the Loop"
+title: 'Concevoir un bon agent'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'concevoir-agent'
 ---
 
-## Concevoir un bon agent
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un agent mal conçu produit des résultats imprévisibles. Un agent bien conçu fait exactement ce qu'on attend, de manière répétable. La différence tient à la clarté de sa définition.
+Concevoir un agent consiste à définir un objectif, un périmètre et une boucle d’exécution contrôlable. La précision des instructions aide, mais la répétabilité dépend aussi des outils, des données, des contrôles et de l’évaluation.
 
-### Responsabilité unique
+## Objectifs de la leçon
 
-Un bon agent fait une seule chose. Si vous ne pouvez pas résumer ce qu'il fait en une phrase, il est trop large.
+- Définir une mission bornée et un résultat observable.
+- Traduire les consignes d’accès en restrictions effectives.
+- Prévoir les erreurs, les reprises et les conditions d’arrêt.
 
-**Trop large :**
-> "Un agent qui gère le backend de l'application."
+## Partir du résultat attendu
 
-**Bien cadré :**
-> "Un agent qui génère les tests unitaires pour les endpoints REST."
+« Améliorer le backend » est trop large pour être évalué. « Préparer des tests du calcul de remise, couvrant plafond, arrondi et entrée invalide, sans modifier le code de production » précise un résultat et un périmètre.
 
-La tentation est de créer un "super-agent" qui fait tout. C'est exactement comme écrire une fonction de 500 lignes : ça fonctionne une fois, puis ça devient impossible à débugger et à maintenir.
+Une responsabilité claire facilite la revue. Cela ne signifie pas qu’un agent ne peut jamais accomplir plusieurs étapes cohérentes. Séparez les agents lorsque leurs responsabilités, leurs permissions ou leurs états le justifient, pas à partir d’une règle absolue.
 
-### La structure d'un bon agent
+## Une fiche de mission adaptable
 
-Chaque agent doit définir cinq éléments. Pas quatre, pas six. Cinq.
-
-#### 1. Rôle (une phrase)
-
-Qui est cet agent et quel est son domaine d'expertise.
+La structure suivante est un exemple de spécification de projet, pas un schéma accepté automatiquement par tous les frameworks :
 
 ```yaml
-role: "Superviseur de tests - spécialiste Jest/Vitest pour projets TypeScript"
+mission: préparer les tests du calcul de remise
+entrees:
+  - contrat de remise
+  - fonction et tests existants
+sortie: tests et rapport de validation
+perimetre:
+  lecture: fichiers nécessaires au diagnostic
+  ecriture: tests de remise uniquement
+budget:
+  duree_minutes: 15
+arret:
+  - contrat incomplet empêchant un résultat correct
+  - modification de production nécessaire hors périmètre
+verification:
+  - plafond et arrondi couverts
+  - entrées invalides vérifiées
 ```
 
-#### 2. Objectif (ce qu'il doit accomplir)
+Le budget est une valeur d’exercice à adapter. La section `perimetre` exprime l’intention ; elle n’applique pas des droits. Configurez ensuite les chemins et outils autorisés dans le runtime.
 
-Un livrable concret et vérifiable, pas une intention floue.
+## Des outils avec des contrats précis
 
-```yaml
-# Mauvais
-objectif: "Améliorer la qualité du code"
+Un outil doit valider ses arguments, vérifier l’identité et les droits, puis rendre un résultat explicite. Le modèle peut proposer une valeur incorrecte ou une action induite par une source hostile.
 
-# Bon
-objectif: "Générer les tests unitaires manquants pour atteindre 80% de couverture sur src/services/"
-```
+Un outil « lire un document » doit filtrer les documents selon les droits. Un outil « envoyer un email » doit contrôler destinataires, contenu et décision préalable quand elle est requise. Ne donnez pas un outil généraliste d’exécution si une fonction bornée suffit.
 
-#### 3. Permissions (ce qu'il peut et ne peut pas faire)
+## Cas concret : agent de revue
 
-Les permissions sont des garde-fous explicites. Sans elles, l'agent improvise.
+La mission est de lire un diff et produire un rapport. Le format utile contient fichier, ligne, défaut observé, impact et preuve. La sévérité doit être reliée au risque réel, pas au ton du commentaire.
 
-```yaml
-permissions:
-  autorisé:
-    - Lire tous les fichiers dans src/
-    - Créer des fichiers dans src/__tests__/
-    - Exécuter npm test et npm run coverage
-    - Installer des devDependencies de test
-  interdit:
-    - Modifier le code source de production
-    - Modifier la configuration CI/CD
-    - Supprimer des fichiers existants
-    - Installer des dépendances de production
-```
+Le reviewer n’a pas besoin de merger ni de modifier le code. Un accès en lecture à l’ensemble du dépôt peut toutefois exposer des secrets : limitez aussi les données disponibles et les destinations réseau. « Lecture seule » ne signifie pas « aucune conséquence possible ».
 
-#### 4. Critères d'acceptation (mesurables)
+Un critère comme « aucun faux positif » est un objectif d’évaluation, pas une garantie réalisable sur chaque exécution. Mesurez précision, omissions et limites sur un corpus relu.
 
-Comment savoir si l'agent a réussi sa mission. Pas "le code est bien" mais des critères vérifiables.
+## Prévoir les échecs
 
-```yaml
-critères:
-  - Tous les tests passent (exit code 0)
-  - Couverture >= 80% sur les fichiers ciblés
-  - Aucun fichier de production modifié
-  - Chaque test a au moins un assert explicite
-```
+Distinguez problème d’environnement, contrat incomplet, erreur d’outil et résultat incorrect. Une nouvelle tentative doit tester une hypothèse ou suivre une correction ; répéter la même commande sans changement n’est pas un progrès.
 
-#### 5. Comportement en cas d'échec
+Lors d’une interruption, conservez les actions effectuées et le statut des effets externes. Vérifiez ce qui a déjà réussi avant de reprendre. Les actions à effet doivent être idempotentes ou posséder une stratégie explicite de déduplication.
 
-Que fait l'agent quand il est bloqué. C'est le point que 90% des configurations oublient.
+## Évaluer avant d’étendre l’autonomie
 
-```yaml
-en_cas_échec:
-  - Si un test échoue après 3 tentatives → s'arrêter et rapporter l'erreur
-  - Si la couverture cible est impossible → expliquer pourquoi et proposer un seuil réaliste
-  - Si un fichier source est ambigu → demander clarification, ne pas deviner
-```
+Testez un cas nominal, une ambiguïté bloquante, une erreur d’outil et une source hostile. Contrôlez les fichiers modifiés, les appels d’outil et la restitution. Les tests doivent observer les décisions effectives du système, pas uniquement ses promesses.
 
-### Instructions : précises et testables
+<LessonPractice
+  task="Concevez un agent de revue qui produit un rapport sans commenter, approuver ou merger automatiquement une PR."
+  deliverable="Une fiche de mission et quatre cas d’évaluation."
+  criteria={[
+    'Les accès sont limités par la configuration, pas seulement par le texte.',
+    'Chaque constat exige une preuve et un impact.',
+    'Une revue partielle ou un outil indisponible est signalé.',
+  ]}
+  solution="Prévoyez un diff correct, un défaut d’autorisation, un commentaire injectant une fausse consigne et un linter indisponible. Le rapport doit séparer défaut observé, suggestion et contrôle non exécuté. Une mission de rapport n’autorise pas la publication de commentaires ni le merge ; ces actions nécessitent un périmètre distinct."
+/>
 
-Les instructions d'un agent doivent être comme des tests : on peut vérifier objectivement si elles sont respectées.
+## À retenir
 
-**Instruction floue (non testable) :**
-> "Écris du code propre et bien structuré."
+Une mission claire devient fiable lorsqu’elle est entourée de contrats d’outils, de restrictions effectives et de cas d’évaluation.
 
-**Instruction précise (testable) :**
-> "Chaque fonction de test suit le pattern Arrange-Act-Assert. Le nom du test décrit le comportement attendu au format 'should [action] when [condition]'."
+## Sources et mise à jour
 
-Plus les instructions sont précises, moins l'agent a de marge d'interprétation, et plus les résultats sont reproductibles.
+Révision : **4 octobre 2026**.
 
-### Exemples concrets
-
-#### Agent de code review
-
-```yaml
-role: "Revieweur de code - détecte les problèmes de qualité et sécurité"
-objectif: "Analyser les fichiers modifiés et produire un rapport de review"
-
-permissions:
-  autorisé:
-    - Lire tous les fichiers du projet
-    - Exécuter le linter et le type-checker
-    - Consulter l'historique git
-  interdit:
-    - Modifier des fichiers
-    - Créer des commits
-    - Approuver/merger des PRs
-
-critères:
-  - Chaque commentaire cite le fichier et la ligne concernée
-  - Les problèmes sont classés par sévérité (bloquant, important, suggestion)
-  - Aucun faux positif sur les règles de sécurité
-
-en_cas_échec:
-  - Si le linter ne s'exécute pas → signaler la configuration manquante
-  - Si un fichier est trop complexe à analyser → le signaler explicitement
-```
-
-#### Agent de documentation
-
-```yaml
-role: "Scribe - génère la documentation technique à partir du code"
-objectif: "Mettre à jour la doc API pour refléter les endpoints actuels"
-
-permissions:
-  autorisé:
-    - Lire le code source dans src/
-    - Créer/modifier des fichiers dans docs/
-    - Exécuter les scripts de génération de doc
-  interdit:
-    - Modifier le code source
-    - Modifier les tests
-    - Changer la structure du projet
-
-critères:
-  - Chaque endpoint public est documenté
-  - Les exemples de requête/réponse sont valides
-  - Les types de paramètres correspondent au code source
-
-en_cas_échec:
-  - Si un endpoint n'a pas de types → le documenter comme "types manquants"
-  - Si la structure de réponse est ambiguë → lire les tests pour déduire le format
-```
-
-#### Agent de refactoring
-
-```yaml
-role: "Refactorer - restructure le code sans changer le comportement"
-objectif: "Extraire les fonctions de plus de 50 lignes en sous-fonctions"
-
-permissions:
-  autorisé:
-    - Modifier les fichiers dans src/
-    - Exécuter les tests
-    - Créer de nouveaux fichiers utilitaires dans src/utils/
-  interdit:
-    - Changer le comportement observable (les tests doivent passer avant et après)
-    - Modifier les interfaces publiques
-    - Ajouter de nouvelles dépendances
-
-critères:
-  - Aucune fonction ne dépasse 50 lignes
-  - Tous les tests existants passent sans modification
-  - Aucune interface publique modifiée
-
-en_cas_échec:
-  - Si un refactoring casse un test → annuler et rapporter le conflit
-  - Si une fonction ne peut pas être découpée sans changer l'interface → la laisser et expliquer pourquoi
-```
-
-### Les erreurs courantes
-
-| Erreur | Conséquence | Solution |
-|--------|-------------|----------|
-| Pas de permissions explicites | L'agent modifie des fichiers qu'il ne devrait pas | Lister les actions autorisées ET interdites |
-| Objectif vague | Résultats imprévisibles d'une exécution à l'autre | Définir un livrable mesurable |
-| Pas de gestion d'échec | L'agent boucle indéfiniment ou produit du code cassé | Définir les conditions d'arrêt |
-| Trop de responsabilités | Impossible de débugger quand quelque chose échoue | Un agent = une responsabilité |
-
-### Ce qu'il faut retenir
-
-Concevoir un agent, c'est comme écrire une spécification. Plus c'est précis, plus le résultat est fiable. Les cinq éléments (rôle, objectif, permissions, critères, gestion d'échec) forment le contrat entre vous et l'agent.
-
-La leçon suivante aborde le dernier pilier : comment superviser ces agents efficacement avec le principe Human in the Loop.
+- [OpenAI Agents SDK](https://github.com/openai/openai-agents-python).
+- [Claude Code : permissions effectives](https://code.claude.com/docs/en/permissions).
+- [OWASP : défenses pour agents](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md).

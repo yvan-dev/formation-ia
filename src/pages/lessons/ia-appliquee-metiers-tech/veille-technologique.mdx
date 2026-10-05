@@ -1,191 +1,88 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Maintenir sa veille technologique"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "veille-technologique"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "stack-retenue"
-  title: "La stack retenue pour ce projet"
-nextLesson: 
-  slug: "frameworks-agentiques"
-  title: "Frameworks agentiques — Vue d'ensemble"
+title: 'Maintenir sa veille technologique'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'veille-technologique'
 ---
 
-## Maintenir sa veille technologique
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-En IA, ce qui était vrai il y a six mois est peut-être déjà obsolète. Les modèles évoluent, les outils changent, de nouvelles techniques apparaissent chaque semaine. Sans veille active, vous accumulez de la dette de connaissance. Avec une veille bien structurée, 15 minutes par jour suffisent.
+Une veille utile transforme un changement externe en décision pour votre projet. Elle ne consiste pas à essayer chaque nouveauté : elle aide à savoir quoi vérifier, quoi adopter et quoi laisser de côté.
 
-### Pourquoi la veille est critique en IA
+## Objectifs de la leçon
 
-Dans la plupart des domaines tech, les fondamentaux bougent lentement. En IA, le rythme est différent :
+- Choisir des sources primaires et datées.
+- Évaluer une nouveauté avec des cas de référence.
+- Organiser une révision des outils et des contenus.
 
-- **Nouveaux modèles** tous les 2-3 mois (GPT-4o, Claude 3.5 Sonnet, Gemini 2, etc.)
-- **Nouvelles capacités** qui changent les workflows (vision, function calling, agents)
-- **Nouveaux outils** qui rendent les anciens obsolètes
-- **Nouvelles techniques de prompting** validées par la recherche
+## Privilégier les sources applicables
 
-Un développeur qui ne fait pas de veille IA risque de résoudre en 2 heures un problème qu'un nouvel outil résout en 2 minutes.
+Pour une API, consultez documentation, changelog et versions du SDK. Pour une vulnérabilité, partez de l’avis officiel du projet ou du registre concerné. Pour un cadre légal, vérifiez le texte applicable et les communications de l’autorité compétente.
 
-### Sources recommandées
+Les articles et démonstrations peuvent aider à découvrir un sujet. Ils ne remplacent pas une preuve sur votre version et votre contexte. Une capture spectaculaire peut omettre les échecs, le coût ou les permissions nécessaires.
 
-Voici une sélection testée et maintenue. Pas besoin de toutes les suivre : choisissez 3 ou 4 sources qui correspondent à votre format préféré.
+| Signal                | Décision à examiner                              |
+| --------------------- | ------------------------------------------------ |
+| API dépréciée         | Migration, échéance et tests de compatibilité    |
+| Nouveau modèle        | Qualité sur les cas de référence et coût complet |
+| Changement de contrat | Données, rétention et sous-traitants             |
+| Avis de sécurité      | Exposition réelle, correctif et priorité         |
 
-#### Newsletters
+## Tenir un registre léger
 
-Le format le plus efficace pour rester informé sans effort.
+```markdown
+# Décision de veille
 
-| Newsletter | Fréquence | Ce que vous y trouvez |
-|------------|-----------|----------------------|
-| **The Batch** (deeplearning.ai) | Hebdomadaire | Résumé des avancées IA par Andrew Ng |
-| **TLDR AI** | Quotidienne | Digest court des news IA (5 min de lecture) |
-| **AI News** (Buttondown) | Hebdomadaire | Curation technique avec du contexte |
-| **Superhuman AI** | Quotidienne | Orienté productivité et cas d'usage |
+Source officielle et date : ...
+Version ou référence concernée : ...
+Impact possible sur notre usage : ...
+Essai et résultat : ...
+Décision : adopter / différer / refuser, avec raison.
+Responsable et prochaine révision : ...
+```
 
-#### Twitter/X
+Une cadence de revue dépend de la criticité et du rythme des changements. Il n’existe pas de durée universelle « quinze minutes suffisent ». Réservez du temps aux événements importants plutôt que de fixer une consommation de nouveautés.
 
-Le canal le plus rapide pour les annonces et les discussions techniques. Quelques comptes incontournables :
+## Évaluer sans changer tout le projet
 
-- **@AnthropicAI** : annonces Claude, publications recherche
-- **@OpenAI** : annonces GPT, nouvelles fonctionnalités
-- **@karpathy** (Andrej Karpathy) : explications techniques accessibles
-- **@simonw** (Simon Willison) : veille outils et expérimentations pratiques
-- **@swyx** : synthèses et analyses de l'écosystème IA
+Conservez un petit jeu de tâches : documentation, correctif, question ambiguë, cas de sécurité et format structuré si utile. Définissez les réponses ou comportements attendus avant l’essai.
 
-Astuce : créez une liste Twitter dédiée "veille IA" pour ne pas noyer ces comptes dans votre feed général.
+Rejouez les mêmes cas avec le modèle ou l’outil candidat. Notez référence, version, paramètres, date, répétitions, coût, latence et qualité après revue. Séparez les cas utilisés pour améliorer le prompt des cas utilisés pour l’évaluer.
 
-#### Podcasts
+Un alias `latest` peut changer sans modification de votre code. Lorsque le service le permet et que la reproductibilité est importante, choisissez une référence datée et planifiez ses migrations. Sinon, détectez les changements avec des évaluations périodiques.
 
-Pour la veille passive (trajets, sport, cuisine).
+## Cas concret : mise à jour d’un outil de code
 
-| Podcast | Format | Pour qui |
-|---------|--------|---------|
-| **Latent Space** | Long format (1h+) | Développeurs, discussions techniques profondes |
-| **Practical AI** | 30-45 min | Cas d'usage concrets et praticiens |
-| **The AI Podcast** (NVIDIA) | 30 min | Recherche et industrie |
+Le changelog annonce un nouveau mode de permissions. Avant de l’activer pour l’équipe, examinez sa portée et testez des actions autorisées et refusées. Une fonctionnalité qui réduit les interruptions peut aussi modifier les contrôles et les traces disponibles.
 
-#### Blogs et sites
+N’installez pas un outil simplement parce qu’il a été mentionné plusieurs fois. Vérifiez éditeur, dépôt officiel, licence, dépendances, accès et procédure de retrait. Une popularité apparente ne remplace pas une revue de provenance.
 
-Pour aller en profondeur sur un sujet.
+## Maintenir les cours
 
-- **Simon Willison's blog** (simonwillison.net) : la meilleure veille outils IA, avec des exemples concrets testés à chaque fois
-- **Blog Anthropic** (anthropic.com/research) : publications recherche et bonnes pratiques
-- **Blog OpenAI** : annonces et documentation des nouvelles capacités
-- **Hugging Face Blog** : modèles open source, benchmarks, tutoriels
+Une formation sur l’IA doit distinguer principes durables et informations volatiles. Marquez les références de modèles, commandes, tarifs et garanties de données avec une date et une source. Privilégiez des exercices qui apprennent à vérifier le catalogue actuel plutôt qu’à mémoriser une liste rapidement obsolète.
 
-#### GitHub
+Si une source n’est pas accessible, consignez cette limite. Ne présentez pas une affirmation comme fraîchement vérifiée simplement parce qu’elle figurait dans une ancienne version du cours.
 
-Pour suivre l'écosystème open source.
+<LessonPractice
+  task="Choisissez une annonce officielle récente sur un outil que vous utilisez et évaluez son impact sur une tâche représentative."
+  deliverable="Une fiche de veille avec source, essai, décision et prochaine vérification."
+  criteria={[
+    'La source primaire et la version sont citées.',
+    'L’essai possède un critère de réussite défini à l’avance.',
+    'La décision mentionne les limites et un moyen de revenir à la configuration précédente.',
+  ]}
+  solution="Pour un changement de permissions, testez une lecture autorisée, une écriture hors périmètre et une action sensible. Vérifiez les décisions effectives de l’outil, pas seulement sa réponse. Vous pouvez différer l’adoption si les bénéfices sont incertains ou si le retrait n’est pas maîtrisé ; ‘nouveau’ n’est pas un critère de réussite."
+/>
 
-- **GitHub Trending** : filtrez par langage et période pour voir les nouveaux projets IA
-- **Releases** : suivez les repos qui comptent pour vous (LangChain, LlamaIndex, Ollama, etc.)
-- **Awesome lists** : `awesome-llm`, `awesome-ai-agents` pour des listes curées
+## À retenir
 
-### Méthode de veille efficace
+La veille devient utile lorsqu’elle produit une décision argumentée et une vérification sur votre usage.
 
-Le piège classique : ouvrir 47 onglets, les lire en diagonale, ne rien retenir. Voici une approche qui fonctionne.
+## Sources et mise à jour
 
-**15 minutes par jour, pas plus.**
+Révision : **4 octobre 2026**.
 
-1. **Matin (5 min)** : parcourez votre newsletter ou votre feed Twitter IA. Identifiez 1-2 sujets pertinents.
-2. **Bookmark (1 min)** : sauvegardez ce qui mérite une lecture approfondie. Un outil type Pocket ou Raindrop, ou simplement un channel Slack personnel.
-3. **Lecture approfondie (9 min)** : lisez un article bookmarké la veille. Prenez une note de 2-3 lignes sur ce que vous en retenez.
-
-**Une session exploration par semaine (30 min).**
-
-Réservez un créneau pour tester un outil ou une technique. Pas juste lire : ouvrir un terminal, lancer un modèle, essayer un prompt. L'expérimentation est la forme de veille la plus efficace.
-
-### Ne pas hésiter à tester
-
-Lire un article sur un nouvel outil, c'est bien. L'essayer pendant 10 minutes, c'est dix fois mieux. Vous développez une intuition que la lecture seule ne donne pas.
-
-Quelques habitudes concrètes :
-
-- Quand un nouveau modèle sort, testez-le sur votre prompt habituel. Comparez.
-- Quand un outil est mentionné 3 fois dans votre veille, installez-le. Donnez-lui 15 minutes.
-- Gardez un fichier "tests veille" avec vos notes : outil, date, verdict en une ligne.
-
-La veille n'est pas un devoir. C'est un avantage compétitif.
-
-### En résumé
-
-- L'IA évolue trop vite pour ignorer la veille. 15 minutes par jour suffisent.
-- Choisissez 3-4 sources dans des formats variés (newsletter, Twitter, podcast).
-- La meilleure veille, c'est l'expérimentation : testez les outils, ne vous contentez pas de lire.
+- [Claude Code : changelog officiel](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md).
+- [OpenAI Python : versions du SDK](https://github.com/openai/openai-python/releases).
+- [Google Gen AI : versions du SDK](https://github.com/googleapis/python-genai/releases).

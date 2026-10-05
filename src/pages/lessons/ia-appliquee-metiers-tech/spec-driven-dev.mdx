@@ -1,239 +1,88 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Spec-Driven Development avec l'IA"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "spec-driven-dev"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "plan-first"
-  title: "Le principe Plan First"
-nextLesson: 
-  slug: "workflow-complet"
-  title: "Exemple de workflow complet"
+title: "Spec-driven development avec l'IA"
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'spec-driven-dev'
 ---
 
-## Spec-Driven Development avec l'IA
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Le Spec-Driven Development consiste à rédiger une spécification claire et complète avant de demander du code à l'IA. C'est la version structurée du Plan First : au lieu d'un plan libre, on fournit un document formel qui décrit exactement ce qu'on attend.
+Une spécification décrit le comportement attendu avant de choisir l’implémentation. Avec l’IA, elle sert de référence commune pour produire du code, préparer les tests et relire le résultat.
 
-### Ce qu'une bonne spec contient
+## Objectifs de la leçon
 
-Une spec incomplète produit du code incomplet. Voici les éléments qui font la différence :
+- Écrire une spécification centrée sur les comportements observables.
+- Distinguer besoin, plan technique et critères d’acceptation.
+- Vérifier un changement sans laisser le modèle définir seul sa réussite.
 
-| Élément | Rôle | Exemple |
-|---------|------|---------|
-| **Objectif** | Pourquoi cette fonctionnalité existe | "Permettre aux utilisateurs de réinitialiser leur mot de passe" |
-| **Contraintes** | Ce qui est imposé par le contexte | "Doit fonctionner sans service email (lien en console pour la v1)" |
-| **Critères d'acceptation** | Comment on vérifie que c'est bon | "Le token expire après 15 minutes. Un token utilisé est invalidé." |
-| **Interface** | Les entrées/sorties attendues | Signature de l'endpoint, format de la réponse |
-| **Cas limites** | Les scénarios non-nominaux | "Que se passe-t-il si l'email n'existe pas ?" |
+## Spécification, plan et tâches
 
-### Fournir un "skill" de contexte
+La **spécification** répond à « que doit faire le système ? ». Le **plan** décrit comment le changement sera réalisé dans le projet. Les **tâches** découpent ce plan en travaux vérifiables.
 
-L'IA ne connaît pas votre projet. Elle ne sait pas quels patterns vous utilisez, quel ORM, quelle convention de nommage. Un "skill" est un bloc de contexte que vous injectez dans votre prompt pour combler ce manque.
+L’ordre peut être itératif : une contrainte technique découverte pendant le plan peut exiger une clarification du besoin. En revanche, ne modifiez pas silencieusement les critères pour faire accepter une implémentation incorrecte.
 
-```text
-Contexte projet (à inclure dans le prompt) :
-- Stack : Node.js, Express, TypeScript, Prisma, PostgreSQL
-- Architecture : controllers/services/repositories
-- Convention : camelCase pour les variables, kebab-case pour les URLs
-- Auth existante : JWT avec middleware authRequired
-- Validation : Zod pour les schémas d'entrée
-- Tests : Vitest avec supertest pour les tests d'intégration
+Des outils comme GitHub Spec Kit structurent ce processus. Un fichier Markdown de projet peut aussi suffire. Une structure YAML inventée dans un cours n’est pas un standard officiel et ne garantit pas la compatibilité avec un outil.
+
+## Cas concret : réinitialiser un mot de passe
+
+L’exemple suivant concerne une application fictive, distincte du site de formation. Avant de coder, définissez les exigences de sécurité et les cas d’échec.
+
+```markdown
+# Réinitialisation du mot de passe
+
+Besoin : permettre au titulaire d’un compte de retrouver son accès.
+Entrée : une adresse email ; sortie publique uniforme, compte connu ou non.
+Jeton : aléatoire, à durée limitée, à usage unique ; ne pas le journaliser.
+Stockage : conserver un condensat du jeton, pas sa valeur exploitable.
+Contrôles : limiter les demandes et vérifier la validité au moment de l’usage.
+Tests : compte inconnu, expiration, réutilisation, jeton invalide et réussite.
+Hors périmètre : changement du fournisseur d’email et refonte de l’authentification.
 ```
 
-Ce bloc de contexte peut être réutilisé d'un prompt à l'autre. Il évite que l'IA réinvente des conventions à chaque requête.
+La réponse uniforme réduit le risque d’énumération, mais son texte seul ne suffit pas : les différences de temps ou de limitation peuvent aussi révéler l’existence d’un compte. Les seuils de limitation doivent être choisis pour votre service et mesurés, pas copiés comme des valeurs universelles.
 
-### Exemple : spécifier un endpoint API
+Le test de développement utilise un fournisseur d’email simulé. N’écrivez pas le jeton dans les logs pour « faciliter le debug » et n’envoyez pas de message réel à une adresse cliente.
 
-Voici une spec complète pour un endpoint de reset de mot de passe :
+## Critères d’acceptation avant l’implémentation
 
-```text
-## Spec : POST /api/auth/reset-password
+Exprimez chaque critère sous forme de comportement :
 
-### Objectif
-Permettre à un utilisateur de demander un lien de réinitialisation
-de mot de passe.
+- Un jeton expiré ne change pas le mot de passe.
+- Un jeton déjà utilisé ne peut pas être réutilisé.
+- Une requête pour un compte inconnu ne révèle pas son absence.
+- Le secret n’apparaît pas dans les journaux.
 
-### Entrée
-{
-  "email": "string (format email, requis)"
-}
+Définissez ensuite les tests appropriés. Un test de l’expiration doit contrôler le temps ou utiliser une horloge injectable ; attendre une heure n’est pas nécessaire. Un test de réutilisation doit observer le refus du second usage, pas seulement la présence d’un champ en base.
 
-### Sortie (succès - 200)
-{
-  "message": "Si un compte existe avec cet email, un lien a été envoyé."
-}
+## Passer au plan technique
 
-Note : toujours renvoyer 200, même si l'email n'existe pas (sécurité).
+Lisez le mécanisme d’authentification existant, la gestion des sessions et le service d’email. Le plan doit réutiliser les conventions et préciser les transactions ou contrôles nécessaires pour éviter les usages concurrents.
 
-### Sortie (erreur - 400)
-{
-  "error": "INVALID_EMAIL",
-  "message": "Format d'email invalide"
-}
+Après une réinitialisation, le traitement des sessions existantes doit être décidé dans la politique de sécurité. L’IA peut aider à identifier cette question ; elle ne doit pas inventer une réponse métier sans la signaler.
 
-### Comportement
-1. Valider le format de l'email avec le schéma Zod
-2. Chercher l'utilisateur en base (Prisma)
-3. Si trouvé : générer un token crypto aléatoire (32 bytes, hex)
-4. Stocker le token en base avec expiration (15 min)
-5. Logger le lien en console (pas de service email en v1)
-6. Renvoyer la réponse générique
+## Relire à partir de la spécification
 
-### Critères d'acceptation
-- Un email invalide retourne 400
-- Un email inexistant retourne 200 (pas de fuite d'information)
-- Le token expire après 15 minutes
-- Un ancien token est invalidé si on en redemande un
-- Le endpoint est rate-limité à 3 requêtes par minute par IP
+Comparez le diff et les tests à chaque critère. Ajoutez les limites connues à la PR. Une spécification versionnée devient utile seulement si elle reste cohérente avec le comportement livré.
 
-### Fichiers à créer/modifier
-- src/controllers/auth.controller.ts (nouveau handler)
-- src/services/auth.service.ts (logique métier)
-- prisma/schema.prisma (table PasswordResetToken)
-- src/schemas/auth.schema.ts (schéma Zod)
-- tests/integration/reset-password.test.ts
-```
+<LessonPractice
+  task="Complétez la spécification de réinitialisation avec le traitement des sessions existantes et un cas d’usage concurrent du même jeton."
+  deliverable="Deux critères d’acceptation et leur méthode de test."
+  criteria={[
+    'La politique de session est une décision explicite.',
+    'Deux utilisations concurrentes ne produisent pas deux réussites.',
+    'Aucun test ne nécessite d’envoyer un email ou de journaliser un secret réel.',
+  ]}
+  solution="Choisissez avec l’équipe si les sessions doivent être révoquées après la réinitialisation et testez cette politique. Pour la concurrence, envoyez deux demandes avec le même jeton fictif : une seule doit réussir. Le contrôle d’usage unique doit être atomique dans le stockage utilisé, pas seulement vérifié dans le prompt ou avant une écriture séparée."
+/>
 
-Avec cette spec, l'IA produit exactement ce que vous attendez. Sans elle, l'IA aurait fait des choix différents sur la gestion d'erreurs, la sécurité, le format de réponse, et la structure de fichiers.
+## À retenir
 
-### OpenSpec : approche avancée pour les specs structurées
+Les critères de réussite appartiennent au besoin. Le plan et le code doivent les satisfaire, avec des tests qui observent les comportements importants.
 
-OpenSpec est une approche de spécification qui formalise encore davantage le processus. L'idée est de définir un format standard pour vos specs, réutilisable sur tous vos projets.
+## Sources et mise à jour
 
-Un template OpenSpec typique :
+Révision : **4 octobre 2026**.
 
-```yaml
-spec:
-  name: "reset-password"
-  version: "1.0"
-  status: "draft"
-
-context:
-  domain: "authentication"
-  dependencies: ["user-service", "token-service"]
-
-requirements:
-  functional:
-    - id: "REQ-001"
-      description: "L'utilisateur peut demander un reset via email"
-      priority: "must"
-    - id: "REQ-002"
-      description: "Le token expire après 15 minutes"
-      priority: "must"
-  non_functional:
-    - id: "NFR-001"
-      description: "Rate limiting de 3 req/min par IP"
-      priority: "should"
-
-acceptance_criteria:
-  - given: "Un email valide d'un utilisateur existant"
-    when: "POST /api/auth/reset-password"
-    then: "Un token est créé et le lien est loggé"
-```
-
-L'avantage d'OpenSpec est la reproductibilité. Une fois votre template défini, chaque nouvelle feature suit le même format. L'IA s'y habitue et produit des résultats de plus en plus cohérents.
-
-### La spec comme documentation vivante
-
-Un bénéfice souvent sous-estimé : la spec, une fois le code implémenté, devient la documentation de référence. Elle décrit le comportement attendu, les cas limites, et les décisions prises.
-
-Trois pratiques pour en tirer le maximum :
-
-1. **Versionner les specs** avec le code : elles vivent dans le repo, pas dans un Google Doc
-2. **Mettre à jour la spec** quand le comportement change : si le code diverge de la spec, c'est la spec qui fait autorité
-3. **Référencer la spec** dans les tests : chaque critère d'acceptation correspond à un test
-
-```typescript
-// tests/integration/reset-password.test.ts
-
-// REQ-001 : L'utilisateur peut demander un reset via email
-it("should create a reset token for existing user", async () => {
-  // ...
-});
-
-// NFR-001 : Rate limiting de 3 req/min par IP
-it("should return 429 after 3 requests per minute", async () => {
-  // ...
-});
-```
-
-La spec n'est pas un document qu'on écrit puis qu'on oublie. C'est la source de vérité du comportement attendu de votre système.
+- [GitHub Spec Kit](https://github.com/github/spec-kit).
+- [OWASP : Forgot Password Cheat Sheet](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Forgot_Password_Cheat_Sheet.md).

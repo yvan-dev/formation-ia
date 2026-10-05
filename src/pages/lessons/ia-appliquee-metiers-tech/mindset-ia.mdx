@@ -1,160 +1,74 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "L'IA comme co-pilote, pas comme remplaçant"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "mindset-ia"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "niveaux-maturite"
-  title: "Les 5 niveaux de maturité IA"
-nextLesson: 
-  slug: "bon-ingenieur-ia"
-  title: "Ce qui différencie un bon ingénieur IA"
+title: 'Travailler avec l’IA en gardant son jugement'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'mindset-ia'
 ---
 
-## L'IA augmente, elle ne remplace pas
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Mettons les choses au clair : l'IA générative ne remplace pas un professionnel compétent. Elle le rend plus rapide, plus productif, et lui permet de se concentrer sur les problèmes qui comptent.
+L’IA peut proposer une solution avant que vous ayez fini de formuler le problème. Cette rapidité est utile, mais elle peut vous pousser à accepter la première réponse plausible. Le réflexe professionnel consiste à conserver le jugement sur le besoin, les compromis et le résultat.
 
-Un LLM ne comprend pas votre contexte métier. Il ne connaît pas les contraintes de votre équipe, l'historique de vos décisions techniques, ni les subtilités de votre domaine. Il génère du texte statistiquement probable. C'est puissant, mais ce n'est pas de la compréhension.
+## Objectifs de la leçon
 
-## L'analogie du pilote et du co-pilote
+- Séparer la proposition du modèle d’une décision validée.
+- Choisir des tâches adaptées à l’assistance.
+- Mesurer le travail complet, corrections comprises.
 
-Un pilote d'avion utilise le pilotage automatique sur 90% du vol. Ça ne fait pas de lui un passager. Il reste responsable du décollage, de l'atterrissage, de la gestion des incidents, et de toutes les décisions critiques. Le pilotage automatique gère le répétitif. Le pilote gère le complexe.
+## Répartir le travail explicitement
 
-C'est exactement votre relation avec l'IA :
+Le modèle peut aider à explorer des pistes, reformuler une spécification, produire un brouillon, préparer des tests ou expliquer un échec. Vous apportez les contraintes du projet, les attentes des utilisateurs et la responsabilité de la validation.
 
-| Le pilote (vous) | Le co-pilote (l'IA) |
-|-------------------|---------------------|
-| Définit la destination | Calcule la trajectoire |
-| Prend les décisions critiques | Exécute les tâches répétitives |
-| Gère les imprévus | Signale les anomalies |
-| Reste responsable du résultat | Propose des options |
-| Comprend le contexte global | Traite l'information locale |
+Cette répartition varie selon le métier et l’organisation. Il serait excessif d’affirmer que l’IA remplace toujours, ou ne remplace jamais, une activité professionnelle. Dans ce parcours, l’objectif est concret : améliorer une tâche sans perdre la maîtrise de sa qualité.
 
-> Personne ne monte dans un avion en disant "pas besoin de pilote, il y a le pilotage automatique". Ne faites pas l'équivalent avec votre code.
+| Moment       | Apport possible de l’IA              | Décision de l’équipe                    |
+| ------------ | ------------------------------------ | --------------------------------------- |
+| Cadrage      | Questions, alternatives, hypothèses  | Besoin et périmètre                     |
+| Production   | Code ou contenu initial              | Acceptation des changements             |
+| Vérification | Tests proposés, anomalies candidates | Preuves suffisantes et risques restants |
+| Livraison    | Description de PR, documentation     | Autorisation de publication             |
 
-## Le bon état d'esprit : collaboration, pas dépendance
+## Cas concret : une validation de formulaire
 
-### Ce que font les bons utilisateurs d'IA
+Le modèle propose une expression régulière complexe pour une adresse email. Elle semble professionnelle, mais vous devez d’abord préciser le besoin : validation de forme, vérification de délivrabilité ou preuve de possession ? Ces trois objectifs demandent des mécanismes différents.
 
-- **Ils formulent des demandes précises.** "Refactorise cette fonction pour séparer la logique métier de l'accès base de données" vaut mieux que "améliore ce code".
-- **Ils vérifient chaque output.** Pas un coup d'œil rapide. Une vraie relecture, comme une code review.
-- **Ils comprennent ce que l'IA produit.** Si vous ne pouvez pas expliquer pourquoi le code généré fonctionne, vous ne devriez pas le merger.
-- **Ils itèrent.** Le premier output est rarement le bon. Le dialogue avec l'IA est un processus de raffinage.
+Vous pouvez demander une solution conforme au validateur déjà utilisé, puis vérifier les cas attendus et les messages accessibles. L’envoi d’un lien de confirmation serait une autre fonctionnalité, avec un service et une politique d’expiration. La sophistication du code n’est pas une mesure de pertinence.
 
-### Ce que font les mauvais utilisateurs d'IA
+## Éviter l’acceptation automatique
 
-- **Ils acceptent tout sans vérifier.** "Ça compile, ça doit être bon." Non.
-- **Ils ne lisent pas le code généré.** Copier-coller aveugle de 200 lignes dans la codebase.
-- **Ils s'appuient sur l'IA pour des décisions qu'ils ne comprennent pas.** "L'IA a dit d'utiliser MongoDB, alors on utilise MongoDB."
-- **Ils perdent leurs compétences.** À force de ne plus écrire de code eux-mêmes, ils ne savent plus debugger quand l'IA se trompe.
+Avant de retenir une proposition, formulez ce que vous souhaitez observer. Cherchez ensuite une preuve indépendante : documentation de la version installée, test de comportement, comparaison au contrat ou revue d’un collègue.
 
-## Quand l'IA est utile
+Une deuxième réponse du même modèle, même plus assurée, n’est pas une preuve indépendante. Une explication convaincante peut accompagner une erreur. À l’inverse, une formulation prudente ne signifie pas nécessairement que la réponse est fausse : jugez le contenu et ses éléments de vérification.
 
-L'IA brille dans les situations suivantes :
+## Préserver ses compétences
 
-- **Tâches répétitives** : boilerplate, tests unitaires standards, conversions de format
-- **Exploration rapide** : prototyper une idée, tester une approche, générer un premier draft
-- **Documentation** : générer de la doc à partir du code, reformuler, structurer
-- **Apprentissage** : comprendre un concept, explorer une API, obtenir des exemples
-- **Refactoring mécanique** : renommages, extraction de fonctions, réorganisation de code
+Après une modification, vous devez pouvoir expliquer le comportement, les cas limites et la raison du choix. Si vous ne le pouvez pas, utilisez le modèle pour vous aider à comprendre puis vérifiez cette explication dans les fichiers concernés.
 
-## Quand l'IA est dangereuse
+Alternez les tâches assistées avec des exercices de lecture et de résolution personnelle. Sur un sujet nouveau, demandez un exemple minimal avant d’accepter une abstraction plus complexe. L’objectif n’est pas de mémoriser chaque ligne : c’est de rester capable de diagnostiquer et de maintenir le système.
 
-L'IA devient un risque quand vous lui faites confiance sans recul :
+## Mesurer le coût complet
 
-- **Architecture système** : un LLM ne connaît pas vos contraintes de production, vos SLAs, votre dette technique
-- **Sécurité** : le code généré peut contenir des vulnérabilités que le modèle ne détecte pas
-- **Décisions métier** : le modèle n'a pas le contexte pour faire des choix stratégiques
-- **Code critique** : paiement, authentification, gestion de données sensibles
-- **Situations nouvelles** : quand votre problème sort des patterns habituels, l'IA va quand même produire une réponse (souvent fausse)
+Chronométrez le cadrage, la génération, la revue, les corrections et la vérification. Notez aussi les défauts restants et les éventuels changements inutiles. Vous pourrez ainsi voir quels usages sont bénéfiques et lesquels ajoutent du travail.
 
-> L'IA est toujours confiante. Même quand elle a tort. C'est à vous de douter.
-
-## Les trois réflexes à adopter
-
-1. **Vérifier avant de merger.** Chaque ligne générée par l'IA passe par votre review. Sans exception.
-2. **Comprendre avant d'accepter.** Si vous ne pouvez pas expliquer le code à un collègue, ne le committez pas.
-3. **Rester compétent.** Continuez à écrire du code vous-même. L'IA est un accélérateur, pas une béquille.
+<LessonPractice
+  task="Demandez une validation d’email pour un formulaire fictif, puis distinguez validation de forme, délivrabilité et possession de l’adresse."
+  deliverable="Une décision de conception et trois cas de test correspondant au besoin choisi."
+  criteria={[
+    'Le besoin exact est formulé avant de choisir une technique.',
+    'Les cas de test portent sur un comportement utilisateur.',
+    'L’explication distingue les capacités de la validation locale et celles d’un email de confirmation.',
+  ]}
+  solution="Pour une simple validation de forme, réutilisez le validateur du projet et testez une valeur acceptable, une valeur invalide et un champ requis vide. Cela ne prouve pas que la boîte existe ni que l’utilisateur la possède. La possession demande un mécanisme de confirmation distinct."
+/>
 
 ## À retenir
 
-L'IA est l'outil le plus puissant que les développeurs aient eu depuis l'invention de Stack Overflow. Mais comme tout outil puissant, il amplifie autant les erreurs que les succès. Votre valeur ne diminue pas avec l'IA. Elle se déplace : de l'exécution vers le jugement, de l'écriture vers la validation, du "comment" vers le "pourquoi".
+Une réponse IA est une proposition à évaluer. La compétence consiste à définir le bon problème et à obtenir des preuves suffisantes pour prendre une décision.
+
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**.
+
+- [Google Engineering Practices : ce qu’une revue de code doit examiner](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).
+- [Guide de prompting OpenAI : cadrage et vérification](https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5_prompting_guide.ipynb).

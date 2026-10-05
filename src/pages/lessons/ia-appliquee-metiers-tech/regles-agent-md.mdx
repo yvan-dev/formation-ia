@@ -1,209 +1,88 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Règles de construction d'un AGENT.md efficace"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "regles-agent-md"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "human-in-the-loop"
-  title: "Human in the Loop"
-nextLesson: 
-  slug: "structure-agent-md"
-  title: "Structure recommandée d'un AGENT.md"
+title: 'Règles de construction d’un AGENTS.md efficace'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'regles-agent-md'
 ---
 
-## Un fichier d'instructions, pas un document de design
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un AGENT.md est le contrat entre vous et l'agent IA. Ce qu'il doit faire, comment, et dans quelles limites. Pas un README, pas une spec fonctionnelle, pas un manifeste philosophique.
+`AGENTS.md`, au pluriel, est un format ouvert pour donner du contexte et des instructions aux agents de code. Son rôle est d’aider l’outil à travailler dans le dépôt ; il n’accorde pas de permissions et ne garantit pas l’exécution correcte des règles.
 
-La différence entre un agent qui produit du travail utilisable et un agent qui génère du bruit tient souvent à la qualité de ce fichier.
+## Objectifs de la leçon
 
-### Ce que c'est, ce que ce n'est pas
+- Nommer et positionner le fichier adapté à l’outil.
+- Écrire des instructions pertinentes et vérifiables.
+- Séparer conventions de projet et restrictions effectives.
 
-| AGENT.md | Ce n'est PAS |
-|----------|--------------|
-| Instructions exécutables | Un document de design |
-| Contrat de comportement | Un README pour humains |
-| Critères mesurables | Une liste d'aspirations |
-| Garde-fous explicites | Un guide de style générique |
+## AGENTS.md, CLAUDE.md et autres formats
 
-Un document de design explique *pourquoi* on a fait un choix. Un AGENT.md dit *quoi faire*. Si votre fichier contient plus de "pourquoi" que de "quoi", vous êtes en train d'écrire le mauvais document.
+Le format ouvert s’appelle **AGENTS.md**. Un fichier `AGENT.md` au singulier peut être une convention interne, mais ne doit pas être présenté comme le nom standard ni supposé chargé automatiquement.
 
-### La concision comme discipline
+Claude Code utilise notamment `CLAUDE.md`, et GitHub Copilot propose ses fichiers d’instructions propres. Le support d’`AGENTS.md`, les fichiers imbriqués et leur portée dépendent de l’outil et de sa version. Consultez la documentation puis observez le chargement réel.
 
-Un bon AGENT.md fait moins de 60 lignes. Ce n'est pas arbitraire. C'est une conséquence directe du fonctionnement des LLMs : plus le contexte est long, plus le modèle dilue son attention. Chaque ligne sans valeur ajoutée dégrade la performance de l'agent.
+Le chemin des leçons de ce parcours conserve `agent-md` pour maintenir les URL existantes. Cela ne change pas le nom du fichier à créer dans le projet final : `AGENTS.md`.
 
-Pour chaque phrase, posez-vous la question : "Si je retire cette ligne, l'agent produira-t-il un résultat différent ?" Si la réponse est non, supprimez-la.
+## Partir des informations qui changent le travail
 
-Voici un test rapide : prenez votre AGENT.md actuel et surlignez chaque ligne qui modifie concrètement le comportement de l'agent. Les lignes non surlignées sont candidates à la suppression.
-
-### Zéro ambiguïté
-
-Un agent n'a pas votre contexte implicite. Il ne "devine" pas ce que vous voulez. Si une instruction peut être interprétée de deux façons, elle le sera, et probablement pas comme vous l'espériez.
-
-Comparez :
+Décrivez le projet, les commandes utiles, les conventions importantes et la manière de vérifier le résultat. Ajoutez les contraintes que l’agent ne peut pas déduire correctement du code seul.
 
 ```markdown
-# Mauvais
-Écris du code propre et bien structuré.
+# Instructions du projet
 
-# Bon
-- Fonctions de moins de 20 lignes
-- Un seul niveau d'imbrication maximum
-- Noms de variables en camelCase, en anglais
+Ce site utilise Astro et MDX.
+Conserver les routes existantes lors d’une correction de contenu.
+Lire la collection de cours avant de modifier la navigation.
+Après modification : exécuter le build et vérifier le rendu concerné.
+Rapporter les contrôles exécutés et ceux restés indisponibles.
 ```
 
-La première version est subjective. La seconde est exécutable. L'agent sait exactement quoi vérifier.
+Ces instructions doivent correspondre au dépôt. Une règle courte mais fausse est plus nuisible qu’une explication un peu plus longue et exacte.
 
-### Chaque instruction doit être actionnable
+## Précision sans rigidité inutile
 
-Une instruction actionnable répond à la question "comment je vérifie que c'est fait ?"
+« Faire du bon code » ne précise pas les attentes. Préférez « réutiliser le composant de bouton existant » ou « tester le refus d’accès à la ressource d’un autre compte ».
 
-```markdown
-# Pas actionnable
-Assure-toi que le code est performant.
+Évitez les métriques arbitraires : toutes les fonctions sous vingt lignes, chaque fichier sous cinquante lignes ou une couverture totale sans lien avec les risques. Elles peuvent provoquer des abstractions inutiles et des tests peu informatifs.
 
-# Actionnable
-Aucune requête SQL ne doit utiliser SELECT *.
-Les boucles sur des collections doivent utiliser .map() ou .filter(), pas for...in.
-```
+Une courte raison peut aider : « garder les clés de stockage pour conserver la progression des utilisateurs ». Le contexte n’est pas toujours du bruit ; il évite parfois une mauvaise interprétation d’une règle.
 
-```markdown
-# Pas actionnable
-Écris des tests complets.
+## Les permissions vivent dans l’environnement
 
-# Actionnable
-Chaque fonction publique a au moins un test nominal et un test d'erreur.
-Les tests utilisent des données réalistes, pas "foo" et "bar".
-```
+Une section « ne pas déployer » précise l’intention, mais ne retire pas un accès de déploiement. Configurez les outils, chemins, identifiants et destinations réseau dans l’environnement utilisé. Les instructions complètent ces contrôles.
 
-Si vous ne pouvez pas vérifier mécaniquement qu'une instruction est respectée, reformulez-la jusqu'à ce que ce soit possible.
+Ne mettez pas de secret dans le fichier, même si vous pensez qu’il sera uniquement lu par un agent local. Il peut être versionné ou transmis à un service.
 
-### Anti-patterns courants
+## Évaluer avec un nouvel arrivant et des cas réels
 
-**Trop long.** Un AGENT.md de 200 lignes est un signal d'alerte. L'agent va ignorer ou mal pondérer certaines instructions. Au-delà de 60 lignes, découpez en plusieurs agents spécialisés.
+Faites relire le fichier à une personne qui ne connaît pas le projet. Vérifiez qu’elle peut trouver les commandes, le besoin et les critères de livraison. Ses questions révèlent des informations manquantes ; elles ne prouvent pas que l’agent échouera toujours, mais orientent la correction.
 
-**Trop vague.** "Assure-toi que le code est de qualité" ne signifie rien pour un agent. Qualité selon quels critères ? Quelles métriques ? Quels standards ?
+Testez aussi une tâche nominale, une dépendance manquante et une demande hors périmètre. Observez les fichiers modifiés, les commandes et les limites signalées.
 
-**Trop de contexte.** L'historique du projet, la philosophie de l'équipe, les raisons d'un choix technique : rien de tout cela n'aide l'agent à exécuter. Il a besoin d'instructions, pas d'un cours d'histoire.
+## Versionner les changements
 
-**Des contradictions.** "Sois concis" suivi de "Documente chaque décision en détail" crée un conflit que l'agent résoudra de façon imprévisible.
+Les instructions évoluent avec le code. Passez leurs modifications en revue et supprimez les règles devenues fausses ou répétées. L’objectif est une source cohérente et accessible, pas un document qui grandit à chaque incident sans nettoyage.
 
-**Des souhaits au lieu de règles.** "Idéalement, les tests devraient couvrir les edge cases" n'est pas une instruction. "Chaque fonction doit avoir au moins un test sur un cas limite" en est une.
+<LessonPractice
+  task="Transformez ‘fais du code propre et ne casse rien’ en cinq instructions pour ce site de formation."
+  deliverable="Un extrait AGENTS.md adapté au dépôt et une liste de contrôles de chargement."
+  criteria={[
+    'Les commandes et chemins cités existent.',
+    'Les comportements à préserver sont explicites.',
+    'Aucun secret ni droit effectif n’est confondu avec une règle textuelle.',
+  ]}
+  solution="Citez la collection de cours, les routes à préserver, les composants partagés et le build. Demandez un rapport des validations réelles et des limites. Vérifiez dans votre outil que le fichier est chargé ; pour Claude Code, vérifiez la prise en charge d’AGENTS.md dans votre version et ses réglages, ou utilisez l’adaptateur documenté."
+/>
 
-**L'effet "kitchen sink".** Ajouter chaque nouvelle idée dans le même AGENT.md sans jamais en retirer. Au bout de quelques semaines, le fichier ressemble à un fourre-tout. Prévoyez des sessions de nettoyage régulières.
+## À retenir
 
-### Le test du nouvel arrivant
+Un bon fichier d’instructions est exact, cohérent et évalué dans l’outil réel. Il accompagne les contrôles d’accès sans les remplacer.
 
-Donnez votre AGENT.md à un collègue qui ne connaît pas le projet. Sans autre contexte, peut-il comprendre exactement ce que l'agent doit faire ?
+## Sources et mise à jour
 
-Si votre collègue pose des questions, ce sont des ambiguïtés que l'agent rencontrera aussi. Sauf que lui ne posera pas de questions. Il improvisera.
+Révision : **5 octobre 2026**.
 
-Ce test fonctionne aussi en sens inverse : si un nouvel arrivant dans l'équipe peut utiliser votre AGENT.md comme guide de contribution, c'est qu'il est bien écrit.
-
-Trois questions à poser au relecteur :
-1. "Qu'est-ce que l'agent doit produire ?" (teste la clarté de l'objectif)
-2. "Qu'est-ce que l'agent n'a pas le droit de faire ?" (teste les permissions)
-3. "Comment tu sais si le résultat est correct ?" (teste les critères d'acceptation)
-
-### Pourquoi versionner les AGENT.md
-
-Un AGENT.md vit avec le code. Il évolue quand les standards changent, quand l'architecture se transforme, quand l'équipe apprend ce qui fonctionne.
-
-Versionnez-le dans Git, au même titre que le code source :
-
-1. **Traçabilité.** Vous voyez quand une règle a été ajoutée et pourquoi (via le message de commit).
-2. **Review.** Les changements passent par la même revue de code que le reste. Un collègue peut repérer une instruction ambiguë avant qu'elle ne cause des problèmes.
-3. **Cohérence.** Toute l'équipe travaille avec la même version. Pas de "moi j'utilise une version différente sur mon poste".
-
-Traitez un changement d'AGENT.md comme un changement de code : branch, PR, review, merge. Un AGENT.md modifié sans review peut introduire des régressions dans le comportement de l'agent, exactement comme du code non reviewé.
-
-### Récapitulatif
-
-| Principe | En pratique |
-|----------|-------------|
-| Moins de 60 lignes | Chaque ligne doit changer le comportement de l'agent |
-| Zéro ambiguïté | Instructions exécutables, pas des souhaits |
-| Tout est actionnable | "Comment je vérifie ?" doit avoir une réponse |
-| Pas de contexte inutile | "Quoi faire", pas "pourquoi on en est là" |
-| Test du nouvel arrivant | Si un humain a des questions, l'agent aussi |
-| Versionné comme du code | Git, review, historique |
-
-La leçon suivante détaille la structure recommandée pour organiser ces instructions.
+- [AGENTS.md : format officiel](https://github.com/agentsmd/agents.md).
+- [Claude Code : mémoire et CLAUDE.md](https://code.claude.com/docs/en/memory).
+- [Claude Code : permissions](https://code.claude.com/docs/en/permissions).

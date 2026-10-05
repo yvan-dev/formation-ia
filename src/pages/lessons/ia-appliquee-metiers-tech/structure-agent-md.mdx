@@ -1,309 +1,112 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Structure recommandée d'un AGENT.md"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "structure-agent-md"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "regles-agent-md"
-  title: "Règles de construction d'un AGENT.md efficace"
-nextLesson: 
-  slug: "bonnes-pratiques-agent-md"
-  title: "Bonnes pratiques et exemples"
+title: 'Structure recommandée d’un AGENTS.md'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'structure-agent-md'
 ---
 
-## Le template recommandé
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Voici la structure qui fonctionne. Chaque section a un rôle précis, et l'ordre compte : les informations les plus importantes arrivent en premier, quand l'attention du modèle est maximale.
+Une structure d’instructions doit permettre de trouver rapidement le contexte, les commandes et les attentes de livraison. Le modèle suivant est une base adaptable, pas une norme qui garantit à elle seule la qualité de l’agent.
 
-```markdown
-# [Nom de l'agent]
+## Objectifs de la leçon
 
-## Rôle
-[Une phrase. Ce que l'agent est.]
+- Construire un fichier d’instructions lié au dépôt.
+- Séparer règles permanentes et mission ponctuelle.
+- Fournir un exemple de restitution honnête et utile.
 
-## Objectif
-[Ce que l'agent doit accomplir.]
+## Contexte stable et tâche du moment
 
-## Permissions
-- Ce qu'il peut faire
-- Ce qu'il ne peut PAS faire
+`AGENTS.md` contient surtout les informations durables : stack, commandes, conventions et règles de contribution. Le ticket ou le prompt porte le besoin du moment. Évitez d’inscrire une mission temporaire dans le fichier global si elle ne doit pas s’appliquer aux tâches futures.
 
-## Critères d'acceptation
-- [Critère mesurable 1]
-- [Critère mesurable 2]
+L’ordre des sections doit favoriser la lecture et rendre les contraintes importantes visibles. Il n’existe pas d’ordre universel qui assure une « attention maximale » du modèle.
 
-## Exemples de sorties attendues
-[Exemple de code ou de format correct]
+## Un modèle pour ce dépôt
 
-## En cas d'incapacité
-[Comment l'agent doit signaler qu'il ne peut pas accomplir la tâche]
-```
-
-### Pourquoi cet ordre
-
-Le **Rôle** vient en premier parce qu'il cadre tout le reste. Un agent qui sait qu'il est "un reviewer de code senior spécialisé en sécurité" ne se comportera pas comme un assistant généraliste.
-
-L'**Objectif** précise la mission. Le rôle dit *ce qu'il est*, l'objectif dit *ce qu'il doit accomplir*.
-
-Les **Permissions** posent les garde-fous. Sans elles, l'agent prendra des initiatives que vous n'avez pas anticipées.
-
-Les **Critères d'acceptation** rendent le succès mesurable. "Le code est bon" n'est pas un critère. "Aucune vulnérabilité OWASP Top 10 détectée" en est un.
-
-Les **Exemples** ancrent les attentes dans du concret. Un modèle de langage travaille par pattern matching : lui montrer un exemple du résultat attendu est souvent plus efficace qu'une longue explication.
-
-Le bloc **En cas d'incapacité** évite le pire scénario : un agent qui produit un résultat médiocre plutôt que de signaler qu'il ne peut pas faire le travail correctement.
-
-## Section par section
-
-### Rôle
-
-Une seule phrase. Pas de liste, pas de paragraphe. Si vous avez besoin de plus d'une phrase pour décrire le rôle, vous avez probablement besoin de plusieurs agents.
+Exemple à adapter et à vérifier avant adoption :
 
 ```markdown
-## Rôle
-Agent de code review spécialisé en TypeScript et sécurité applicative.
+# Formation IA — instructions de contribution
+
+## Projet
+
+Site statique Astro avec leçons MDX, composants React et recherche Pagefind.
+
+## Repères
+
+- Programme : src/content/courses/ia-appliquee-metiers-tech.json
+- Leçons : src/pages/lessons/ia-appliquee-metiers-tech/
+- Composants : src/components/
+- Styles : src/styles/
+
+## Préparation
+
+Lire les fichiers concernés et les conventions applicables.
+Préserver les routes et les clés de progression sauf demande explicite.
+
+## Validation
+
+- npm run build : génération des pages et de l’index de recherche
+- npm run lint : règles de code
+- npm run test:e2e : parcours navigateur pertinents
+  Vérifier que les tests annoncés ont réellement été exécutés.
+
+## Livraison
+
+Décrire le problème, le comportement obtenu et les validations.
+Signaler les contrôles indisponibles et les limites observées.
+Ne pas déduire une autorisation de merge ou de publication de la création d’une PR.
 ```
 
-Pas :
+Ce modèle ne crée pas de politique de permissions. Configurez séparément les accès dans l’outil et l’environnement. Si le dépôt possède déjà des instructions applicables, harmonisez-les au lieu d’ajouter une seconde source contradictoire.
 
-```markdown
-## Rôle
-Tu es un agent intelligent capable de faire de la revue de code.
-Tu maîtrises plusieurs langages et tu peux aussi écrire de la
-documentation si nécessaire. Tu es rigoureux et professionnel.
+## Adapter les commandes
+
+Une commande doit fonctionner dans le bon répertoire et avec les prérequis nécessaires. Documentez ceux qui ne sont pas évidents : version de Node, navigateur E2E et variables requises, sans valeur secrète.
+
+Ne copiez pas `npm test` si le projet ne définit pas ce script. Ne présentez pas un outil de validation absent comme déjà installé. Pour un générateur OpenAPI, par exemple, utilisez le validateur réellement retenu dans le projet.
+
+## Montrer une restitution attendue
+
+```text
+Changement : le formulaire distingue liste vide et erreur réseau.
+Vérification : build réussi ; scénario nominal et erreur simulée vérifiés.
+Limite : le service distant réel n’a pas été interrogé.
+Point restant : publication selon le processus du projet.
 ```
 
-La première version est précise. La seconde est un CV.
+L’exemple ne doit pas annoncer des résultats fictifs comme des faits exécutés. Dans le fichier d’instructions, identifiez-le comme un format de sortie à remplir avec les observations réelles.
 
-### Objectif
+## Gérer un blocage
 
-Ce que l'agent doit produire concrètement. Formulez-le comme un livrable, pas comme une aspiration.
+Demandez de distinguer information manquante, accès refusé, problème d’environnement et défaut du code. Le système peut poursuivre les travaux indépendants, mais ne doit pas inventer une preuve ni contourner une restriction pour terminer.
 
-```markdown
-## Objectif
-Analyser chaque pull request et produire un rapport listant :
-les problèmes de sécurité, les violations de conventions,
-et les suggestions d'amélioration.
-```
+Un seuil de taille de diff peut servir d’indicateur de revue, pas de garantie. Une petite modification d’autorisation peut être critique ; une grande mise à jour documentaire peut rester simple. Basez l’escalade sur le risque et les capacités réelles de vérification.
 
-### Permissions
+## Rendre les références maintenables
 
-C'est la section la plus sous-estimée. Sans permissions explicites, un agent fera ce qu'il juge pertinent, ce qui inclut parfois modifier des fichiers qu'il ne devrait pas toucher ou prendre des décisions architecturales.
+Réutilisez les documents existants, comme le guide de design, plutôt que recopier les tokens partout. Vérifiez les chemins et demandez la lecture des références nécessaires : un lien n’est pas toujours chargé automatiquement.
 
-```markdown
-## Permissions
-- Lire tous les fichiers du repository
-- Commenter les pull requests
-- Suggérer des modifications de code
-- NE PAS merger de pull request
-- NE PAS modifier directement le code source
-- NE PAS approuver sans avoir vérifié les tests
-```
+<LessonPractice
+  task="Adaptez le modèle à votre checkout et ajoutez un exemple de restitution comportant un contrôle non exécuté."
+  deliverable="Un AGENTS.md relu, avec commandes et références vérifiées."
+  criteria={[
+    'Les règles permanentes sont séparées du ticket d’exercice.',
+    'Le rapport distingue réussite et absence de validation.',
+    'Le fichier ne contient pas de valeur secrète ni de commande inexistante.',
+  ]}
+  solution="Pour un navigateur E2E indisponible, le rapport peut indiquer build réussi, lint réussi, E2E non exécutés avec la cause précise. Il ne doit pas conclure que le parcours fonctionne. Vérifiez que les scripts cités correspondent au manifeste et que les références documentaires existent dans cette branche."
+/>
 
-Les permissions négatives sont aussi importantes que les positives.
+## À retenir
 
-### Critères d'acceptation
+La structure rend les informations trouvables. L’exactitude des commandes, la cohérence des règles et la qualité des preuves restent essentielles.
 
-Chaque critère doit être vérifiable par un humain ou par un outil. "Le code est propre" ne passe pas ce test. "Le linter ne retourne aucune erreur" oui.
+## Sources et mise à jour
 
-```markdown
-## Critères d'acceptation
-- Chaque commentaire cite le fichier et la ligne concernée
-- Les problèmes de sécurité sont classés par sévérité (critique/haute/moyenne/basse)
-- Le rapport se termine par un verdict : APPROVED, CHANGES_REQUESTED, ou NEEDS_DISCUSSION
-- Temps de réponse inférieur à 2 minutes par PR de moins de 500 lignes
-```
+Révision : **5 octobre 2026**.
 
-### Exemples de sorties attendues
-
-Les exemples valent mieux que les descriptions. Montrez exactement le format de sortie que vous attendez.
-
-```markdown
-## Exemples de sorties attendues
-
-### Commentaire sur une faille de sécurité
-**[CRITIQUE] src/auth/login.ts:42**
-Injection SQL possible. Le paramètre `username` est concaténé
-directement dans la requête. Utiliser une requête paramétrée.
-
-### Verdict final
-**CHANGES_REQUESTED**
-2 problèmes critiques, 1 suggestion. Les problèmes de sécurité
-doivent être corrigés avant merge.
-```
-
-### En cas d'incapacité
-
-Un agent qui échoue silencieusement est pire qu'un agent qui ne fait rien. Donnez-lui une porte de sortie explicite.
-
-```markdown
-## En cas d'incapacité
-Si le diff dépasse 2000 lignes ou si le langage n'est pas
-TypeScript/JavaScript, répondre :
-"SKIP: [raison]. Review manuelle recommandée."
-Ne jamais produire une review partielle sans le signaler.
-```
-
-## Exemple complet : agent de code review
-
-```markdown
-# Code Reviewer
-
-## Rôle
-Agent de code review spécialisé en TypeScript et sécurité applicative.
-
-## Objectif
-Analyser chaque pull request et produire un rapport structuré couvrant
-la sécurité, les conventions et la qualité du code.
-
-## Permissions
-- Lire tous les fichiers du repository
-- Commenter les pull requests
-- NE PAS merger ou approuver les PRs
-- NE PAS modifier le code directement
-
-## Critères d'acceptation
-- Chaque commentaire référence fichier:ligne
-- Sévérité classée : critique / haute / moyenne / basse
-- Verdict final : APPROVED | CHANGES_REQUESTED | NEEDS_DISCUSSION
-- Aucune review sur du code non-TypeScript sans le signaler
-
-## Exemples de sorties attendues
-**[HAUTE] src/api/users.ts:87**
-La validation d'email utilise une regex permissive. Utiliser
-la librairie `validator` déjà présente dans le projet.
-
-**Verdict : CHANGES_REQUESTED** - 1 problème haute sévérité.
-
-## En cas d'incapacité
-Si le diff dépasse 2000 lignes : "SKIP: PR trop volumineuse
-pour une review automatique fiable. Review manuelle recommandée."
-```
-
-## Exemple complet : agent de documentation
-
-```markdown
-# Doc Writer
-
-## Rôle
-Agent de documentation technique pour API REST.
-
-## Objectif
-Générer la documentation de chaque endpoint à partir du code source,
-au format OpenAPI 3.0.
-
-## Permissions
-- Lire les fichiers src/routes/** et src/models/**
-- Créer/modifier les fichiers dans docs/api/**
-- NE PAS modifier le code source
-- NE PAS documenter les routes marquées @internal
-
-## Critères d'acceptation
-- Chaque endpoint a : méthode, path, paramètres, body, réponses
-- Les exemples de requête/réponse sont valides (JSON parsable)
-- Les codes d'erreur documentés correspondent au code source
-- Le fichier OpenAPI passe la validation avec swagger-cli validate
-
-## Exemples de sorties attendues
-paths:
-  /users/{id}:
-    get:
-      summary: Récupérer un utilisateur par ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        200:
-          description: Utilisateur trouvé
-        404:
-          description: Utilisateur non trouvé
-
-## En cas d'incapacité
-Si un endpoint utilise un pattern non standard (WebSocket, SSE),
-ajouter un placeholder : "TODO: documentation manuelle requise
-pour [endpoint] - pattern [type] non supporté."
-```
-
-Ces deux exemples suivent la même structure mais servent des objectifs très différents. C'est la force du template : il s'adapte au contexte tout en garantissant que rien d'essentiel n'est oublié.
+- [AGENTS.md : exemples du format](https://github.com/agentsmd/agents.md).
+- [Manifeste du projet](https://github.com/yvan-dev/formation-ia/blob/main/package.json).
+- [Google : revue et documentation](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).

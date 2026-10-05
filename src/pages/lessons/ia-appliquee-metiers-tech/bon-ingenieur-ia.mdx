@@ -1,182 +1,76 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Ce qui différencie un bon ingénieur IA"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "bon-ingenieur-ia"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "mindset-ia"
-  title: "L'IA comme co-pilote, pas comme remplaçant"
-nextLesson: 
-  slug: "fonctionnement-llm"
-  title: "Comment fonctionne un LLM"
+title: 'Le développeur augmenté : compétence et validation'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'bon-ingenieur-ia'
 ---
 
-## Le vrai avantage compétitif
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-L'accès à l'IA est démocratisé. Tout le monde peut ouvrir ChatGPT ou installer Copilot. Ce qui fait la différence, ce n'est pas l'outil. C'est la capacité à l'utiliser correctement.
+Un usage professionnel de l’IA se reconnaît à la qualité du résultat et aux preuves qui l’accompagnent. Produire vite est utile ; livrer une modification compréhensible, vérifiée et adaptée au projet est le véritable objectif.
 
-Un bon ingénieur IA n'est pas celui qui tape le meilleur prompt. C'est celui qui sait quand la réponse est fausse, pourquoi elle est fausse, et comment la corriger.
+## Objectifs de la leçon
 
-## Des connaissances théoriques pour guider l'IA
+- Distinguer exploration rapide et livraison maintenable.
+- Justifier une décision par des contraintes et des preuves.
+- Construire une revue de résultat adaptée au risque.
 
-L'IA génère du code qui fonctionne. Mais "ça fonctionne" n'est pas suffisant en production. Un bon ingénieur a les connaissances pour orienter l'IA dans la bonne direction.
+## Le “vibe coder” vs le développeur augmenté
 
-**Architecture** : Si vous ne comprenez pas les patterns d'architecture (clean architecture, hexagonal, CQRS), vous ne pourrez pas évaluer si la structure proposée par l'IA tient la route à l'échelle.
+Le terme « vibe coding » décrit couramment une pratique où l’on pilote la génération par demandes successives, parfois sans lire ou comprendre tout le code produit. Cette approche peut servir à explorer une idée dans un prototype isolé. Elle ne fournit pas, à elle seule, les garanties attendues pour un logiciel maintenu.
 
-**Design patterns** : L'IA connaît les patterns. Elle les applique parfois au mauvais endroit. Savoir quand un Strategy est pertinent et quand un simple `if` suffit, c'est votre travail.
+Le **développeur augmenté** utilise l’IA tout en gardant la capacité d’expliquer, de vérifier et de modifier le résultat. Il n’est pas défini par l’outil utilisé ni par la longueur de son prompt.
 
-**Complexité algorithmique** : L'IA peut générer un algorithme en O(n³) là où un O(n log n) existe. Si vous ne savez pas lire la complexité, vous ne verrez pas le problème.
+| Question                 | Exploration rapide              | Développeur augmenté                   |
+| ------------------------ | ------------------------------- | -------------------------------------- |
+| Le besoin est-il clair ? | Une intention initiale          | Des critères de réussite explicites    |
+| Le code est-il compris ? | Compréhension parfois partielle | Comportement et compromis expliqués    |
+| Comment vérifier ?       | Essai du cas nominal            | Tests utiles, cas limites et revue     |
+| Que livre-t-on ?         | Un prototype pour apprendre     | Un changement maintenable et documenté |
 
-**Sécurité** : Injections SQL, XSS, gestion des secrets. L'IA génère régulièrement du code vulnérable. Vos connaissances en sécurité sont votre filet de protection.
+Le contexte compte. Un prototype qui traite des données réelles ou qui est ouvert au public a déjà des risques à gérer. Le qualifier de « jetable » ne dispense pas de protéger les accès et les secrets.
 
-> Plus vos connaissances sont solides, plus vous tirez de valeur de l'IA. C'est contre-intuitif : l'IA bénéficie davantage aux experts qu'aux débutants.
+## Les connaissances qui guident la décision
 
-## Valider, critiquer, corriger
+Vous n’avez pas besoin de connaître tous les patterns d’architecture. Vous devez comprendre ceux que votre changement utilise et savoir pourquoi ils sont nécessaires. Une abstraction n’est pas une amélioration automatique ; un simple traitement peut suffire.
 
-L'IA vous propose du code. Votre travail commence à ce moment-là.
+Pour une authentification, distinguez décodage et validation d’un jeton. Pour une requête, distinguez paramètres liés et concaténation. Pour une interface, vérifiez le clavier, les états d’erreur et les petits écrans. Ces compétences permettent de reconnaître un résultat plausible mais incomplet.
 
-### Ce que vous devez vérifier
+## Cas concret : limiter un endpoint
 
-- **La logique métier est-elle correcte ?** Le code fait-il ce qu'on lui demande, pas juste quelque chose qui y ressemble ?
-- **Les edge cases sont-ils gérés ?** L'IA oublie souvent les cas limites : valeurs nulles, listes vides, timeouts, erreurs réseau.
-- **Les conventions du projet sont-elles respectées ?** Nommage, structure de fichiers, patterns utilisés dans la codebase.
-- **La performance est-elle acceptable ?** Requêtes N+1, chargement de données inutiles, allocations excessives.
-- **La sécurité est-elle assurée ?** Validation des entrées, gestion des permissions, pas de secrets en dur.
+Le modèle propose une limite de requêtes stockée dans une variable globale du serveur. Le code fonctionne avec un seul processus. Sur plusieurs instances, chaque processus possède son compteur : la limite globale attendue n’est plus appliquée.
 
-### Comment critiquer efficacement
+La bonne décision dépend de l’architecture réelle. Pour un prototype local, le stockage en mémoire peut être acceptable si sa limite est documentée. Pour un service réparti, examinez une solution partagée ou un contrôle à la passerelle. Définissez aussi le périmètre de la limite, les réponses d’erreur et le comportement en cas d’indisponibilité.
 
-Ne vous contentez pas de "ça a l'air bien". Posez-vous ces questions :
+## Une boucle de travail professionnelle
 
-1. Est-ce que je comprends chaque ligne ?
-2. Est-ce que j'aurais écrit ça différemment ? Pourquoi ?
-3. Que se passe-t-il si l'input est inattendu ?
-4. Ce code sera-t-il maintenable dans 6 mois ?
+1. **Comprendre** le besoin et les fichiers existants.
+2. **Proposer** une solution avec les hypothèses utiles.
+3. **Vérifier** les comportements et les cas d’échec.
+4. **Relire** le diff, les dépendances et les permissions.
+5. **Livrer** avec une description claire des limites.
 
-## Comprendre le "pourquoi"
+Adaptez les contrôles au risque. Une correction de texte n’exige pas les mêmes vérifications qu’une modification de paiement. Les tests doivent pouvoir détecter un défaut réel ; une assertion qui reproduit exactement l’implémentation apporte peu de confiance.
 
-C'est la différence fondamentale entre utiliser l'IA et être utilisé par l'IA.
-
-**Mauvais** : "J'ai utilisé Claude pour générer le service d'authentification. Ça marche."
-
-**Bon** : "Claude a généré un service d'auth avec JWT et refresh tokens. J'ai modifié la rotation des tokens pour utiliser une stratégie sliding window parce que notre use case nécessite des sessions longues sans re-login."
-
-Dans le premier cas, vous êtes un opérateur de prompt. Dans le second, vous êtes un ingénieur qui utilise un outil. La différence se voit au premier incident en production.
-
-## Le "vibe coder" vs le développeur argumenté
-
-Le terme "vibe coding" désigne le fait de générer du code par IA sans vraiment comprendre ce qu'on produit. Ça fonctionne pour des prototypes et des projets personnels. En production, c'est une bombe à retardement.
-
-| Vibe coder | Développeur argumenté |
-|------------|----------------------|
-| Accepte le premier output | Itère et challenge |
-| Ne peut pas expliquer ses choix | Justifie chaque décision technique |
-| Debug par essai-erreur avec l'IA | Identifie la cause racine |
-| "Ça marche" | "Ça marche parce que..." |
-| Dépend de l'IA pour tout | Utilise l'IA pour accélérer |
-| Panique quand l'IA se trompe | Corrige et continue |
-
-> Le vibe coding est séduisant parce qu'il donne des résultats rapides. Mais la vitesse sans compréhension crée de la dette technique à un rythme jamais vu.
-
-## L'importance de la review et de la pensée critique
-
-### Traitez l'IA comme un junior talentueux
-
-Un junior peut produire du bon code, mais vous ne mergez pas son travail sans review. Appliquez le même standard à l'IA :
-
-- **Relisez tout.** Pas de fast-forward sur le code généré.
-- **Testez les edge cases.** L'IA teste rarement les scénarios limites.
-- **Challengez les choix.** "Pourquoi un useEffect ici et pas un useMemo ?" Posez la question à l'IA, puis évaluez la réponse.
-- **Refactorisez si nécessaire.** Le code généré est souvent verbeux. Simplifiez.
-
-### Les signaux d'alerte
-
-Méfiez-vous quand :
-
-- L'IA génère beaucoup de code que vous ne comprenez pas entièrement
-- Vous acceptez une solution parce que vous n'avez pas de meilleure idée (pas parce qu'elle est bonne)
-- Vous ne pourriez pas debugger le code généré sans redemander à l'IA
-- Vous avez arrêté d'écrire du code vous-même depuis un moment
+<LessonPractice
+  task="Évaluez un limiteur de requêtes en mémoire pour une application déployée sur trois instances."
+  deliverable="Une note courte : problème, solution adaptée et tests indispensables."
+  criteria={[
+    'Le compteur par processus est distingué d’une limite partagée.',
+    'Le choix prend en compte le coût et la disponibilité du stockage.',
+    'Les tests couvrent le dépassement et le comportement en cas de panne.',
+  ]}
+  solution="Un compteur local ne garantit pas une limite commune aux trois instances. Une passerelle ou un stockage partagé peut convenir selon le système. Vérifiez la clé de limitation, l’expiration, les accès concurrents et la réponse prévue en cas de panne ; documentez les compromis plutôt que de présenter une technique comme universelle."
+/>
 
 ## À retenir
 
-Un bon ingénieur IA, c'est d'abord un bon ingénieur. L'IA amplifie vos compétences existantes. Si vos fondamentaux sont solides, l'IA vous rend redoutable. Si vos fondamentaux sont faibles, l'IA masque temporairement le problème, jusqu'au premier incident sérieux.
+Le développeur augmenté transforme une proposition en résultat vérifiable. Il conserve le jugement technique et rend ses décisions compréhensibles pour les personnes qui maintiendront le projet.
 
-Investissez dans vos compétences. L'IA changera, les outils évolueront. Votre capacité à comprendre, analyser et décider restera votre atout principal.
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**.
+
+- [Google Engineering Practices : conception, complexité, tests et documentation](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).
+- [OWASP : risques des applications LLM](https://github.com/OWASP/www-project-top-10-for-large-language-model-applications).
