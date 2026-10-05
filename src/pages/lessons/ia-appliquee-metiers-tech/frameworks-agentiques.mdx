@@ -1,207 +1,85 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Frameworks agentiques — Vue d'ensemble"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "frameworks-agentiques"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "veille-technologique"
-  title: "Maintenir sa veille technologique"
-nextLesson: 
-  slug: "donnees-sensibles"
-  title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
+title: 'Frameworks agentiques : choisir une orchestration'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'frameworks-agentiques'
 ---
 
-## Frameworks agentiques -- Vue d'ensemble
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un agent IA, ce n'est pas juste un chatbot. C'est un LLM qui peut planifier, exécuter des actions, observer les résultats, et itérer jusqu'à atteindre un objectif. Les frameworks agentiques structurent cette boucle. Voyons ce qu'ils apportent et quand ils sont utiles.
+Un framework agentique fournit des primitives pour construire une boucle d’action : appels de modèle, outils, état, interruptions ou traces. Il ne définit pas automatiquement le bon besoin ni les contrôles adaptés à votre produit.
 
-### Qu'est-ce qu'un framework agentique ?
+## Objectifs de la leçon
 
-Un framework agentique fournit une architecture pour orchestrer un ou plusieurs agents IA. Au lieu de faire un seul appel "prompt entrant, réponse sortante", on construit une boucle :
+- Distinguer méthode de travail, outil de développement et framework d’exécution.
+- Comparer des primitives d’orchestration sur un besoin concret.
+- Repérer les coûts et risques ajoutés par l’architecture.
 
-1. **Planifier** : l'agent décompose l'objectif en étapes
-2. **Exécuter** : il réalise une action (appel d'outil, écriture de code, recherche)
-3. **Observer** : il analyse le résultat
-4. **Itérer** : il ajuste son plan et recommence
+## Trois notions différentes
 
-C'est la différence entre demander "écris-moi une fonction de tri" (un aller-retour) et demander "construis un module d'authentification complet, teste-le, et corrige les bugs" (une boucle agentique).
+Une **méthode de travail** structure spécification, plan et revue. Un **outil de développement** aide à modifier un dépôt. Un **framework d’exécution** fournit du code et des mécanismes pour construire votre application agentique.
 
-### BMAD (Breakthrough Method of Agile Development)
+Les noms de méthodes communautaires ne désignent pas nécessairement des standards stables. Vérifiez leur dépôt et leur version avant d’attribuer un acronyme ou un comportement. Une suite d’étapes inventée pour un exercice doit être présentée comme une convention pédagogique.
 
-BMAD est un framework qui structure la collaboration entre un humain et des agents IA spécialisés.
+## Des frameworks officiels à comparer
 
-**Principes fondamentaux :**
+**Repères vérifiés le 4 octobre 2026**, à confirmer pour les versions utilisées :
 
-- **Rôles spécialisés.** Chaque agent a un persona défini (architecte, développeur, testeur, PM). Chaque persona a des instructions précises et un périmètre clair.
-- **Workflow séquentiel.** Le travail passe d'un persona à l'autre dans un ordre défini : analyse, conception, implémentation, vérification.
-- **Artifacts.** Chaque étape produit un document structuré (spec, plan, code) qui sert d'input à l'étape suivante.
-- **Human-in-the-loop.** L'humain valide à chaque transition entre personas.
+| Projet                    | Primitives mises en avant par son dépôt                   | Question de choix                                                 |
+| ------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
+| OpenAI Agents SDK         | Agents, outils, handoffs, guardrails, sessions et traces  | Quelles fonctions et intégrations correspondent au service ?      |
+| LangGraph                 | Graphes d’état, exécution durable, mémoire et supervision | Faut-il maîtriser explicitement les transitions et la reprise ?   |
+| Microsoft Agent Framework | Construction et orchestration d’agents et workflows       | Quelles intégrations et contraintes de langage sont nécessaires ? |
 
-BMAD est adapté aux projets où la traçabilité et la rigueur du processus comptent autant que le résultat.
+Ce tableau ne classe pas les performances. Testez l’installation, l’API de la version retenue, l’observabilité et les cas d’échec. Une fonction citée dans un README peut demander une configuration supplémentaire.
 
-### GSD (Get Stuff Done)
+## Ne pas ajouter un framework sans besoin
 
-GSD prend le contrepied de BMAD : moins de cérémonie, plus d'exécution.
+Pour un appel unique qui résume un document fictif, une intégration directe peut suffire. Un workflow interrompable, avec plusieurs outils et une reprise durable, peut justifier un framework.
 
-**Principes fondamentaux :**
+L’architecture doit rendre explicites l’état, les transitions, les erreurs et les décisions humaines. Si ces éléments restent implicites, un framework peut ajouter du code sans améliorer la maîtrise du système.
 
-- **Pragmatisme.** On va droit au but. Pas de documentation excessive, pas de personas complexes.
-- **Itération rapide.** Cycle court : prompt, résultat, ajustement. On ne planifie pas tout d'avance.
-- **Un seul agent.** Pas de multi-agents : un LLM, des outils, et un humain qui pilote.
-- **Feedback immédiat.** L'agent exécute, montre le résultat, l'humain corrige la direction.
+## Cas concret : analyser puis préparer une réponse
 
-GSD fonctionne bien pour le prototypage, les taches bien définies, et les équipes qui préfèrent l'agilité à la structure.
+Un workflow récupère des documents autorisés, produit un brouillon et demande une décision avant un envoi externe. La récupération, la génération et l’envoi sont trois étapes distinctes.
 
-### Le Ralph Loop
+L’interruption doit persister l’état et présenter le destinataire, le contenu et les pièces jointes réellement proposés. Lors de la reprise, le contrôle doit empêcher l’envoi d’un contenu différent de celui approuvé. En cas de timeout, vérifiez si l’envoi a eu lieu avant de réessayer.
 
-Le Ralph Loop est un pattern d'exécution agentique qui formalise la boucle "réfléchir, agir, apprendre".
+## Les contrôles à prévoir
 
-**Le cycle :**
+- **Permissions** : filtrage des ressources et validation auprès de chaque outil.
+- **Budget** : nombre d’appels, coût, temps et conditions d’arrêt.
+- **Idempotence** : reprise sans duplication des effets externes.
+- **Observabilité** : étapes, erreurs et décisions, sans secrets dans les traces.
+- **Évaluation** : cas nominaux, erreurs d’outil et contenu hostile.
 
-1. **Read** : l'agent lit le contexte (code existant, specs, erreurs)
-2. **Analyze** : il identifie ce qui doit changer et pourquoi
-3. **Plan** : il propose un plan d'action concret
-4. **Execute** : il implémente le plan
-5. **Verify** : il vérifie que le résultat est correct (tests, build, review)
+Les guardrails et hooks peuvent participer à ces contrôles ; leur portée dépend de l’implémentation. Ils ne constituent pas une garantie universelle de sécurité. Les instructions textuelles ne remplacent pas le contrôle d’accès.
 
-Si la vérification échoue, l'agent revient à l'étape Read avec le nouveau contexte (message d'erreur, test qui échoue) et recommence.
+## Un ou plusieurs agents ?
 
-**Cas d'application typiques :**
+Plusieurs agents peuvent aider à séparer des responsabilités ou à traiter des sous-tâches indépendantes. Ils ajoutent aussi coordination, coût et risques de conflit. Commencez par la solution la plus simple qui satisfait le besoin, puis justifiez une séparation par une mesure ou une contrainte réelle.
 
-- Correction de bugs complexes (le bug guide l'itération)
-- Refactoring progressif (chaque étape est vérifiée avant de continuer)
-- Implémentation de features multi-fichiers (l'agent adapte son plan au fur et à mesure)
+<LessonPractice
+  task="Concevez un workflow documentaire qui prépare un email mais attend une validation avant son envoi."
+  deliverable="Un diagramme d’étapes et une grille de critères pour comparer deux frameworks."
+  criteria={[
+    'L’étape d’envoi est distincte de la génération.',
+    'L’état permet une reprise et la prévention des doublons.',
+    'Les données sensibles sont exclues des traces non nécessaires.',
+  ]}
+  solution="Le flux peut être : récupérer avec droits → rédiger → présenter l’action → attendre → valider à nouveau les paramètres → envoyer → enregistrer le statut. Comparez la persistance, les interruptions, les contrôles d’outil et la gestion d’un timeout. Un simple message du modèle ‘je demande confirmation’ ne suffit pas à arrêter un outil déjà exécuté."
+/>
 
-### Skills, agents, hooks : les concepts fondamentaux
+## À retenir
 
-Derrière les noms de frameworks, on retrouve les mêmes briques de base.
+Choisissez un framework pour les mécanismes dont vous avez besoin. Gardez les comportements, les permissions et les conditions d’arrêt explicites.
 
-#### Skills (compétences)
+## Sources et mise à jour
 
-Un skill est une capacité encapsulée qu'un agent peut utiliser. Par exemple :
+Révision : **4 octobre 2026**.
 
-- Lire un fichier
-- Exécuter une commande shell
-- Faire une recherche web
-- Appeler une API externe
-
-Les skills sont modulaires. Vous pouvez en ajouter, en retirer, en combiner selon le cas d'usage.
-
-#### Agents
-
-Un agent combine un LLM, un system prompt (qui définit son rôle), et un ensemble de skills. L'agent a un objectif et utilise ses skills pour l'atteindre.
-
-Les architectures multi-agents ajoutent un agent orchestrateur qui délègue à des agents spécialisés. C'est plus puissant, mais aussi plus complexe à debugger.
-
-#### Hooks
-
-Les hooks sont des points d'interception dans le cycle de vie de l'agent. Ils permettent de :
-
-- **Pré-traiter** : valider ou enrichir un prompt avant qu'il soit envoyé
-- **Post-traiter** : vérifier ou logger une action après exécution
-- **Intercepter** : bloquer certaines actions (sécurité, permissions)
-
-Les hooks rendent les agents prévisibles et contrôlables, ce qui est indispensable en production.
-
-### Framework vs prompt simple : comment choisir ?
-
-La question la plus pragmatique. Utilisez ce tableau.
-
-| Situation | Approche recommandée |
-|-----------|---------------------|
-| Question ponctuelle, réponse en un coup | Prompt simple |
-| Tache bien définie, un seul fichier | Prompt simple |
-| Tache multi-étapes avec vérification | Framework léger (Ralph Loop) |
-| Projet structuré avec plusieurs rôles | Framework complet (BMAD) |
-| Prototypage rapide | GSD |
-| Pipeline automatisé en production | Framework + hooks |
-
-**La règle d'or :** commencez par le prompt simple. Si vous vous retrouvez à enchainer manuellement 5+ prompts pour une tache, c'est le moment de passer à un framework.
-
-Les frameworks ajoutent de la complexité. Cette complexité n'est justifiée que quand elle résout un vrai problème : coordination, traçabilité, fiabilité, ou autonomie.
-
-### En résumé
-
-- Un framework agentique structure la boucle planifier-exécuter-observer-itérer.
-- BMAD mise sur la rigueur et les rôles spécialisés, GSD sur la rapidité d'exécution.
-- Le Ralph Loop formalise le cycle read-analyze-plan-execute-verify.
-- Skills, agents et hooks sont les briques universelles de tout framework.
-- Commencez simple. Passez au framework quand la complexité de la tache le justifie.
+- [OpenAI Agents SDK](https://github.com/openai/openai-agents-python).
+- [LangGraph](https://github.com/langchain-ai/langgraph).
+- [Microsoft Agent Framework](https://github.com/microsoft/agent-framework).
+- [OWASP : défenses spécifiques aux agents](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md).

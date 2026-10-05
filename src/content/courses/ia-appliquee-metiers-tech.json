@@ -1,17 +1,17 @@
 {
   "title": "IA appliquée aux métiers tech",
   "level": "Intermédiaire",
-  "description": "Parcours d'accompagnement pour structurer un workflow développeur assisté par IA: cadrage, production de code, validation et amélioration continue.",
-  "image": "/formation-ia/images/course-ia.svg",
-  "publicCible": "Collègues tech: développement, architecture, DevOps, QA, produit et profils techniques qui veulent adopter l'IA de façon pragmatique.",
+  "description": "Un parcours pratique pour cadrer une tâche, produire avec l’IA, vérifier le résultat et déployer avec une supervision adaptée.",
+  "image": "/formation-ia/favicon.svg",
+  "publicCible": "Développement, architecture, DevOps, QA et produit : des équipes qui veulent utiliser l’IA sur des projets concrets.",
   "prerequis": "Aucun prérequis en IA. Une expérience projet côté tech suffit.",
   "format": "Ateliers guidés, cas concrets et exercices d'équipe. Les modules non opérationnels sont indiqués comme à venir.",
-  "livrableFinal": "Un plan d'adoption IA d'équipe et un socle AGENT.md exploitable sur vos projets.",
+  "livrableFinal": "Un dossier d’adoption IA d’équipe et un fichier AGENTS.md vérifié sur un projet réel.",
   "objectifsGlobaux": [
-    "Adopter un workflow développeur IA concret dès les premières semaines",
-    "Rédiger des prompts et spécifications qui réduisent les allers-retours",
-    "Mettre en place des points de validation humaine sur les étapes critiques",
-    "Préparer la montée en maturité vers les niveaux 3, 4 puis 5"
+    "Choisir un usage IA et mesurer sa qualité sur des tâches représentatives",
+    "Rédiger des prompts et spécifications vérifiables",
+    "Contrôler les données, les permissions et les étapes sensibles",
+    "Livrer un changement relu et documenter les limites observées"
   ],
   "modules": [
     {
@@ -25,10 +25,22 @@
       ],
       "livrable": "Auto-positionnement + objectif personnel de progression",
       "lessons": [
-        { "slug": "panorama-ia", "title": "Panorama IA 2026" },
-        { "slug": "niveaux-maturite", "title": "Les 5 niveaux de maturité IA" },
-        { "slug": "mindset-ia", "title": "L'IA comme copilote, pas comme remplaçant" },
-        { "slug": "bon-ingenieur-ia", "title": "Ce qui différencie un bon usage de l'IA" }
+        {
+          "slug": "panorama-ia",
+          "title": "Panorama IA : choisir un système en 2026"
+        },
+        {
+          "slug": "niveaux-maturite",
+          "title": "Les 5 niveaux de maturité IA"
+        },
+        {
+          "slug": "mindset-ia",
+          "title": "Travailler avec l’IA en gardant son jugement"
+        },
+        {
+          "slug": "bon-ingenieur-ia",
+          "title": "Le développeur augmenté : compétence et validation"
+        }
       ]
     },
     {
@@ -45,11 +57,26 @@
         "Identifier les causes d'hallucination sur des cas réels"
       ],
       "lessons": [
-        { "slug": "fonctionnement-llm", "title": "Comment fonctionne un LLM" },
-        { "slug": "memoire-llm", "title": "Mémoire des LLMs: contexte et context rot" },
-        { "slug": "hallucinations", "title": "Hallucinations: causes, détection, réduction" },
-        { "slug": "bases-prompt", "title": "Les bases du prompt" },
-        { "slug": "system-prompts", "title": "System prompts" }
+        {
+          "slug": "fonctionnement-llm",
+          "title": "Comment fonctionne un LLM"
+        },
+        {
+          "slug": "memoire-llm",
+          "title": "Mémoire des LLM : contexte et récupération"
+        },
+        {
+          "slug": "hallucinations",
+          "title": "Hallucinations: causes, détection, réduction"
+        },
+        {
+          "slug": "bases-prompt",
+          "title": "Les bases du prompt"
+        },
+        {
+          "slug": "system-prompts",
+          "title": "Instructions système et limites de confiance"
+        }
       ]
     },
     {
@@ -66,11 +93,26 @@
         "Mesurer le gain et les limites sur un vrai ticket"
       ],
       "lessons": [
-        { "slug": "prompting-dev", "title": "L'art du prompting en développement" },
-        { "slug": "plan-first", "title": "Le principe plan-first" },
-        { "slug": "spec-driven-dev", "title": "Spec-driven development avec l'IA" },
-        { "slug": "workflow-complet", "title": "Exemple de workflow complet" },
-        { "slug": "assistant-vs-agent", "title": "De l'assistant à l'agent" }
+        {
+          "slug": "prompting-dev",
+          "title": "L'art du prompting en développement"
+        },
+        {
+          "slug": "plan-first",
+          "title": "Le principe plan-first"
+        },
+        {
+          "slug": "spec-driven-dev",
+          "title": "Spec-driven development avec l'IA"
+        },
+        {
+          "slug": "workflow-complet",
+          "title": "Exemple de workflow complet"
+        },
+        {
+          "slug": "assistant-vs-agent",
+          "title": "De l'assistant à l'agent"
+        }
       ]
     },
     {
@@ -82,10 +124,22 @@
         "Construire un benchmark simple et actionnable"
       ],
       "lessons": [
-        { "slug": "ecosysteme-outils", "title": "Écosystème des outils IA" },
-        { "slug": "stack-retenue", "title": "La stack retenue pour ce projet" },
-        { "slug": "veille-technologique", "title": "Maintenir sa veille technologique" },
-        { "slug": "frameworks-agentiques", "title": "Frameworks agentiques: vue d'ensemble" }
+        {
+          "slug": "ecosysteme-outils",
+          "title": "Écosystème des outils IA"
+        },
+        {
+          "slug": "stack-retenue",
+          "title": "La stack retenue pour ce projet"
+        },
+        {
+          "slug": "veille-technologique",
+          "title": "Maintenir sa veille technologique"
+        },
+        {
+          "slug": "frameworks-agentiques",
+          "title": "Frameworks agentiques : choisir une orchestration"
+        }
       ]
     },
     {
@@ -98,23 +152,45 @@
         "Sécuriser les workflows IA en équipe"
       ],
       "lessons": [
-        { "slug": "donnees-sensibles", "title": "Données sensibles: ce qu'il faut exclure des prompts" },
-        { "slug": "prompt-injection", "title": "Prompt injection" },
-        { "slug": "hallucinations-critiques", "title": "Hallucinations en contexte critique" },
-        { "slug": "biais-limitations", "title": "Biais et limitations des modèles" },
-        { "slug": "responsabilite-legal", "title": "Responsabilité et cadre légal" }
+        {
+          "slug": "donnees-sensibles",
+          "title": "Données sensibles: ce qu'il faut exclure des prompts"
+        },
+        {
+          "slug": "prompt-injection",
+          "title": "Prompt injection"
+        },
+        {
+          "slug": "hallucinations-critiques",
+          "title": "Hallucinations en contexte critique"
+        },
+        {
+          "slug": "biais-limitations",
+          "title": "Biais et limitations des modèles"
+        },
+        {
+          "slug": "responsabilite-legal",
+          "title": "Responsabilité, données et cadre légal"
+        }
       ]
     },
     {
       "released": false,
-      "title": "Approche spec-driven avancée (à venir)",
+      "title": "Méthodes avancées : prompts et spécifications (à venir)",
       "public": "profils techniques",
       "objectifs": [
         "Industrialiser les specs avec IA sur des projets complexes",
         "Améliorer la qualité de delivery sur plusieurs cycles"
       ],
       "lessons": [
-        { "slug": "approche-sommaire", "title": "Approche par sommaire" }
+        {
+          "slug": "techniques-avancees-prompt",
+          "title": "Techniques avancées de prompting"
+        },
+        {
+          "slug": "approche-sommaire",
+          "title": "Approche par sommaire"
+        }
       ]
     },
     {
@@ -126,22 +202,37 @@
         "Concevoir des garde-fous opérationnels"
       ],
       "lessons": [
-        { "slug": "concevoir-agent", "title": "Concevoir un bon agent" },
-        { "slug": "human-in-the-loop", "title": "Human in the Loop" }
+        {
+          "slug": "concevoir-agent",
+          "title": "Concevoir un bon agent"
+        },
+        {
+          "slug": "human-in-the-loop",
+          "title": "Human in the Loop : superviser les actions"
+        }
       ]
     },
     {
       "released": false,
-      "title": "Projet capstone AGENT.md (à venir)",
+      "title": "Projet final : construire son AGENTS.md (à venir)",
       "public": "profils techniques",
       "objectifs": [
-        "Formaliser un AGENT.md opérationnel",
-        "Mettre en place une boucle d'amélioration continue"
+        "Formaliser un AGENTS.md adapté au dépôt et à l’outil utilisé",
+        "Évaluer les instructions avec des cas nominaux, des erreurs et du contenu non fiable"
       ],
       "lessons": [
-        { "slug": "regles-agent-md", "title": "Règles de construction d'un AGENT.md efficace" },
-        { "slug": "structure-agent-md", "title": "Structure recommandée d'un AGENT.md" },
-        { "slug": "bonnes-pratiques-agent-md", "title": "Bonnes pratiques et exemples" }
+        {
+          "slug": "regles-agent-md",
+          "title": "Règles de construction d’un AGENTS.md efficace"
+        },
+        {
+          "slug": "structure-agent-md",
+          "title": "Structure recommandée d’un AGENTS.md"
+        },
+        {
+          "slug": "bonnes-pratiques-agent-md",
+          "title": "Bonnes pratiques et exemples"
+        }
       ]
     }
   ]

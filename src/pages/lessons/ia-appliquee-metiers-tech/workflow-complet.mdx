@@ -1,286 +1,90 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Exemple de workflow complet"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "workflow-complet"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "spec-driven-dev"
-  title: "Spec-Driven Development avec l'IA"
-nextLesson: 
-  slug: "approche-sommaire"
-  title: "Approche par sommaire"
+title: 'Exemple de workflow complet'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'workflow-complet'
 ---
 
-## Exemple de workflow complet
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Les leçons précédentes ont présenté le Plan First et le Spec-Driven Development comme des principes. Cette leçon les assemble en un workflow concret, étape par étape, appliqué à une feature réelle.
+Cette leçon réunit cadrage, planification, exécution assistée et revue. Le cas étudié est un système de notifications dans une application SaaS fictive ; il ne décrit pas un backend déjà présent dans le site de formation.
 
-### Le workflow en 7 étapes
+## Objectifs de la leçon
 
-```text
-1. Définir l'objectif métier
-2. Générer un plan détaillé (avec l'IA)
-3. Valider et affiner le plan
-4. Définir les critères d'acceptation
-5. Implémenter module par module
-6. Tester et valider chaque étape
-7. Documenter les décisions
-```
+- Conduire une tâche complète avec des critères définis avant le code.
+- Vérifier les autorisations et les cas d’échec.
+- Produire une livraison relisible avec des limites explicites.
 
-### Feature exemple : système de notifications in-app
+## 1. Cadrer le besoin
 
-On va suivre le workflow complet pour ajouter un système de notifications in-app à une application SaaS existante (Node.js, Express, TypeScript, Prisma, PostgreSQL, React frontend).
+L’utilisateur souhaite consulter ses notifications et les marquer comme lues. Précisez le périmètre : liste, statut de lecture et état vide. L’envoi d’email, les notifications push et une refonte du système d’événements restent hors périmètre.
 
-### Etape 1 : Définir l'objectif métier
+Les critères principaux sont définis maintenant : seules les notifications du compte connecté sont visibles ; la liste possède un ordre stable ; marquer une notification déjà lue ne crée pas d’effet supplémentaire ; les états de chargement, d’erreur et de liste vide sont compréhensibles.
 
-Avant de toucher à la technique, on clarifie le besoin.
+## 2. Lire le projet et préparer le plan
+
+L’agent lit l’authentification, un endpoint analogue, le composant de liste et les tests existants. Il indique les fichiers observés et les inconnues. Le plan doit couvrir API, stockage et interface seulement si ces couches existent réellement dans le projet.
 
 ```text
-Prompt :
-"Je veux ajouter un système de notifications in-app à mon SaaS.
-Les utilisateurs doivent voir un badge avec le nombre de notifications
-non lues, accéder à une liste de notifications, et les marquer comme lues.
-Les notifications sont déclenchées par des événements serveur
-(nouveau commentaire, invitation à un projet, changement de statut).
-
-Quels sont les cas d'usage principaux que je dois couvrir ?
-Y a-t-il des cas limites auxquels je ne pense pas ?"
+Lire le contrat d’autorisation et la pagination existante.
+Ajouter la consultation des notifications du compte connecté.
+Ajouter une action idempotente pour marquer comme lu.
+Construire les états accessibles de la liste.
+Vérifier autorisations, pagination, erreurs et comportements utilisateur.
 ```
 
-Le point important ici : on ne demande pas du code. On demande à l'IA de valider notre compréhension du besoin et d'identifier les angles morts.
+Ne créez pas un nouveau service ou une dépendance si les primitives existantes répondent au besoin. L’équipe valide les décisions sensibles et les éventuelles modifications de périmètre.
 
-**Checkpoint** : l'IA va probablement mentionner la pagination, la suppression, les préférences de notification, le temps réel. Décidez ce qui entre dans le scope v1 et ce qui est reporté.
+## 3. Implémenter par étapes vérifiables
 
-### Etape 2 : Générer un plan détaillé
+Commencez par le comportement serveur et ses contrôles si une API est concernée. L’identité doit venir du mécanisme d’authentification ; un identifiant transmis par le client ou proposé par le modèle ne prouve pas une autorisation.
 
-```text
-Prompt :
-"Voici le scope v1 retenu :
-- CRUD notifications côté API
-- Badge de compteur côté frontend
-- Liste paginée avec marquage lu/non lu
-- Pas de temps réel pour la v1 (polling toutes les 30s)
-- Pas de préférences utilisateur pour la v1
+Pour la pagination, un tri par date peut être ambigu si plusieurs notifications partagent la même date. Utilisez un ordre déterministe avec un départage adapté, et un curseur cohérent avec cet ordre lorsque le contrat le prévoit.
 
-Contexte technique :
-[Insérer le bloc de contexte projet : stack, conventions, architecture]
+Le statut de lecture doit éviter les effets répétés. Si la notification déclenche une autre action, examinez les doublons et la stratégie d’idempotence.
 
-Propose un plan d'implémentation détaillé avec :
-- Les fichiers à créer ou modifier
-- L'ordre d'implémentation
-- Les dépendances entre étapes
-- Les risques identifiés"
-```
+## 4. Vérifier le contrat
 
-**Checkpoint** : le plan doit inclure le schéma de base de données, les endpoints API, les services, et les composants frontend. S'il manque un de ces éléments, demandez à l'IA de compléter.
+| Scénario                        | Résultat attendu                            |
+| ------------------------------- | ------------------------------------------- |
+| Compte A consulte sa liste      | Notifications de A uniquement               |
+| A cible une notification de B   | Accès refusé sans divulgation               |
+| Deux notifications de même date | Ordre et pagination déterministes           |
+| Marquer deux fois comme lu      | État final identique, aucun doublon d’effet |
+| Réseau indisponible             | Message d’erreur et possibilité de reprise  |
+| Liste vide                      | Message distinct d’une erreur               |
 
-### Etape 3 : Valider et affiner le plan
+Exécutez les contrôles pertinents et consignez leur statut. Si une actualisation périodique est retenue, vérifiez qu’elle ne multiplie pas les requêtes inutilement, notamment lorsque la page est masquée, et qu’elle possède une gestion d’échec.
 
-C'est l'étape la plus sous-estimée. On challenge chaque décision du plan.
+## 5. Relire et livrer
 
-```text
-Prompt :
-"Questions sur le plan :
-1. Pourquoi une table séparée plutôt qu'un champ JSON
-   sur la table User ?
-2. Le polling à 30s va générer beaucoup de requêtes.
-   As-tu prévu un mécanisme de cache ?
-3. L'endpoint de listing utilise de l'offset pagination.
-   Pourquoi pas du cursor-based ?
-4. Je ne vois pas de migration Prisma dans le plan.
-   Ajoute-la."
-```
+La revue confronte le diff au besoin : autorisations, complexité, accessibilité, dépendances et cas limites. Un test réussi ne dispense pas de cette lecture. Un défaut de sécurité ou un obstacle sérieux à la maintenance doit être corrigé avant livraison.
 
-Itérez jusqu'à ce que le plan reflète exactement ce que vous voulez. Deux à trois allers-retours suffisent en général. Si le plan nécessite plus de cinq itérations, c'est un signal que le scope est trop large ou trop flou.
+La PR explique le problème, le comportement obtenu, les validations et les limites. Le merge ou le déploiement suit les autorisations et les règles du projet. Préparer une PR déjà demandée n’exige pas une confirmation supplémentaire.
 
-**Checkpoint** : le plan final doit être stable. Plus de questions ouvertes, plus de "on verra".
+## 6. Observer le résultat
 
-### Etape 4 : Définir les critères d'acceptation
+Après livraison autorisée, surveillez les erreurs, la latence et les effets indésirables selon le système. Mesurez le temps complet, y compris les corrections. Une conclusion doit porter sur les tâches réellement évaluées, sans généraliser un essai à tout le développement.
 
-Les critères d'acceptation sont le filet de sécurité. Ils définissent quand c'est "fini".
+<LessonPractice
+  task="Relisez un plan de notifications qui teste seulement ‘la liste s’affiche’ et ‘le bouton lu fonctionne’."
+  deliverable="Une matrice de test corrigée et trois points de revue prioritaires."
+  criteria={[
+    'L’accès croisé entre deux comptes est testé.',
+    'La pagination possède un cas d’égalité de date.',
+    'Les doubles actions et les erreurs réseau sont couverts.',
+  ]}
+  solution="Ajoutez A/B pour l’autorisation, plusieurs notifications avec une date identique pour la pagination et deux demandes identiques pour l’idempotence. Relisez d’abord le filtrage par compte, l’ordre du curseur et les états accessibles. Un simple rendu de liste peut réussir même si les données d’un autre compte sont exposées."
+/>
 
-```text
-Prompt :
-"À partir du plan validé, génère les critères d'acceptation
-pour chaque module. Utilise le format Given/When/Then.
-Couvre les cas nominaux et les cas d'erreur."
-```
+## À retenir
 
-Résultat attendu :
+Un workflow professionnel relie chaque étape aux critères initiaux et à une preuve. La vitesse de génération ne mesure pas, à elle seule, la qualité de la livraison.
 
-```text
-## API - GET /api/notifications
+## Sources et mise à jour
 
-- Given: un utilisateur authentifié avec 5 notifications
-  When: GET /api/notifications?limit=3
-  Then: retourne 3 notifications triées par date décroissante
-        avec un champ hasMore=true
+Révision : **4 octobre 2026**.
 
-- Given: un utilisateur non authentifié
-  When: GET /api/notifications
-  Then: retourne 401
-
-- Given: un utilisateur avec 0 notifications
-  When: GET /api/notifications
-  Then: retourne un tableau vide avec hasMore=false
-```
-
-**Checkpoint** : chaque critère sera traduit en test. Si un critère est ambigu, il produira un test ambigu.
-
-### Etape 5 : Implémenter module par module
-
-On ne demande jamais "implémente tout". On découpe et on avance étape par étape.
-
-```text
-Prompt (étape 5a - schéma) :
-"Implémente l'étape 1 du plan : la migration Prisma.
-Crée le modèle Notification avec les champs définis dans le plan.
-Suis les conventions du schéma existant."
-
-Prompt (étape 5b - service) :
-"Implémente l'étape 2 : le service NotificationService.
-Référence : plan validé, critères d'acceptation du module API.
-Utilise le pattern repository existant dans le projet."
-
-Prompt (étape 5c - controller) :
-"Implémente l'étape 3 : le controller et les routes.
-Le service est déjà implémenté. Utilise les schémas Zod
-pour la validation des entrées."
-```
-
-**Checkpoint** : à chaque étape, relisez le code généré. Vérifiez qu'il correspond au plan. Si l'IA a pris une liberté (ajout d'un champ, changement de signature), corrigez immédiatement.
-
-### Etape 6 : Tester et valider chaque étape
-
-Les tests se basent directement sur les critères d'acceptation de l'étape 4.
-
-```text
-Prompt :
-"Écris les tests d'intégration pour GET /api/notifications.
-Utilise les critères d'acceptation suivants comme cas de test :
-[coller les critères de l'étape 4]
-
-Stack de test : Vitest + supertest.
-Utilise le helper de test existant pour créer des utilisateurs
-et des tokens d'authentification."
-```
-
-**Checkpoint** : les tests passent. Si un test échoue, le problème est soit dans le code, soit dans le critère d'acceptation. Identifiez lequel avant de corriger.
-
-### Etape 7 : Documenter les décisions
-
-Les décisions prises pendant le processus ont de la valeur. Capturez-les.
-
-```text
-Prompt :
-"Résume les décisions techniques prises pour le système
-de notifications :
-- Choix faits et pourquoi
-- Alternatives écartées et pourquoi
-- Limitations connues de la v1
-- Points d'attention pour la v2
-
-Format : une ADR (Architecture Decision Record) concise."
-```
-
-Le résultat est un document qui explique le "pourquoi" derrière le "quoi". Dans six mois, quand quelqu'un demandera pourquoi on utilise du polling au lieu du temps réel, la réponse est dans l'ADR.
-
-### Quand itérer vs quand avancer
-
-| Signal | Action |
-|--------|--------|
-| L'IA a fait un choix non couvert par le plan | Stop. Mettez à jour le plan, puis continuez. |
-| Un test échoue sur un cas non prévu | Ajoutez le cas aux critères d'acceptation, puis corrigez. |
-| Le code fonctionne mais la structure ne plaît pas | Avancez. Refactorez après que tous les tests passent. |
-| Vous avez un doute sur la sécurité | Stop. Clarifiez avant de continuer. |
-| L'implémentation est "assez bien" | Avancez. Le perfect est l'ennemi du done. |
-
-### Récapitulatif
-
-Le workflow complet forme une boucle de feedback :
-
-```text
-Objectif --> Plan --> Validation --> Critères --> Implémentation --> Tests --> Documentation
-   ^                                                                            |
-   +------ (si changement de scope ou nouveau besoin) -------------------------+
-```
-
-Chaque étape produit un artefact vérifiable. Le plan est vérifiable par une relecture. Les critères sont vérifiables par des tests. Le code est vérifiable par les critères. La documentation est vérifiable par le plan initial.
+- [Google Engineering Practices : revue de code](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).
+- [OWASP : Authorization Cheat Sheet](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authorization_Cheat_Sheet.md).

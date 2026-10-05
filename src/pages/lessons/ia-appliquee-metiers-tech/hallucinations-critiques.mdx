@@ -1,224 +1,102 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Hallucinations dans un contexte critique"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "hallucinations-critiques"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "prompt-injection"
-  title: "Prompt Injection"
-nextLesson: 
-  slug: "biais-limitations"
-  title: "Biais et limitations des modèles"
+title: 'Hallucinations en contexte critique'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'hallucinations-critiques'
 ---
 
-## Hallucinations dans un contexte critique
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Les hallucinations des LLMs ont été abordées dans le Module 2 comme un phénomène général. Ici, on s'intéresse aux conséquences concrètes quand du code halluciné par un LLM arrive en production. Les risques ne sont pas théoriques : failles de sécurité, dépendances piégées, et vulnérabilités invisibles à la revue de code classique.
+Quand une sortie IA intervient dans une authentification, une autorisation ou une opération sur des données, une erreur plausible peut devenir un incident. Les contrôles doivent cibler le comportement dangereux, pas seulement la compilation.
 
-## Code généré avec des failles de sécurité
+## Objectifs de la leçon
 
-Un LLM produit du code qui *a l'air* correct. Il compile, les tests passent, et la logique semble cohérente. Mais le modèle n'a aucune notion de sécurité en tant que concept. Il reproduit des patterns statistiquement fréquents dans ses données d'entraînement, y compris des patterns vulnérables.
+- Détecter des erreurs de sécurité dans un code généré.
+- Vérifier les dépendances avant installation.
+- Choisir des tests négatifs qui prouvent un refus attendu.
 
-### Exemples de vulnérabilités générées par des LLMs
+## Des erreurs qui passent le cas nominal
 
-**Injection SQL.** Vous demandez une fonction qui interroge une base de données. Le LLM génère :
+Un endpoint peut retourner la bonne réponse et oublier le contrôle du propriétaire. Un jeton valide peut être décodé alors que les jetons falsifiés ne sont jamais rejetés. Le fonctionnement du cas nominal ne prouve donc pas la sécurité.
+
+Les mêmes règles s’appliquent au code humain et au code assisté. Ne supposez ni que le modèle ignore toute notion de sécurité, ni qu’une consigne « code sécurisé » suffit à valider sa sortie.
+
+## Exemple 1 : requête SQL
+
+Exemple Python/SQLite pédagogique. La concaténation d’une entrée dans une requête est dangereuse :
 
 ```python
-def get_user(username):
-    query = f"SELECT * FROM users WHERE name = '{username}'"
-    return db.execute(query)
+# À ne pas utiliser : entrée intégrée au texte SQL
+query = f"SELECT id FROM users WHERE name = '{username}'"
 ```
 
-Le code fonctionne. Il est aussi vulnérable à l'injection SQL. Le LLM a reproduit un pattern fréquent dans ses données d'entraînement (beaucoup de tutoriels utilisent la concaténation de chaînes), au lieu du pattern sécurisé avec des requêtes paramétrées.
+Une requête paramétrée transmet la valeur séparément :
 
-**XSS (Cross-Site Scripting).** Un composant React généré par l'IA :
+```python
+# SQLite : le placeholder dépend du pilote utilisé
+rows = connection.execute(
+    "SELECT id FROM users WHERE name = ?",
+    (username,),
+).fetchall()
+```
+
+Les paramètres protègent les valeurs, pas un nom de table construit dynamiquement. Pour des identifiants SQL variables, utilisez une liste autorisée et les primitives du pilote. Le contrôle d’autorisation reste une étape distincte.
+
+## Exemple 2 : jeton d’authentification
+
+Décoder un JWT permet de lire son contenu ; cela ne prouve pas sa signature. Utilisez une bibliothèque maintenue et sa fonction de vérification, avec algorithmes attendus, expiration, émetteur et audience selon le contrat.
+
+Ne copiez pas un simple `verify(token, secret)` comme solution universelle. Les clés, algorithmes et règles de validation dépendent du système. Après l’authentification, contrôlez aussi le droit d’accéder à la ressource ciblée.
+
+## Exemple 3 : contenu HTML
+
+En React, une interpolation de texte est échappée. Une insertion via `dangerouslySetInnerHTML` demande un traitement spécifique si le contenu n’est pas fiable. Si vous n’avez besoin que d’un nom, rendez du texte :
 
 ```jsx
-function UserGreeting({ name }) {
-    return <div dangerouslySetInnerHTML={{__html: `Bonjour ${name}`}} />;
+function Greeting({ name }) {
+  return <p>Bonjour {name}</p>;
 }
 ```
 
-Le LLM a utilisé `dangerouslySetInnerHTML` parce que ce pattern existe dans ses données d'entraînement. Si `name` contient du JavaScript malveillant, il sera exécuté.
+Si du HTML est nécessaire, choisissez une stratégie de sanitisation adaptée et documentée. Une regex supprimant quelques balises ne constitue pas un parseur HTML sûr.
 
-**Gestion des secrets.** Le modèle peut générer du code qui logge des mots de passe, stocke des tokens en clair, ou désactive la vérification TLS avec `verify=False`.
+## Dépendances et slopsquatting
 
-## Dépendances inexistantes : le risque du typosquatting
+Avant une nouvelle installation, vérifiez le registre officiel, le dépôt, l’éditeur, la licence, les versions et les alertes. Un nombre élevé de téléchargements ou un nom existant ne garantit pas l’innocuité.
 
-C'est l'un des risques les plus insidieux du code généré par IA. Quand un LLM hallucine un nom de package, un attaquant peut créer ce package sur npm ou PyPI avec du code malveillant.
+Le **slopsquatting** exploite des noms de packages inventés par des modèles. Le **typosquatting** exploite la confusion avec un nom connu. Le lockfile améliore la reproductibilité et les contrôles d’intégrité, mais ne rend pas sûre une dépendance malveillante choisie au départ.
 
-### Comment ça fonctionne
+## Tester des refus et des invariants
 
-1. Vous demandez au LLM du code pour une tâche spécifique
-2. Le modèle génère un `import` avec un package qui n'existe pas (par exemple `flask-security-utils` au lieu de `flask-security`)
-3. Vous faites `pip install flask-security-utils` et obtenez une erreur
-4. Un attaquant surveille ces packages hallucinés, crée `flask-security-utils` sur PyPI avec un payload malveillant
-5. Le prochain développeur qui fait confiance au même output installe le package piégé
+| Cas                                    | Preuve attendue                                |
+| -------------------------------------- | ---------------------------------------------- |
+| Jeton falsifié ou expiré               | Requête refusée, aucune opération protégée     |
+| Accès à la ressource d’un autre compte | Aucun contenu ni mutation autorisés            |
+| Entrée ressemblant à du SQL            | Valeur traitée comme donnée, résultat conforme |
+| Échec du service de validation         | Pas de passage silencieux en accès libre       |
 
-Ce scénario n'est pas hypothétique. Des chercheurs de Vulcan Cyber ont démontré en 2023 que ChatGPT hallucinait de manière répétable certains noms de packages. Ils ont créé ces packages sur PyPI et ont observé des milliers d'installations.
+Une table qui existe encore après un test SQL ne suffit pas à prouver l’absence d’injection : le résultat peut avoir été élargi sans supprimer la table. Vérifiez la réponse exacte et l’invariant métier.
 
-### Comment se protéger
+<LessonPractice
+  task="Relisez un endpoint fictif qui décode un JWT et lit une ressource à partir d’un identifiant fourni par le client."
+  deliverable="Deux défauts prioritaires et quatre tests de refus."
+  criteria={[
+    'Décodage et validation du jeton sont distingués.',
+    'Authentification et autorisation sont testées séparément.',
+    'Les tests vérifient l’absence de donnée ou de mutation protégée.',
+  ]}
+  solution="Les défauts probables sont l’absence de vérification du jeton et l’absence de contrôle du propriétaire. Testez jeton falsifié, jeton expiré, mauvais émetteur/audience selon le contrat et accès à la ressource d’un autre compte. Un statut d’erreur seul doit être complété par la vérification qu’aucune opération protégée n’a eu lieu."
+/>
 
-- **Vérifiez chaque dépendance** : avant `npm install` ou `pip install`, confirmez que le package existe sur le registre officiel et qu'il correspond à ce que vous attendez
-- **Vérifiez le nombre de téléchargements** : un package légitime utilisé par la communauté a un historique de téléchargements visible
-- **Vérifiez l'auteur et le dépôt source** : un package légitime a un repository GitHub lié, des contributeurs identifiables
-- **Utilisez des lockfiles** : `package-lock.json`, `poetry.lock` garantissent la reproductibilité et empêchent l'installation de versions altérées
+## À retenir
 
-## Cas concret : une hallucination qui crée une vulnérabilité
+La revue critique cherche les erreurs que le cas nominal laisse passer. Vérifiez les refus, les effets et la provenance des dépendances.
 
-Scénario : vous demandez au LLM de générer un middleware d'authentification pour une API Express.
+## Sources et mise à jour
 
-Le LLM produit :
+Révision : **4 octobre 2026**.
 
-```javascript
-function authMiddleware(req, res, next) {
-    const token = req.headers.authorization;
-    if (token) {
-        const decoded = jwt.decode(token);  // decode, pas verify !
-        req.user = decoded;
-        next();
-    } else {
-        res.status(401).json({ error: 'Non autorisé' });
-    }
-}
-```
-
-Le problème : `jwt.decode()` ne vérifie pas la signature du token. N'importe qui peut forger un token avec les claims de son choix. La fonction correcte est `jwt.verify(token, secret)`.
-
-Ce bug est particulièrement dangereux parce que :
-- Le code compile et s'exécute sans erreur
-- Les tests basiques passent (un token valide est bien décodé)
-- Le nom de la fonction `decode` est plausible
-- Seul un développeur qui connaît la différence entre `decode` et `verify` va détecter le problème
-
-## Protocole de validation avant mise en production
-
-Ne jamais déployer du code généré par l'IA sans passer par un protocole de validation. Ce protocole n'est pas différent de ce que vous feriez pour du code écrit par un junior : revue attentive, tests, et vérification des hypothèses.
-
-### Revue de sécurité systématique
-
-Pour chaque morceau de code généré, vérifiez :
-
-- **Entrées utilisateur** : sont-elles validées et sanitizées ?
-- **Requêtes BDD** : utilisent-elles des paramètres liés (prepared statements) ?
-- **Authentification** : les tokens sont-ils vérifiés, pas juste décodés ?
-- **Autorisations** : les permissions sont-elles contrôlées à chaque endpoint ?
-- **Données sensibles** : les secrets sont-ils gérés via des variables d'environnement ?
-- **Dépendances** : chaque import correspond-il à un package réel et maintenu ?
-
-### Tests orientés sécurité
-
-En plus des tests fonctionnels, ajoutez des tests qui ciblent les vulnérabilités courantes :
-
-```python
-def test_sql_injection():
-    """Vérifie que l'injection SQL est impossible."""
-    malicious_input = "'; DROP TABLE users; --"
-    result = get_user(malicious_input)
-    # La table doit toujours exister
-    assert db.table_exists('users')
-
-def test_invalid_token_rejected():
-    """Vérifie qu'un token forgé est rejeté."""
-    fake_token = jwt.encode({'role': 'admin'}, 'wrong_secret')
-    response = client.get('/api/data', headers={'Authorization': fake_token})
-    assert response.status_code == 401
-```
-
-## Checklist de validation du code généré
-
-Avant chaque merge de code généré par IA :
-
-1. **Compréhension** : est-ce que je comprends chaque ligne de ce code ?
-2. **Dépendances** : est-ce que chaque package importé existe réellement ?
-3. **Sécurité** : est-ce que les entrées sont validées et les secrets protégés ?
-4. **Authentification** : les vérifications de tokens/sessions sont-elles correctes ?
-5. **Erreurs** : les cas d'erreur sont-ils gérés proprement (pas de fail-open) ?
-6. **Tests** : des tests couvrent-ils les cas nominaux ET les cas d'attaque ?
-7. **Review** : un autre développeur a-t-il relu le code ?
-
-## Ce qu'il faut retenir
-
-Le code généré par un LLM est du code écrit par un développeur qui ne comprend pas ce qu'il écrit. Il produit des patterns statistiquement courants, pas forcément des patterns sûrs.
-
-Traitez chaque output comme vous traiteriez le code d'un stagiaire talentueux mais qui ne connaît rien à la sécurité. Lisez tout. Testez tout. Vérifiez chaque dépendance. Et ne déployez jamais sans revue humaine.
-
-La règle fondamentale : **l'IA accélère la production de code, mais la responsabilité de la qualité reste entièrement humaine**.
+- [OWASP : SQL Injection Prevention](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md).
+- [OWASP : JSON Web Token](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_Cheat_Sheet.md) — principes de validation, à adapter à la bibliothèque utilisée.
+- [OWASP : Authorization Cheat Sheet](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authorization_Cheat_Sheet.md).

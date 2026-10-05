@@ -1,116 +1,71 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Les 5 niveaux de maturité IA"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "niveaux-maturite"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "panorama-ia"
-  title: "Panorama IA 2026"
-nextLesson: 
-  slug: "mindset-ia"
-  title: "L'IA comme co-pilote, pas comme remplaçant"
+title: 'Les 5 niveaux de maturité IA'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'niveaux-maturite'
 ---
 
-## Pourquoi cette grille existe
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Cette échelle sert à se situer rapidement, sans jugement. L'objectif n'est pas de viser le niveau 5 immédiatement, mais de progresser de manière stable.
+Une équipe peut utiliser l’IA de plusieurs façons : poser une question, recevoir une suggestion dans l’éditeur, déléguer une modification ou orchestrer un processus. Cette grille aide à discuter des pratiques et de leurs risques.
 
-## Les 5 niveaux (version courte)
+## Objectifs de la leçon
 
-1. **Niveau 1 - Chat**: questions/réponses ponctuelles.
-2. **Niveau 2 - Copilote**: assistance intégrée dans l'éditeur.
-3. **Niveau 3 - Agent guidé**: délégation de tâches complètes avec supervision.
-4. **Niveau 4 - Human in the Loop**: workflows automatisés avec validations humaines.
-5. **Niveau 5 - Swarm**: orchestration multi-agents, supervision stratégique.
+- Identifier le mode de collaboration adapté à une tâche.
+- Relier autonomie, permissions et supervision.
+- Fixer un objectif de progression observable.
 
-## Objectifs de progression
+## Une grille pédagogique, pas une certification
 
-- **Court terme**: atteindre et stabiliser le niveau 3.
-- **Moyen terme**: structurer des workflows niveau 4.
-- **Long terme**: industrialiser progressivement le niveau 5.
+Les cinq niveaux ci-dessous constituent le vocabulaire de ce parcours. Ils ne sont ni une norme industrielle, ni un classement scientifique. Ils peuvent coexister dans une même équipe et sur un même projet.
 
-## Comment se positionner concrètement
+Le niveau le plus autonome n’est pas nécessairement le plus pertinent. Pour une question de conception, une conversation peut suffire ; pour une modification répétitive bien spécifiée, un agent peut réduire le travail manuel. La supervision humaine traverse tous les niveaux.
 
-Le moyen le plus fiable est de partir de vos pratiques réelles (cadrage, validation, sécurité, collaboration, mesure d'impact), puis de vous situer.
+| Mode                      | Ce que l’IA fait                               | Ce que vous devez contrôler                      |
+| ------------------------- | ---------------------------------------------- | ------------------------------------------------ |
+| **1 · Chat**              | Propose une explication ou un brouillon        | Sources, contexte, exactitude                    |
+| **2 · Copilote**          | Suggère du code au sein de votre travail       | Diff, conventions, tests ciblés                  |
+| **3 · Agent guidé**       | Enchaîne lecture, modification et vérification | Objectif, outils, périmètre, résultat            |
+| **4 · Human in the Loop** | Exécute un workflow avec points de décision    | Action concrète, arguments, reprise et refus     |
+| **5 · Swarm**             | Coordonne plusieurs agents spécialisés         | Responsabilités, conflits, budget, observabilité |
 
-Faites le quiz de placement : [/formation-ia/quiz-niveau](/formation-ia/quiz-niveau)
+## Passer d’un mode à l’autre
 
-Le résultat du quiz vous donne un niveau estimé et un plan d'amélioration concret sur 30 jours.
+Une progression utile commence par la stabilisation d’un usage simple. Si les critères de réussite sont flous, ajouter des agents ne les rendra pas plus clairs. Si un test ne vérifie pas le bon comportement, automatiser son exécution ne corrige pas ce défaut.
+
+Pour passer au mode agent guidé, choisissez une tâche bornée, par exemple compléter une documentation à partir de fonctions existantes. Définissez les fichiers modifiables, les commandes nécessaires, les critères de réussite et les conditions d’arrêt. Commencez avec les permissions minimales. Le contrôle d’accès doit être appliqué par l’environnement, pas uniquement demandé dans un texte.
+
+## Cas concret : modifier une page de formation
+
+Vous voulez corriger une légende et vérifier sa lisibilité sur mobile. Un copilote peut suggérer le texte ; un agent guidé peut modifier le fichier et lancer le build. Il n’a pas besoin de secrets, de données clients ou d’un accès de déploiement.
+
+Pour publier la modification, votre processus peut imposer une revue humaine de la PR. Cette décision est distincte de la création de la PR, qui peut déjà être autorisée par la demande. Ne multipliez pas les confirmations pour les actions réversibles prévues dans la mission : réservez les points de décision aux actions sensibles et aux ambiguïtés bloquantes.
+
+## Mesurer une progression réelle
+
+Choisissez une mesure liée à la qualité : proportion de tâches acceptées après revue, erreurs détectées, temps total avec corrections, changements hors périmètre ou incidents. Un volume de prompts ou de lignes générées ne mesure pas directement une amélioration.
+
+Comparez des tâches de difficulté similaire, avec et sans assistance, et notez les conditions de l’essai. Un gain sur une documentation ne prouve pas un gain sur une migration de données.
+
+<LessonPractice
+  task="Classez trois tâches : expliquer un algorithme, corriger une faute dans une page et préparer une migration de production."
+  deliverable="Un mode de collaboration et un contrôle principal pour chaque tâche, puis un objectif à deux semaines."
+  criteria={[
+    'L’autonomie est justifiée par la tâche plutôt que par le niveau maximal.',
+    'La migration possède un point de validation avant exécution.',
+    'L’objectif comporte une mesure de qualité et une échéance.',
+  ]}
+  solution="Une conversation peut suffire pour l’algorithme ; un agent guidé peut préparer une correction et sa PR. La migration nécessite une préparation testée, une sauvegarde/restauration vérifiée et une décision autorisée avant l’action sur la production. Un objectif utile serait de traiter trois corrections comparables et de mesurer le temps total ainsi que les défauts restants."
+/>
+
+## À retenir
+
+La maturité consiste à choisir l’autonomie adaptée et à vérifier les résultats. Elle ne se mesure pas au nombre d’agents déployés.
+
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**. La grille de niveaux est propre à cette formation.
+
+- [OpenAI Agents : outils, handoffs et contrôles](https://github.com/openai/openai-agents-python).
+- [LangGraph : exécution durable et supervision humaine](https://github.com/langchain-ai/langgraph).

@@ -1,156 +1,88 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Comment fonctionne un LLM"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "fonctionnement-llm"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "bon-ingenieur-ia"
-  title: "Ce qui différencie un bon ingénieur IA"
-nextLesson: 
-  slug: "memoire-llm"
-  title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
+title: 'Comment fonctionne un LLM'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'fonctionnement-llm'
 ---
 
-## Comment fonctionne un LLM
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un LLM (Large Language Model) est un programme qui prédit le mot suivant. C'est tout. Pas de compréhension, pas de raisonnement au sens humain. Juste de la prédiction statistique, à très grande échelle.
+Un LLM est un modèle de langage entraîné à traiter et produire des séquences de tokens. Comprendre ce mécanisme aide à choisir le contexte, interpréter une réponse et éviter de confondre fluidité avec exactitude.
 
-Comprendre ce mécanisme change radicalement la façon dont on interagit avec ces outils.
+## Objectifs de la leçon
 
-### Le principe : prédire le token suivant
+- Expliquer le rôle des tokens, de l’entraînement et de l’inférence.
+- Distinguer génération, raisonnement et accès aux sources.
+- Identifier les limites d’une estimation de coût ou de taille.
 
-Vous connaissez le texte prédictif de votre smartphone. Vous tapez "je suis en" et il propose "route", "retard" ou "réunion". Un LLM fait exactement la même chose, mais avec une capacité de contexte et une précision incomparablement plus grandes.
+## Du texte aux tokens
 
-Le modèle a été entraîné sur des milliards de textes. Il a appris des patterns statistiques : quels mots suivent quels autres mots, dans quels contextes. Quand vous lui posez une question, il génère sa réponse token par token, en choisissant à chaque étape le token le plus probable compte tenu de tout ce qui précède.
+Un **token** est une unité encodée par le tokenizer du modèle : fragment de mot, mot, ponctuation ou autre élément. Le découpage varie selon le modèle, la langue et le contenu. Le code, les accents et les espaces peuvent changer le nombre de tokens.
 
-Il ne "sait" rien. Il calcule des probabilités.
+N’utilisez pas une conversion fixe « un token égale un mot » pour calculer un budget. Comptez avec les outils du fournisseur ou avec l’usage retourné par l’API. Pour les images, l’audio et la vidéo, les règles de comptage peuvent être différentes.
 
-### Les tokens : l'unité de base
+## L’entraînement construit des capacités
 
-Un token n'est pas exactement un mot. C'est un fragment de texte, parfois un mot entier, parfois une syllabe, parfois un caractère spécial.
+Le préentraînement ajuste les paramètres du modèle sur de grands ensembles de données. Pour de nombreux modèles autorégressifs, l’objectif central est la prédiction du token suivant à partir du contexte.
 
-Quelques repères concrets :
+Cela ne signifie pas que le modèle se limite à recopier des phrases : l’entraînement peut produire des représentations utiles pour traduire, coder ou résoudre certaines tâches. Le post-entraînement peut ensuite améliorer le suivi d’instructions, les préférences de réponse ou le raisonnement, avec différentes méthodes selon le fournisseur.
 
-| Texte | Nombre de tokens (approximatif) |
-|-------|-------------------------------|
-| "Bonjour" | 1-2 tokens |
-| Un paragraphe de 100 mots | ~130 tokens |
-| Une page A4 | ~500 tokens |
-| Un fichier de 500 lignes de code | ~3 000 tokens |
+Un modèle peut réussir des tâches de raisonnement et se tromper sur des faits élémentaires. La réussite doit donc être évaluée sur la tâche réelle, pas déduite de sa taille ou d’une métaphore sur son fonctionnement.
 
-Pourquoi c'est important ? Deux raisons :
+## L’inférence produit une sortie
 
-1. **Le coût.** Vous payez par token consommé (entrée + sortie). Un prompt de 10 000 tokens coûte plus qu'un prompt de 500.
-2. **La fenêtre de contexte.** Le modèle a une limite de tokens qu'il peut traiter en une fois. Au-delà, il ne voit tout simplement pas l'information. On y revient dans la leçon suivante.
+À l’usage, le modèle reçoit un contexte et calcule une distribution de probabilités sur les tokens possibles. Un mécanisme de décodage sélectionne la suite. Il ne choisit pas nécessairement le token le plus probable à chaque étape : les réglages et l’architecture peuvent varier.
 
-### Modèle de base vs modèle instruct
+Certains systèmes consacrent un budget supplémentaire au raisonnement. D’autres peuvent appeler des outils, rechercher une source ou exécuter du code avant de répondre. Ces actions relèvent du système qui entoure le modèle, avec leurs propres erreurs possibles.
 
-Un modèle de base (comme GPT brut avant fine-tuning) est un autocompléteur. Donnez-lui "Le président de la France est", il complétera avec le nom le plus probable. Mais il ne sait pas "répondre à une question". Si vous écrivez "Quelle est la capitale de l'Italie ?", il pourrait très bien générer "Quelle est la capitale de l'Espagne ?" parce qu'il a vu ce pattern de liste de questions dans ses données d'entraînement.
+```text
+Demande + instructions + contexte pertinent
+                ↓
+           Modèle de langage
+                ↓
+     Réponse ou demande d’appel d’outil
+                ↓
+      Validation et exécution par l’application
+                ↓
+      Observation, puis réponse éventuelle
+```
 
-Un modèle instruct (ChatGPT, Claude, etc.) a été affiné pour suivre des instructions. Il a appris, via un entraînement supplémentaire avec retour humain (RLHF), à se comporter comme un assistant : répondre aux questions, refuser les demandes dangereuses, structurer ses réponses.
+La demande d’un outil n’accorde aucune permission en elle-même. C’est l’application qui doit contrôler l’accès et les paramètres avant exécution.
 
-La distinction compte. Quand un modèle instruct refuse de faire quelque chose ou répond de manière trop prudente, c'est souvent l'alignement (le fine-tuning) qui parle, pas une limitation fondamentale.
+## Connaissance apprise et connaissance récupérée
 
-### Pourquoi les LLMs "inventent" parfois
+Les paramètres contiennent des informations apprises pendant l’entraînement. Ils ne constituent pas une base de données consultable ni une garantie de fraîcheur. Une recherche web ou documentaire peut apporter des informations récentes, à condition que la bonne source ait réellement été consultée.
 
-Un LLM ne consulte pas une base de connaissances. Il génère du texte statistiquement plausible. Si vous lui demandez le nom d'un package npm qui fait X, il va prédire un nom de package qui *ressemble* à ce qui existe, basé sur les patterns de noms qu'il a vus.
+Une citation doit être vérifiée : existe-t-elle, concerne-t-elle la version utilisée, soutient-elle l’affirmation ? Une réponse qui nomme une URL n’a pas forcément ouvert cette URL.
 
-Parfois ce package existe. Parfois non. Le modèle ne fait pas la différence, il ne vérifie pas. Il produit ce qui est statistiquement cohérent avec le contexte.
+## Cas concret : demander une API récente
 
-C'est la source des hallucinations (traitées en détail dans une leçon dédiée). La clé : ne jamais considérer la sortie d'un LLM comme un fait vérifié.
+Vous demandez un exemple pour une bibliothèque mise à jour. Le modèle peut proposer une méthode d’une ancienne version. Fournissez la version installée et l’extrait de documentation pertinent, puis compilez ou exécutez un exemple minimal. La vérification de la signature dans le code ou les types installés est plus fiable qu’une assurance verbale du modèle.
 
-### Les paramètres qui comptent
+## Coût, latence et qualité
 
-Deux facteurs déterminent la capacité d'un modèle :
+Le coût peut dépendre des entrées, des sorties, du cache, du raisonnement et des outils selon le service. La latence dépend aussi de la longueur de réponse et des appels externes. Un modèle plus grand n’est pas systématiquement meilleur pour votre besoin : comparez des résultats sur des cas représentatifs.
 
-**La taille du modèle** (en milliards de paramètres). Plus le modèle est grand, plus il peut capturer des patterns fins. GPT-4 est sensiblement plus capable que GPT-3.5 sur les tâches complexes. Mais plus gros ne veut pas toujours dire meilleur : un modèle plus petit, bien entraîné sur des données de qualité, peut battre un modèle plus gros entraîné sur du bruit.
+<LessonPractice
+  task="Préparez deux demandes pour expliquer une fonction : l’une avec le fichier complet, l’autre avec la fonction et ses types utiles."
+  deliverable="Une comparaison du contexte fourni, de la réponse et de l’usage de tokens quand il est disponible."
+  criteria={[
+    'Les informations nécessaires à la compréhension sont présentes dans les deux demandes.',
+    'Le nombre de tokens est mesuré ou clairement laissé inconnu, jamais déduit d’un nombre de mots fixe.',
+    'La réponse est comparée au comportement réel de la fonction.',
+  ]}
+  solution="Le contexte réduit doit conserver les types, les dépendances et le contrat utiles. S’il manque une fonction appelée, la comparaison n’est plus équitable. Vérifiez les explications avec un cas nominal et un cas limite ; une réponse plus courte ou moins coûteuse n’est intéressante que si elle reste correcte."
+/>
 
-**Les données d'entraînement.** La qualité, la diversité et la date de coupure des données déterminent ce que le modèle "connaît". Un modèle entraîné jusqu'en 2024 ne sait rien de ce qui s'est passé en 2025. Et il connaît mieux les sujets abondamment représentés dans ses données (l'anglais, le code Python, la documentation populaire) que les sujets rares.
+## À retenir
 
-### Ce qu'il faut retenir
+Le modèle produit une réponse à partir de son contexte et de capacités apprises. Les outils peuvent étendre ses informations ; la vérification reste une étape distincte.
 
-- Un LLM prédit le token suivant. Il ne comprend pas, il ne raisonne pas au sens strict.
-- Les tokens sont l'unité de mesure : coût, contexte, limites, tout se compte en tokens.
-- Un modèle instruct est un modèle de base affiné pour suivre des instructions.
-- La sortie d'un LLM est toujours probabiliste, jamais garantie factuellement.
-- La taille du modèle et la qualité des données d'entraînement déterminent ses capacités.
+## Sources et mise à jour
 
-Ces principes fondamentaux influencent chaque interaction que vous aurez avec un LLM. Gardez-les en tête pour la suite.
+Révision : **4 octobre 2026**.
+
+- [OpenAI : documentation des modèles et limites propres à chaque référence](https://developers.openai.com/api/docs/models).
+- [OpenAI Agents : boucle modèle/outils](https://github.com/openai/openai-agents-python).
+- [Google Gen AI : génération et comptage de tokens](https://github.com/googleapis/python-genai).

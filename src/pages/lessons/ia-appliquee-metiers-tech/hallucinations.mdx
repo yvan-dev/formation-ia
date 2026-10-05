@@ -1,179 +1,82 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Les hallucinations : causes, détection et réduction"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "hallucinations"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "memoire-llm"
-  title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-nextLesson: 
-  slug: "bases-prompt"
-  title: "Les bases du prompt"
+title: 'Hallucinations: causes, détection, réduction'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'hallucinations'
 ---
 
-## Les hallucinations : causes, détection et réduction
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Une hallucination, c'est quand un LLM génère une information fausse avec la même assurance qu'une information vraie. Pas de signal d'alerte, pas d'hésitation. Le modèle affirme, et il a tort.
+Une hallucination est une sortie fausse ou non étayée présentée comme une réponse pertinente : API inexistante, chiffre inventé, citation incorrecte ou description qui ne correspond pas au fichier. La fluidité de la réponse ne permet pas de la détecter à elle seule.
 
-C'est probablement le risque le plus important à comprendre quand on utilise un LLM en contexte professionnel.
+## Objectifs de la leçon
 
-### Pourquoi les hallucinations se produisent
+- Reconnaître plusieurs formes d’hallucination.
+- Associer chaque affirmation à une vérification appropriée.
+- Réduire les erreurs sans promettre de les éliminer.
 
-Rappel de la leçon précédente : un LLM prédit le token suivant. Il ne vérifie rien. Il ne consulte pas de source. Il génère ce qui est statistiquement plausible.
+## Pourquoi une réponse plausible peut être fausse
 
-Quand vous demandez "quel package npm permet de faire X ?", le modèle ne cherche pas sur npmjs.com. Il génère un nom de package qui *ressemble* à un vrai nom de package, basé sur les patterns qu'il a vus pendant l'entraînement. Si aucun package correspondant n'existait dans ses données, il en inventera un. Et il le présentera exactement comme s'il existait.
+Le modèle génère une suite adaptée à son contexte ; il n’effectue pas automatiquement une vérification factuelle. Un contexte incomplet, une API ancienne, une ambiguïté ou une récupération documentaire défaillante peuvent conduire à une réponse incorrecte.
 
-Le modèle n'a aucune notion de "vrai" ou "faux". Il n'a que "probable" et "moins probable".
+Toutes les erreurs de code ne sont pas des hallucinations. Une règle métier mal spécifiée ou une autorisation oubliée peut produire un code valide mais inadapté. Le diagnostic doit distinguer fait inventé, incompréhension du besoin et défaut d’implémentation.
 
-### Types d'hallucinations courantes en dev
+| Sortie suspecte            | Vérification utile                                           |
+| -------------------------- | ------------------------------------------------------------ |
+| Méthode d’une bibliothèque | Types et documentation de la version installée               |
+| Statistique chiffrée       | Source primaire, date, population et méthode                 |
+| Citation ou URL            | Existence de la source et passage qui soutient l’affirmation |
+| Description d’un fichier   | Lecture du fichier réellement concerné                       |
+| Résultat de test           | Commande exécutée, sortie et nombre de tests                 |
 
-**Faits inventés.** Le modèle cite une étude, un article de blog, une documentation qui n'existe pas. Il invente des dates, des chiffres, des noms d'auteurs.
+## Cas concret : un import proposé
 
-**Code incorrect qui compile.** Le code généré a l'air correct syntaxiquement, mais utilise des API qui n'existent pas, des signatures de fonctions erronées, ou des comportements inventés d'une librairie.
+Le modèle suggère une bibliothèque dont vous ne connaissez pas le nom. **Ne l’installez pas pour vérifier si elle existe.** Recherchez d’abord le package dans le registre officiel et comparez son dépôt, son éditeur et sa documentation. L’existence du nom ne prouve pas la légitimité du projet.
 
-**Dépendances inexistantes.** Le modèle recommande un package, une librairie, un outil qui n'existe tout simplement pas. C'est particulièrement fréquent pour les packages moins populaires ou les écosystèmes plus petits.
+Un attaquant peut publier un nom de package fréquemment inventé par des modèles : ce risque est souvent appelé **slopsquatting**. Il se distingue du typosquatting, qui exploite une faute de frappe dans le nom d’un package connu. Une dépendance nouvelle demande une revue de provenance avant son exécution.
 
-**Versions fantômes.** Le modèle attribue des fonctionnalités à une version spécifique d'un framework, alors que cette fonctionnalité n'existe pas dans cette version (ou n'existe dans aucune version).
+## Réduire le risque au moment du prompt
 
-**Mélange de sources.** Le modèle combine l'API de React avec celle de Vue, la syntaxe de Python 2 avec Python 3, ou la config de Webpack avec celle de Vite. Il produit quelque chose qui a l'air cohérent mais mélange des mondes incompatibles.
+Fournissez la version utilisée, les contrats pertinents et les données réellement nécessaires. Demandez au modèle de séparer les faits observés, les hypothèses et les points à confirmer. Autorisez explicitement une réponse incomplète lorsque les sources manquent.
 
-### Comment détecter les hallucinations
+```text
+Utilise la documentation de la version installée et les fichiers cités.
+Pour chaque recommandation, indique la contrainte du projet qui la justifie.
+Si la signature d’une API n’est pas vérifiée, signale-le.
+Ne présente pas un test comme réussi sans l’avoir exécuté.
+```
 
-La détection repose sur un principe simple : ne faites confiance qu'à ce que vous pouvez vérifier.
+Ces instructions favorisent un comportement utile, mais ne garantissent ni leur respect ni la vérité de la réponse. Les contrôles doivent rester extérieurs au modèle.
 
-**Vérification croisée.** Si le modèle affirme un fait, vérifiez-le via une source fiable. Documentation officielle, code source, test local. Pas un autre LLM (qui pourrait halluciner la même chose).
+## Vérifier avec des preuves indépendantes
 
-**Demandez les sources.** "D'où vient cette information ?" force le modèle à expliciter son raisonnement. Attention : il peut aussi halluciner des sources. Mais s'il ne peut pas en fournir, c'est un signal d'alerte.
+Compiler un exemple peut détecter une signature inexistante, mais ne prouve pas que l’algorithme respecte le besoin. Un test nominal valide un cas, mais peut manquer une autorisation. Choisissez la preuve correspondant à l’affirmation.
 
-**Testez les assertions.** Si le modèle dit "cette méthode accepte un callback en troisième argument", vérifiez dans la doc ou testez le code. Ne prenez pas l'affirmation pour acquise.
+Demander une autocritique ou une seconde réponse peut révéler des incohérences. Deux modèles peuvent toutefois partager la même erreur ; leur accord n’établit pas un fait. Une température basse peut réduire certaines variations, sans garantir l’exactitude, et tous les modèles n’exposent pas ce réglage.
 
-**Surveillez les détails trop précis.** Un modèle qui vous donne un numéro de téléphone, une URL très spécifique, ou un numéro de CVE devrait déclencher votre réflexe de vérification. Plus le détail est précis et vérifiable, plus il risque d'être inventé.
+## Réagir à une erreur
 
-**Posez la même question différemment.** Si vous obtenez deux réponses contradictoires en reformulant la question, au moins une des deux est fausse.
+Isolez l’affirmation incorrecte, apportez la source qui la contredit et demandez une correction ciblée. Revérifiez ensuite les éléments dépendants. Si une méthode de bibliothèque est inventée, les tests et l’explication qui l’utilisent doivent aussi être revus.
 
-### Stratégies de réduction
+<LessonPractice
+  task="Analysez une réponse qui propose une méthode de bibliothèque, cite une URL et annonce ‘tous les tests passent’."
+  deliverable="Un tableau affirmation / preuve requise / résultat vérifié."
+  criteria={[
+    'La signature est vérifiée dans la version réellement utilisée.',
+    'La citation est confrontée à son contenu.',
+    'Une absence d’exécution est notée comme ‘non testé’.',
+  ]}
+  solution="La signature se vérifie dans les types ou la documentation, la citation dans le passage concerné, et les tests dans une exécution datée avec son statut. Une réponse qui reformule ses propres affirmations n’apporte aucune de ces preuves. Si un outil est indisponible, consignez la limite au lieu de conclure que le contrôle a réussi."
+/>
 
-Vous ne pouvez pas éliminer les hallucinations. Mais vous pouvez réduire leur fréquence de manière significative.
+## À retenir
 
-#### Ancrer sur des faits
+Réduisez les occasions d’erreur avec un bon contexte, puis vérifiez les affirmations importantes avec des sources et des observations indépendantes.
 
-Fournissez au modèle le contexte factuel dont il a besoin. Plutôt que de demander "comment configurer ESLint pour TypeScript ?", collez votre `eslint.config.js` actuel et la version d'ESLint que vous utilisez. Plus le modèle a de contexte concret, moins il a besoin d'inventer.
+## Sources et mise à jour
 
-#### Réduire l'ambiguïté
+Révision : **4 octobre 2026**.
 
-Les questions vagues produisent des réponses vagues (et hallucinées). "Comment faire du caching ?" invite l'hallucination. "Comment implémenter un cache Redis pour les sessions utilisateur dans une app Express 5 avec ioredis ?" la réduit.
-
-#### Segmenter les tâches
-
-Plutôt qu'un prompt de 500 mots qui demande tout d'un coup, découpez en étapes :
-1. D'abord la structure
-2. Puis l'implémentation de chaque partie
-3. Puis la validation
-
-Chaque étape est plus simple. Le modèle a moins d'occasions de diverger.
-
-#### Utiliser des températures basses
-
-La température contrôle le caractère aléatoire des réponses. Une température basse (0 à 0.3) rend le modèle plus conservateur : il choisit les tokens les plus probables. Une température haute (0.8 à 1) le rend plus créatif, mais aussi plus susceptible d'halluciner.
-
-Pour du code et des faits techniques, préférez une température basse. Réservez les températures hautes au brainstorming et à la créativité.
-
-#### Demander au modèle d'exprimer son incertitude
-
-Ajoutez dans vos prompts : "Si tu n'es pas sûr, dis-le explicitement." Les modèles instruits sont entraînés pour tenter de répondre. Leur donner la permission d'admettre leur incertitude réduit les fabrications.
-
-### Exemples concrets d'hallucinations courantes
-
-| Situation | Hallucination typique | Comment vérifier |
-|-----------|----------------------|-----------------|
-| "Quel package pour parser du YAML en Rust ?" | Invente `yaml-rust2` avec une API fictive | Vérifier sur crates.io |
-| "Montre-moi l'API fetch avec timeout" | Utilise `AbortSignal.timeout()` avec une signature incorrecte | Vérifier sur MDN |
-| "Quel est le breaking change principal de Next.js 15 ?" | Attribue un changement qui n'existe pas dans cette version | Vérifier le changelog officiel |
-| "Écris un test avec Vitest et MSW" | Mélange l'API de MSW v1 et v2 | Vérifier la doc MSW pour la version installée |
-| "Cite-moi un article sur le sujet" | Invente un titre, un auteur, et une URL crédible | Visiter l'URL (elle renverra une 404) |
-
-### Ce qu'il faut retenir
-
-- Les hallucinations sont un comportement normal du modèle, pas un bug. Elles découlent directement du mécanisme de prédiction probabiliste.
-- Plus le sujet est spécifique ou récent, plus le risque d'hallucination est élevé.
-- La vérification n'est pas optionnelle. Chaque fait, chaque référence, chaque API doit être validé.
-- Fournir du contexte concret, poser des questions précises et segmenter les tâches sont vos meilleurs leviers de réduction.
-- Un LLM qui a tort avec assurance est plus dangereux qu'un LLM qui se trompe visiblement. Gardez votre esprit critique actif en permanence.
+- [OWASP : risques liés à la désinformation et aux sorties LLM](https://github.com/OWASP/www-project-top-10-for-large-language-model-applications).
+- [OWASP : validation des sorties et défense en profondeur](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md).

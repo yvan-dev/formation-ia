@@ -1,327 +1,97 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Bonnes pratiques et exemples"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "bonnes-pratiques-agent-md"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "structure-agent-md"
-  title: "Structure recommandée d'un AGENT.md"
-nextLesson: null
+title: 'Bonnes pratiques et exemples'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'bonnes-pratiques-agent-md'
 ---
 
-## Inclure des exemples de référence
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un AGENT.md sans exemples force l'agent à deviner le format de sortie. Avec des exemples, il reproduit le pattern. La différence de qualité est significative.
+Le projet final consiste à produire un `AGENTS.md` adapté à un dépôt et à vérifier son effet sur des tâches concrètes. La qualité se mesure dans l’usage, pas au nombre de règles ou d’agents créés.
 
-### Exemples positifs et négatifs
+## Objectifs de la leçon
 
-Quand le format est critique (code, données structurées, rapports), montrez les deux côtés : ce qui est attendu et ce qui ne l'est pas.
+- Améliorer les instructions à partir de défauts observés.
+- Utiliser des exemples et des références cohérents avec le projet.
+- Livrer un dossier de validation reproductible.
 
-```markdown
-## Format des messages de commit
+## Partir d’une version minimale exacte
 
-### Correct
-feat(auth): add JWT refresh token rotation
-fix(api): handle null response from payment provider
-docs(readme): update deployment instructions for v3
+Commencez par le contexte, les commandes, les contraintes importantes et le format de livraison. N’ajoutez pas toutes les règles imaginables. Lisez les instructions déjà présentes dans le dépôt et la documentation de l’outil choisi.
 
-### Incorrect
-Fixed stuff
-update
-WIP - do not merge
-feat: Added new feature for the authentication system that rotates tokens
-```
+La longueur n’est pas un critère absolu. Supprimez les répétitions et les éléments faux ; conservez les informations qui permettent une bonne décision. Si un domaine devient trop détaillé, déplacez-le dans une référence clairement indiquée et vérifiez son chargement.
 
-L'agent comprend immédiatement le niveau de détail attendu, la longueur, la structure. Pas besoin d'expliquer la convention Conventional Commits en trois paragraphes.
+## Fournir des exemples utiles
 
-### Exemples de code comme référence
-
-Si votre agent génère du code, montrez-lui le style exact que vous attendez.
+Un exemple rend une attente plus concrète. Il doit correspondre aux conventions réelles : format de commit, rapport de validation ou composant existant. Ne présentez pas un style particulier comme une obligation industrielle universelle.
 
 ```markdown
-## Style de code - Référence
+## Rapport attendu — exemple de format
 
-### Gestion d'erreurs
-// Correct : erreur typée avec contexte
-async function getUser(id: string): Promise<Result<User, AppError>> {
-  const user = await db.users.findById(id);
-  if (!user) {
-    return err(new NotFoundError("User", id));
-  }
-  return ok(user);
-}
-
-// Incorrect : try/catch générique sans typage
-async function getUser(id: string) {
-  try {
-    return await db.users.findById(id);
-  } catch (e) {
-    throw new Error("Something went wrong");
-  }
-}
+Changement : comportement modifié et raison.
+Validation : commande, statut et nombre de tests si applicable.
+Limites : contrôle non exécuté, dépendance ou hypothèse restante.
 ```
 
-## Structurer par sommaire et par use cases
+Une référence à un fichier maintenu est souvent préférable à une copie de code qui vieillira dans les instructions. Vérifiez que le fichier existe et que l’agent le lit pour la tâche concernée.
 
-Quand un AGENT.md couvre plusieurs scénarios, organisez les instructions par cas d'usage plutôt que par catégorie technique.
+## Corriger le bon mécanisme
 
-```markdown
-## Cas d'usage
+| Observation                               | Correction à examiner                                        |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| L’agent modifie un fichier hors périmètre | Clarifier la mission et restreindre les écritures effectives |
+| Une commande inexistante est proposée     | Corriger les références et relire le manifeste               |
+| Une affirmation est inventée              | Exiger une preuve et vérifier les sources/outils disponibles |
+| Une règle n’est pas suivie                | Examiner chargement, conflit, compréhension et contrôles     |
+| Le résultat est inutilement complexe      | Préciser le comportement attendu et la réutilisation du code |
 
-### PR < 100 lignes
-- Review rapide, focus sécurité uniquement
-- Verdict en une ligne
+Ajouter « ne jamais inventer » ne garantit pas la vérité. Déplacer une règle en haut du fichier ne garantit pas son respect. Diagnostiquez la cause et observez l’effet de la correction.
 
-### PR 100-500 lignes
-- Review complète : sécurité + conventions + architecture
-- Commentaires inline sur chaque problème
+## Construire un jeu d’évaluation
 
-### PR > 500 lignes
-- Signaler que la PR devrait être découpée
-- Review partielle sur les fichiers critiques uniquement
-```
+Utilisez au moins quatre familles de cas pour le projet final :
 
-Cette organisation aide l'agent à choisir le bon comportement selon le contexte, sans instructions conditionnelles complexes.
+1. Une tâche normale dans le périmètre.
+2. Une demande avec information manquante.
+3. Une erreur d’environnement ou d’outil.
+4. Une source contenant une consigne hostile.
 
-## Itérer sur son AGENT.md
+Pour chaque cas, définissez résultat attendu, accès autorisés et contrôles. Conservez quelques cas de validation qui n’ont pas servi à ajuster les instructions. Répétez les cas sensibles lorsque la variabilité des sorties compte.
 
-Un AGENT.md n'est jamais terminé du premier coup. Le cycle d'amélioration ressemble à ceci :
+## Cas concret : correction de cours
 
-### v1 : le premier jet
+Le fichier doit aider l’agent à préserver les slugs, corriger le texte et vérifier le rendu. Testez une correction de titre, un lien absent, une erreur de syntaxe MDX et un exemple qui contient une fausse consigne.
 
-Écrivez les instructions minimales. Rôle, objectif, permissions, deux ou trois critères. Lancez l'agent sur un cas réel.
+Vérifiez le diff et la navigation. Le contenu de l’exemple doit être traité comme du contenu pédagogique, sans changer la mission. Un build réussi ne prouve pas que les faits de la leçon sont exacts : la revue des sources reste distincte.
 
-### Test : observer le résultat
+## Dossier final à remettre
 
-Analysez ce que l'agent produit. Les écarts entre le résultat et vos attentes révèlent les instructions manquantes ou ambiguës.
+Remettez le fichier d’instructions, les éventuels adaptateurs, les références utilisées et le tableau des cas. Pour chaque essai, indiquez outil, version/modèle, date, résultat, corrections et limites. Décrivez les permissions réellement configurées.
 
-| Observation | Action |
-|-------------|--------|
-| L'agent fait quelque chose d'inattendu | Ajouter une permission négative |
-| Le format de sortie varie | Ajouter un exemple concret |
-| L'agent ignore une règle | La remonter plus haut dans le fichier |
-| L'agent invente des informations | Ajouter "Ne jamais inventer de données" |
-| Le résultat est correct mais verbeux | Ajouter "Réponses concises, pas de reformulation" |
+Passez les changements en PR avec une description compréhensible pour une personne extérieure à l’exercice. N’inventez pas des essais réussis. Une limite documentée est plus utile qu’une garantie impossible à démontrer.
 
-### v2 : corriger et préciser
+<LessonPractice
+  task="Réalisez le projet final sur un dépôt d’exercice avec une tâche normale, une ambiguïté, un outil indisponible et une source hostile."
+  deliverable="AGENTS.md, adaptateur éventuel et rapport des quatre cas."
+  criteria={[
+    'Le fichier est chargé par l’outil choisi et les chemins sont vérifiés.',
+    'Le rapport distingue résultats attendus, observés et non vérifiés.',
+    'Les permissions effectives correspondent au périmètre.',
+    'Au moins une correction est justifiée par un défaut observé, puis réévaluée.',
+  ]}
+  solution="Une livraison professionnelle peut conclure que trois cas réussissent et qu’un contrôle reste indisponible, avec sa cause et la prochaine action. Elle ne doit pas masquer l’échec en modifiant le critère après l’essai. Après correction, rejouez le cas concerné et les régressions pertinentes ; gardez une trace du comportement avant/après."
+/>
 
-Ajoutez les instructions manquantes. Reformulez les ambiguïtés. Supprimez ce qui n'a eu aucun effet.
+## À retenir
 
-Répétez ce cycle. En général, trois itérations suffisent pour stabiliser un AGENT.md.
+Les instructions sont un artefact maintenu avec le code. Leur qualité repose sur l’exactitude, les contrôles effectifs et l’évaluation sur des cas nouveaux.
 
-## Organiser plusieurs agents
+## Sources et mise à jour
 
-Un agent par responsabilité. Pas un super-agent qui fait tout. Les raisons sont les mêmes que pour les fonctions en programmation : responsabilité unique, testabilité, maintenabilité.
+Révision : **5 octobre 2026**.
 
-```
-.claude/
-  agents/
-    code-reviewer.md      # Review de code
-    doc-writer.md          # Documentation
-    test-writer.md         # Génération de tests
-    migration-checker.md   # Vérification de migrations DB
-```
-
-Chaque agent a son fichier, son périmètre, ses permissions. Si deux agents ont besoin de partager des conventions (style de code, format de commit), extrayez ces conventions dans un fichier commun et référencez-le.
-
-```markdown
-## Conventions
-Voir ./shared/code-style.md pour les conventions de code.
-```
-
-### Quand découper un agent
-
-Trois signaux indiquent qu'un agent fait trop de choses :
-
-1. **L'AGENT.md dépasse 60 lignes.** Vous avez probablement deux responsabilités mélangées.
-2. **Les permissions se contredisent.** "Peut modifier le code" et "Ne doit pas toucher aux tests" dans le même fichier, c'est un signe.
-3. **Les résultats sont incohérents.** Si l'agent fait bien la review mais mal la documentation, séparez les deux rôles.
-
-## Avant / après : transformer un mauvais AGENT.md
-
-### Avant (problématique)
-
-```markdown
-# Mon Agent
-
-Tu es un assistant IA très intelligent et compétent.
-Tu dois m'aider à coder. Fais du bon code, propre et bien testé.
-Utilise les meilleures pratiques. Sois efficace.
-
-Si tu ne sais pas, dis-le. Sinon fais de ton mieux.
-
-N'oublie pas d'être concis mais aussi complet. Fais attention
-aux edge cases. Le code doit être maintenable et performant.
-Utilise TypeScript de préférence mais tu peux aussi utiliser
-JavaScript si c'est plus simple. Les tests sont importants
-mais ne passe pas trop de temps dessus non plus.
-```
-
-Problèmes : aucun critère mesurable, instructions contradictoires ("concis mais complet"), pas de permissions, pas d'exemples, pas de format de sortie défini.
-
-### Après (actionnable)
-
-```markdown
-# TypeScript Developer
-
-## Rôle
-Agent de développement TypeScript pour une API REST Node.js.
-
-## Objectif
-Implémenter les fonctionnalités décrites dans les tickets,
-avec tests unitaires.
-
-## Permissions
-- Créer/modifier les fichiers dans src/ et tests/
-- NE PAS modifier les fichiers de configuration (tsconfig, eslint, etc.)
-- NE PAS ajouter de dépendances sans les lister en commentaire
-
-## Critères d'acceptation
-- TypeScript strict mode, zéro any
-- Chaque fonction exportée a au moins un test
-- Fonctions de moins de 30 lignes
-- Gestion d'erreur avec le pattern Result<T, E>
-
-## Exemple de sortie
-async function createUser(input: CreateUserInput): Promise<Result<User, ValidationError | ConflictError>> {
-  const validated = validateInput(input);
-  if (!validated.ok) return validated;
-  
-  const existing = await db.users.findByEmail(input.email);
-  if (existing) return err(new ConflictError("email", input.email));
-  
-  const user = await db.users.create(validated.value);
-  return ok(user);
-}
-
-## En cas d'incapacité
-Si la tâche nécessite un langage autre que TypeScript ou
-une modification de l'infrastructure, répondre :
-"HORS SCOPE: [raison]. Intervention humaine requise."
-```
-
-Le passage de "avant" à "après" illustre les principes vus dans les deux leçons précédentes : concision, précision, exemples concrets, permissions explicites.
-
-## Le peer review d'AGENT.md
-
-Faites relire vos AGENT.md par un collègue avant de les mettre en production. Les bénéfices sont les mêmes que pour la revue de code :
-
-- **Un regard neuf détecte les ambiguïtés** que vous ne voyez plus parce que vous avez le contexte en tête.
-- **Les questions du reviewer sont des bugs.** Si votre collègue demande "qu'est-ce que tu veux dire par 'code propre' ici ?", l'agent se posera la même question, sauf qu'il ne la posera pas.
-- **Les conventions d'équipe se propagent.** Un reviewer peut repérer que votre AGENT.md contredit les standards établis par un autre agent.
-
-Intégrez la review d'AGENT.md dans votre processus de PR. Même branche, même review, même merge.
-
-## Atelier final : checklist de validation
-
-Avant de considérer un AGENT.md comme prêt, passez-le à travers cette checklist.
-
-### Structure
-
-- [ ] Le fichier fait moins de 60 lignes
-- [ ] Le Rôle tient en une phrase
-- [ ] L'Objectif décrit un livrable concret
-- [ ] Les Permissions incluent au moins une interdiction
-- [ ] Les Critères d'acceptation sont tous mesurables
-- [ ] Au moins un exemple de sortie est fourni
-- [ ] Le comportement en cas d'échec est défini
-
-### Qualité des instructions
-
-- [ ] Aucune instruction subjective ("bon code", "qualité", "propre")
-- [ ] Aucune contradiction entre les instructions
-- [ ] Aucun souhait déguisé en règle ("idéalement", "si possible")
-- [ ] Chaque ligne change le comportement de l'agent
-
-### Test
-
-- [ ] Un collègue sans contexte comprend le fichier
-- [ ] L'agent a été testé sur au moins 3 cas réels
-- [ ] Les écarts observés ont été corrigés par des instructions
-- [ ] Le fichier est versionné dans le dépôt Git
-
-### Organisation
-
-- [ ] Un seul agent par responsabilité
-- [ ] Les conventions partagées sont extraites dans un fichier commun
-- [ ] Le fichier est accessible à toute l'équipe
-
-Cette checklist est aussi un bon outil de peer review. Partagez-la avec votre équipe et utilisez-la systématiquement avant chaque mise en production d'un AGENT.md.
+- [AGENTS.md](https://github.com/agentsmd/agents.md).
+- [Claude Code : permissions](https://code.claude.com/docs/en/permissions).
+- [Google : pratiques de revue](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).
+- [OWASP : évaluation d’entrées non fiables](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md).

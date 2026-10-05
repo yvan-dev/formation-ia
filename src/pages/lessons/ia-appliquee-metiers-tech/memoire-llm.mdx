@@ -1,173 +1,87 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "memoire-llm"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "fonctionnement-llm"
-  title: "Comment fonctionne un LLM"
-nextLesson: 
-  slug: "hallucinations"
-  title: "Les hallucinations : causes, détection et réduction"
+title: 'Mémoire des LLM : contexte et récupération'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'memoire-llm'
 ---
 
-## La mémoire des LLMs : fenêtre de contexte et Context Rot
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un LLM n'a pas de mémoire au sens classique. Il ne retient rien entre deux conversations, et à l'intérieur d'une conversation, il ne "retient" que ce qui tient dans sa fenêtre de contexte. Comprendre cette limite change fondamentalement la façon dont on structure ses échanges avec un modèle.
+Quand un assistant « se souvient », plusieurs mécanismes peuvent être à l’œuvre. Les distinguer évite d’attendre d’une conversation ce qu’elle ne garantit pas, ou de stocker des données sans en maîtriser les conséquences.
 
-### La fenêtre de contexte : votre espace de travail
+## Objectifs de la leçon
 
-Imaginez un bureau avec une surface limitée. Vous pouvez y poser des documents, mais quand le bureau est plein, vous devez retirer des feuilles pour en ajouter de nouvelles. Les feuilles retirées n'existent plus pour vous.
+- Distinguer paramètres, contexte, mémoire d’application et récupération.
+- Construire un contexte utile sans dépendre d’un historique implicite.
+- Vérifier les sources et les droits d’accès d’un système documentaire.
 
-La fenêtre de contexte fonctionne de la même manière. C'est le nombre total de tokens (entrée + sortie) que le modèle peut traiter simultanément.
+## Quatre mécanismes à distinguer
 
-| Modèle | Fenêtre de contexte | Équivalent approximatif |
-|--------|--------------------|-----------------------|
-| GPT-3.5 | 16K tokens | ~25 pages |
-| GPT-4o | 128K tokens | ~200 pages |
-| Claude Opus/Sonnet | 200K tokens | ~300 pages |
-| Gemini 1.5 Pro | 1M+ tokens | ~1 500 pages |
+| Mécanisme                 | Contenu                                         | Limite principale                               |
+| ------------------------- | ----------------------------------------------- | ----------------------------------------------- |
+| Paramètres du modèle      | Informations apprises pendant l’entraînement    | Pas un registre fiable de votre projet          |
+| Contexte de l’appel       | Instructions, messages et données fournis       | Capacité et pertinence limitées                 |
+| Mémoire d’application     | Préférences ou résumés conservés par un service | Politique de stockage et exactitude à contrôler |
+| Récupération documentaire | Passages recherchés dans des sources            | Qualité de recherche et autorisations           |
 
-Ces chiffres semblent énormes. En pratique, ils se remplissent vite. Un fichier de code de 1 000 lignes consomme environ 6 000 tokens. Ajoutez le system prompt, l'historique de conversation, et quelques fichiers de contexte : vous atteignez les limites plus rapidement qu'on ne le pense.
+La mémoire entre conversations dépend du produit, de sa configuration et du compte. Elle n’est ni toujours présente, ni toujours absente. Vérifiez ce que le service conserve et comment le corriger ou le supprimer.
 
-### Ce qui se passe quand la fenêtre déborde
+## La fenêtre de contexte
 
-Quand la conversation dépasse la fenêtre de contexte, les messages les plus anciens sont supprimés. Le modèle ne vous prévient pas. Il continue de répondre comme si de rien n'était, mais il a perdu le début de la conversation.
+La fenêtre de contexte limite ce que le modèle peut traiter dans un appel. Les règles exactes varient : certains budgets incluent différents types de tokens et une réserve de sortie. Consultez la documentation de la référence utilisée.
 
-Conséquences concrètes :
-- Les instructions données au début de la session sont oubliées
-- Les décisions prises plus tôt ne sont plus accessibles
-- Le modèle peut se contredire sans s'en rendre compte
+Lorsque la limite approche, l’application peut résumer, tronquer, sélectionner des messages ou refuser la demande. N’affirmez pas que toutes les interfaces suppriment automatiquement les anciens messages. Observez le comportement de votre outil et ses indications d’usage.
 
-### Context Rot : la dégradation silencieuse
+Un contexte accepté n’est pas nécessairement un contexte bien exploité. Des informations peuvent être négligées dans une longue conversation. Les expressions « lost in the middle » ou « context rot » décrivent des problèmes observés dans certaines conditions, pas une loi selon laquelle toute session longue devient inutilisable.
 
-Même quand la fenêtre de contexte n'est pas dépassée, la qualité des réponses se dégrade sur les longues sessions. C'est le phénomène de **Context Rot** (pourrissement du contexte).
+## Construire un paquet de contexte
 
-Le mécanisme est simple : plus la conversation est longue, plus le modèle doit jongler avec des informations variées, parfois contradictoires. Sa capacité d'attention se dilue. Les informations au milieu de la fenêtre sont moins bien prises en compte que celles au début et à la fin (c'est le problème connu du "lost in the middle").
+Pour une tâche de développement, réunissez le besoin, les critères de réussite, la version des dépendances et les fichiers réellement concernés. Ajoutez les décisions déjà prises et leurs raisons lorsqu’elles évitent une mauvaise interprétation.
 
-**Symptômes typiques :**
-- Le modèle "oublie" des contraintes que vous avez posées plus tôt
-- Les réponses deviennent plus génériques, moins précises
-- Des incohérences apparaissent entre les réponses successives
-- Les hallucinations augmentent en fréquence
-- Le modèle reformule des choses déjà dites au lieu d'avancer
+```markdown
+# Reprise de tâche
 
-**Remèdes pratiques :**
+Objectif : afficher un état vide accessible pour les résultats de recherche.
+Contraintes : conserver la route et le moteur de recherche existants.
+Décision : distinguer zéro résultat d’une erreur réseau.
+État vérifié : le cas nominal fonctionne ; l’erreur reste à traiter.
+À lire : composant de recherche, styles partagés et test du formulaire.
+```
 
-1. **Résumés intermédiaires.** Demandez au modèle de résumer les décisions prises et le contexte important, puis réinjectez ce résumé dans une nouvelle session.
-2. **Redécoupage des sessions.** Traitez un sujet par conversation. Plutôt qu'une session marathon de 3 heures, faites 6 sessions de 30 minutes avec un brief clair à chaque reprise.
-3. **Réinitialisation stratégique.** Quand vous sentez la qualité baisser, démarrez une nouvelle conversation en collant les éléments essentiels (spécifications, décisions prises, état actuel).
+Un résumé peut omettre une contrainte ou inventer une conclusion. Relisez-le avant de le réutiliser. Les décisions importantes gagnent à être versionnées dans le dépôt plutôt que confiées uniquement à une mémoire de conversation.
 
-### Mémoire externe : le principe du RAG
+## RAG : rechercher puis générer
 
-Puisqu'un LLM n'a pas de mémoire persistante, comment lui donner accès à des informations spécifiques (documentation interne, base de connaissances, historique projet) ?
+La génération augmentée par récupération, ou **RAG**, recherche des passages et les fournit au modèle. La recherche peut être lexicale, vectorielle ou hybride ; une base vectorielle n’est pas obligatoire.
 
-C'est le rôle du **RAG** (Retrieval-Augmented Generation). Le principe en version simple :
+La récupération doit respecter les droits de l’utilisateur avant que les documents entrent dans le contexte. Une instruction « ne montre pas les données confidentielles » arrive trop tard si des documents non autorisés ont déjà été transmis.
 
-1. Vos documents sont découpés en fragments et indexés dans une base de données vectorielle.
-2. Quand l'utilisateur pose une question, le système recherche les fragments les plus pertinents.
-3. Ces fragments sont injectés dans le prompt, avant la question de l'utilisateur.
-4. Le LLM répond en s'appuyant sur ces fragments comme contexte.
+Vérifiez aussi la date, la provenance et la pertinence des passages. Le modèle peut interpréter incorrectement une bonne source ou produire une conclusion qu’elle ne soutient pas. La citation rend la vérification possible ; elle ne garantit pas l’exactitude.
 
-Le modèle ne "connaît" toujours rien. On lui fournit l'information pertinente au bon moment, dans sa fenêtre de contexte. C'est une forme de mémoire externe, pas de mémoire intrinsèque.
+## Cas concret : retrouver une procédure
 
-### Contexte court vs contexte long : implications pratiques
+Un assistant interne trouve deux procédures de déploiement, dont une archivée. La réponse doit distinguer les versions et citer la procédure applicable. Si aucun document autorisé ne répond à la question, le système doit le signaler plutôt que compléter avec une règle inventée.
 
-Un contexte plus grand n'est pas toujours meilleur.
+<LessonPractice
+  task="Préparez une reprise de tâche contenant une décision validée, une hypothèse non vérifiée et deux références de fichiers."
+  deliverable="Un résumé relu que vous pourriez transmettre à une nouvelle session."
+  criteria={[
+    'Décisions et hypothèses sont explicitement séparées.',
+    'Les chemins existent et les versions utiles sont précisées.',
+    'Le résumé ne contient aucun secret ni résultat de test non exécuté.',
+  ]}
+  solution="Écrivez par exemple : décision validée = garder le moteur existant ; hypothèse = l’état vide est géré dans le composant de recherche, à vérifier. N’écrivez pas ‘tests réussis’ si vous n’avez qu’un plan de test. La nouvelle session doit pouvoir reprendre en relisant les deux fichiers indiqués."
+/>
 
-| Situation | Recommandation |
-|-----------|---------------|
-| Question précise sur un sujet ciblé | Contexte court, bien ciblé. Moins de bruit, meilleure réponse. |
-| Analyse d'un gros fichier de code | Contexte long nécessaire. Injectez le fichier complet. |
-| Session de travail itérative | Contexte moyen. Redémarrez régulièrement avec un résumé. |
-| Comparer plusieurs documents | Contexte long, mais surveillez la qualité. Testez les réponses. |
+## À retenir
 
-### Bonnes pratiques pour gérer le contexte
+La mémoire est une propriété du système complet. Gardez les décisions importantes dans des sources maîtrisées et fournissez à chaque tâche le contexte nécessaire.
 
-**Structurez vos prompts.** Mettez les informations critiques au début et à la fin de votre message. Le milieu est la zone la moins bien traitée par le modèle.
+## Sources et mise à jour
 
-**Soyez sélectif.** N'injectez pas "tout le projet" dans le contexte. Identifiez les fichiers réellement pertinents. Du contexte inutile, c'est du bruit qui dilue l'attention du modèle.
+Révision : **4 octobre 2026**.
 
-**Surveillez les signaux de dégradation.** Si les réponses deviennent vagues, répétitives ou incohérentes, c'est probablement du Context Rot. Relancez une session propre.
-
-**Réaffirmez les contraintes.** Dans les longues sessions, rappelez périodiquement les contraintes et le format attendu. Ne comptez pas sur le modèle pour s'en souvenir.
-
-**Préférez plusieurs sessions courtes à une session longue.** C'est contre-intuitif, mais 5 sessions ciblées de 20 minutes produisent généralement de meilleurs résultats qu'une session continue de 2 heures.
+- [LangGraph : état, persistance et mémoire](https://github.com/langchain-ai/langgraph).
+- [OpenAI Agents : gestion de sessions](https://github.com/openai/openai-agents-python).
+- [Google Gen AI : limites et fonctions de contexte](https://github.com/googleapis/python-genai).

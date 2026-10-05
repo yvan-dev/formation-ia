@@ -1,183 +1,90 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "La stack retenue pour ce projet"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "stack-retenue"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "ecosysteme-outils"
-  title: "L'écosystème des outils IA"
-nextLesson: 
-  slug: "veille-technologique"
-  title: "Maintenir sa veille technologique"
+title: 'La stack retenue pour ce projet'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'stack-retenue'
 ---
 
-## La stack retenue pour ce projet
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Pour cette formation, on a fait des choix. Pas parce que ce sont les seuls outils valides, mais parce qu'il faut bien en choisir pour avancer. Voici ce qu'on utilise et pourquoi.
+La stack de ce site est une référence concrète pour les exercices. Elle ne doit pas être confondue avec les applications SaaS fictives utilisées dans certains cas pédagogiques.
 
-### Les outils choisis
+## Objectifs de la leçon
 
-**Claude (Anthropic)** comme modèle principal, et **Claude Code** comme interface CLI agentique.
+- Identifier les technologies réellement présentes dans le dépôt.
+- Associer les scripts aux vérifications qu’ils réalisent.
+- Choisir un outil IA compatible sans dépendance obligatoire à une marque.
 
-C'est tout. Deux outils. La simplicité est volontaire : on se concentre sur les compétences, pas sur la multiplication des outils.
+## Le socle de l’application
 
-### Pourquoi Claude ?
+**Vérification du dépôt le 4 octobre 2026.** Le site utilise Astro 5, React 19, Tailwind CSS 4 et MDX. Astro génère les pages, MDX porte les leçons, les composants partagés assurent la cohérence et Pagefind indexe les pages compilées pour la recherche.
 
-Plusieurs raisons concrètes ont guidé ce choix.
+| Élément        | Rôle dans le projet                          |
+| -------------- | -------------------------------------------- |
+| Astro          | Routage par fichiers et génération statique  |
+| MDX            | Contenus pédagogiques et composants de leçon |
+| React          | Composants interactifs lorsque nécessaires   |
+| Tailwind / CSS | Styles et tokens de présentation             |
+| Pagefind       | Index de recherche après build               |
+| Playwright     | Vérification des parcours dans le navigateur |
 
-**Qualité de raisonnement.** Claude excelle sur les taches qui demandent de la réflexion structurée : analyse de code, rédaction technique, résolution de problèmes multi-étapes. Pour une formation orientée métiers tech, c'est le critère numéro un.
+Ce dépôt n’est pas une application Next.js/Express et ne possède pas le backend de notifications ou de réinitialisation présenté dans les cas fictifs. Ces exemples servent à exercer le raisonnement sur un autre contexte, clairement identifié.
 
-**Fenêtre de contexte large.** Claude peut traiter des documents longs (200K tokens). Vous pouvez lui donner un fichier de spec complet, un README entier, ou plusieurs fichiers source d'un coup.
+## Installer selon le dépôt
 
-**Politique de confidentialité.** Via l'API, Anthropic ne conserve pas vos données et ne les utilise pas pour l'entrainement. C'est un point critique pour travailler sur du code professionnel.
-
-**API robuste.** L'API est bien documentée, stable, et supporte le streaming. Si vous voulez aller au-delà de l'interface chat, tout est accessible programmatiquement.
-
-### Pourquoi Claude Code ?
-
-Claude Code est un outil CLI (ligne de commande) qui transforme Claude en agent capable d'agir sur votre système de fichiers.
-
-Ce qui le distingue d'un simple chatbot :
-
-- **Accès au filesystem.** Il lit et modifie vos fichiers directement, sans copier-coller.
-- **Exécution de commandes.** Il peut lancer vos tests, votre build, vos scripts.
-- **Mode agentique.** Il planifie, exécute, vérifie, et itère de façon autonome.
-- **Contexte du projet.** Il comprend la structure de votre codebase, pas juste le fichier courant.
-
-### Prise en main rapide
-
-L'installation de Claude Code se fait en quelques étapes.
+Lisez le `package.json`, le lockfile et les instructions du projet. Utilisez une version de Node compatible avec les dépendances et la CI. Le lockfile décrit les versions résolues ; les plages du manifeste ne remplacent pas cette référence.
 
 ```bash
-# Installation
-npm install -g @anthropic-ai/claude-code
-
-# Lancement dans un projet
-cd votre-projet
-claude
+npm ci
+npm run dev
 ```
 
-Au premier lancement, Claude Code vous demande une clé API Anthropic. Vous pouvez la générer sur [console.anthropic.com](https://console.anthropic.com).
+`npm ci` utilise le lockfile et recrée l’installation. Si un script d’installation échoue, examinez sa sortie et les instructions du dépôt plutôt que d’ignorer l’erreur. Dans un environnement cloud, un script de hooks peut nécessiter un réglage documenté ; ce réglage ne doit pas masquer un échec du build.
 
-Quelques commandes utiles pour démarrer :
+## Vérifier le travail
 
 ```bash
-# Poser une question sur le codebase
-claude "explique la structure de ce projet"
-
-# Demander une modification
-claude "ajoute une validation email dans le formulaire d'inscription"
-
-# Mode conversation
-claude
-> quels sont les tests qui échouent ?
-> corrige-les
+npm run build
+npm run lint
+npm run test:e2e
 ```
 
-### Cas d'usage principaux
+Le build inclut la génération Astro puis l’index Pagefind. Le lint vérifie des règles de code ; il ne prouve pas que le parcours utilisateur fonctionne. Les tests E2E utilisent un navigateur et vérifient les interactions. Consultez la configuration Playwright pour son serveur et ses prérequis.
 
-Voici comment on utilise Claude dans cette formation.
+Une commande réussie avec zéro test exécuté ne constitue pas une validation du parcours. Notez le nombre de tests, les échecs et les contrôles non exécutés. Pour une modification de leçon, vérifiez aussi le rendu MDX, les liens et la navigation.
 
-| Cas d'usage | Outil | Exemple |
-|------------|-------|---------|
-| Comprendre du code | Claude (chat) | "Explique ce que fait cette fonction" |
-| Générer du code | Claude Code | "Crée un endpoint REST pour les utilisateurs" |
-| Refactorer | Claude Code | "Extrais cette logique dans un service dédié" |
-| Debugger | Claude Code | "Les tests échouent, trouve et corrige le bug" |
-| Rédiger des specs | Claude (chat) | "Rédige une spec technique pour cette feature" |
-| Revoir du code | Claude (chat) | "Review ce diff et suggère des améliorations" |
+## Choisir l’assistant de développement
 
-### L'approche est transférable
+Vous pouvez utiliser l’outil approuvé par votre organisation, à condition de pouvoir limiter ses accès et relire ses modifications. Le cours n’exige pas un abonnement particulier. La compétence travaillée est transférable : lire, cadrer, produire, vérifier et livrer.
 
-Tout ce que vous apprendrez avec Claude s'applique aux autres outils. Les principes sont les mêmes :
+Si vous choisissez Claude Code, suivez sa documentation officielle. Le README recommande désormais une installation native ou un gestionnaire pris en charge ; l’installation npm y est indiquée comme dépréciée. Par exemple, avec Homebrew déjà configuré :
 
-- Un bon prompt reste un bon prompt, quel que soit le modèle
-- La décomposition de taches complexes fonctionne partout
-- L'évaluation critique des sorties est universelle
-- Le workflow spec-first est indépendant de l'outil
+```bash
+brew install --cask claude-code
+```
 
-Si demain vous passez à GPT-5, à Gemini, ou à un modèle qui n'existe pas encore, vos compétences restent. L'outil est un véhicule, pas la destination.
+Sur Windows, la documentation propose notamment WinGet. N’exécutez pas une commande d’installation copiée d’un résultat IA sans vérifier sa source. L’authentification et les conditions de données dépendent du mode d’accès choisi ; ne supposez pas qu’une clé API est toujours nécessaire ni qu’aucune donnée n’est conservée.
 
-### En résumé
+<LessonPractice
+  task="Cartographiez les fichiers de votre checkout : pages, leçons, composants, styles, collection de cours et tests."
+  deliverable="Une carte de six chemins existants et le rôle de trois scripts npm."
+  criteria={[
+    'Les chemins sont vérifiés dans le dépôt.',
+    'Le build et les tests navigateur sont distingués.',
+    'Aucun backend fictif n’est présenté comme présent dans ce site.',
+  ]}
+  solution="Les pages se trouvent dans src/pages, les leçons dans son sous-répertoire lessons, les composants dans src/components, les styles dans src/styles et le programme dans src/content/courses. Les tests sont dans e2e. Vérifiez ces chemins dans votre version du dépôt et comparez build, lint et test:e2e aux scripts du manifeste."
+/>
 
-- On utilise Claude + Claude Code pour la formation : qualité de raisonnement, confidentialité, et capacités agentiques.
-- L'installation prend 5 minutes. La prise en main est progressive.
-- Les compétences acquises sont transférables à tout autre outil IA.
+## À retenir
+
+Les fichiers du dépôt et le lockfile sont la référence pour la stack. L’outil IA doit s’adapter au projet, pas provoquer une migration sans besoin.
+
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**.
+
+- [Manifeste de ce dépôt](https://github.com/yvan-dev/formation-ia/blob/main/package.json).
+- [Astro : dépôt officiel](https://github.com/withastro/astro).
+- [Claude Code : installation actuelle](https://github.com/anthropics/claude-code#get-started).

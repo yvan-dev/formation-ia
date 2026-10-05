@@ -1,291 +1,89 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
 title: "L'art du prompting en développement"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "prompting-dev"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "techniques-avancees-prompt"
-  title: "Techniques avancées de prompting"
-nextLesson: 
-  slug: "ecosysteme-outils"
-  title: "L'écosystème des outils IA"
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'prompting-dev'
 ---
 
-## L'erreur classique : demander du code directement
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Le réflexe quand on utilise un LLM en dev, c'est de demander du code. "Écris-moi une fonction qui fait X." Le problème : vous obtenez du code qui fonctionne peut-être, mais vous ne savez pas pourquoi il est construit comme ça, quels compromis ont été faits, ni quelles alternatives existaient.
+Un prompt de développement utile relie un besoin à un dépôt réel : ses conventions, ses dépendances et ses tests. Il réduit les changements inutiles et fournit au relecteur les moyens d’évaluer le résultat.
 
-Les meilleurs résultats viennent quand vous traitez l'IA comme un collègue senior, pas comme un générateur de code. Vous discutez avant de coder.
+## Objectifs de la leçon
 
-## Demander de l'architecture avant du code
+- Préparer une demande adaptée à la taille du changement.
+- Demander des preuves de comportement plutôt qu’une assurance verbale.
+- Relire le résultat et les limites de l’exécution.
 
-Avant de demander une implémentation, demandez un plan. L'IA est meilleure quand elle réfléchit d'abord à la structure.
+## Commencer par le dépôt
 
-### Mauvais réflexe
+Avant de modifier, identifiez les fichiers concernés, les scripts du projet et les contraintes existantes. Demandez au système de citer les fichiers lus lorsqu’ils fondent une décision. Un chemin proposé mais non vérifié ne constitue pas une preuve.
 
-```markdown
-Écris un système de file d'attente pour traiter des jobs en arrière-plan
-en Node.js.
+Pour une petite correction, une demande courte peut suffire. Pour un changement qui touche plusieurs couches, un plan aide à clarifier les étapes et les inconnues. Le formalisme doit rester proportionné au risque.
+
+## Un prompt de modification réutilisable
+
+```text
+Besoin : le formulaire doit annoncer les erreurs au lecteur d’écran.
+Contexte : lire le composant, les styles et le test du formulaire.
+Contraintes : conserver les routes, la validation et les composants existants.
+Implémentation : proposer le plus petit changement couvrant le besoin.
+Vérification : tester une soumission invalide au clavier et un cas valide.
+Livraison : décrire le comportement, les fichiers modifiés et les contrôles exécutés.
+Signaler les limites et les changements hors périmètre nécessaires.
 ```
 
-Vous allez obtenir un fichier monolithique avec des choix arbitraires.
+La demande explique ce que l’utilisateur doit pouvoir faire. Elle n’impose pas une bibliothèque supplémentaire sans raison.
 
-### Bon réflexe
+## Décrire les comportements, y compris les erreurs
 
-```markdown
-Tu es un architecte backend Node.js.
+Un ticket « ajouter un export » peut cacher des exigences d’autorisation, de format, de volume et de confidentialité. Précisez les cas attendus avant la génération du code : qui peut exporter, quelles données, quel état vide, quelle erreur et quelle taille maximale ?
 
-Je dois implémenter un système de file d'attente pour traiter des jobs
-en arrière-plan. Contexte :
-- ~500 jobs/heure en pic
-- Les jobs sont des envois d'email et des générations de PDF
-- Stack actuelle : Node.js, PostgreSQL, Redis disponible
-- Équipe de 3 devs, pas d'expérience avec les message brokers
+Pour une API fictive, un format d’erreur peut suivre **RFC 9457, Problem Details for HTTP APIs**, qui remplace RFC 7807. Le choix exact des codes HTTP doit rester cohérent avec le contrat du projet. N’appliquez pas automatiquement un code universel à toutes les erreurs de validation.
 
-Avant d'écrire du code :
-1. Propose 2-3 approches architecturales
-2. Compare-les sur : complexité, fiabilité, observabilité
-3. Recommande une approche avec justification
-4. Décris la structure des fichiers / modules
+```json
+{
+  "type": "https://example.com/problems/invalid-limit",
+  "title": "Paramètre de pagination invalide",
+  "status": 400,
+  "detail": "La limite doit être un entier positif dans la plage autorisée."
+}
 ```
 
-La différence : vous obtenez une vision d'ensemble avant de plonger dans le code. Vous pouvez challenger les choix, poser des questions, et seulement ensuite demander l'implémentation de l'approche retenue.
+Cet exemple est un contrat pédagogique, pas une API déjà présente dans le site de formation. Un message d’erreur ne doit pas révéler de secret ni de détail interne sensible.
 
-## Demander une explication avant une implémentation
+## Demander une justification vérifiable
 
-Quand vous ne comprenez pas bien un concept ou une technologie, résistez à la tentation de demander directement du code. Demandez d'abord une explication.
+Demandez les hypothèses, les options pertinentes et les raisons d’un choix. Une justification utile s’appuie sur une contrainte du projet ou une observation mesurée. Il n’est pas nécessaire de demander la chaîne de pensée interne du modèle.
 
-```markdown
-Avant d'écrire quoi que ce soit, explique-moi comment fonctionne
-le pattern CQRS dans le contexte d'une API REST Node.js.
+Pour un refactoring, exigez que le comportement public reste identique et que les tests pertinents soient comparés avant/après. Ne confondez pas des tests modifiés pour passer avec une preuve de non-régression.
 
-- Quels problèmes ça résout ?
-- À partir de quelle complexité ça vaut le coup ?
-- Quels sont les pièges courants ?
+## Relire la livraison
 
-Utilise un exemple concret avec une entité "Commande" dans un
-contexte e-commerce.
-```
+Vérifiez le diff, les fichiers ajoutés, les dépendances, les effets sur les données et les commandes exécutées. Une commande terminée avec succès peut avoir exécuté zéro test : regardez le compte et le résultat du runner. Un test non lancé doit rester marqué comme non exécuté.
 
-Cette approche a deux avantages : vous apprenez (au lieu de copier-coller du code que vous ne comprenez pas), et l'implémentation qui suivra sera de meilleure qualité parce que l'IA a déjà posé les fondations conceptuelles dans son contexte.
+La revue doit couvrir les aspects que les outils ne jugent pas : adéquation au besoin, lisibilité et complexité. Si une commande échoue, faites distinguer problème d’environnement et défaut du changement avant de décider de la suite.
 
-## Faire critiquer son propre code
+<LessonPractice
+  task="Préparez une demande pour ajouter un export CSV dans une API fictive réservée au propriétaire des données."
+  deliverable="Un prompt et une liste de cas d’acceptation, sans imposer de bibliothèque nouvelle."
+  criteria={[
+    'L’accès d’un autre utilisateur est explicitement refusé.',
+    'L’état vide et l’erreur d’export sont prévus.',
+    'La restitution inclut les tests réellement exécutés et leurs limites.',
+  ]}
+  solution="Le prompt doit citer le mécanisme d’autorisation existant et demander sa réutilisation. Les cas essentiels sont l’export autorisé, le refus d’accès croisé, l’absence de données et l’échec du service. Le format CSV doit respecter les conventions retenues, y compris le traitement des caractères et les risques liés à l’ouverture dans un tableur."
+/>
 
-L'un des usages les plus puissants d'un LLM en dev : lui soumettre votre code et lui demander de le critiquer. Pas juste "est-ce que c'est bien ?", mais une critique structurée.
+## À retenir
 
-```markdown
-Tu es un tech lead qui fait des code reviews exigeantes.
+Le prompt de développement sert de contrat de travail vérifiable. Le diff et les contrôles donnent la preuve de livraison.
 
-Voici ma fonction de gestion des erreurs API. Critique-la sur :
-1. Gestion des cas limites
-2. Typage TypeScript
-3. Testabilité
-4. Clarté pour un nouveau développeur qui lirait ce code
+## Sources et mise à jour
 
-[votre code ici]
+Révision : **4 octobre 2026**.
 
-Pour chaque problème identifié :
-- Explique pourquoi c'est un problème
-- Propose une correction concrète
-- Classe en critique / important / mineur
-```
-
-Le point clé : soyez spécifique sur les axes de critique. "Review ce code" donne des commentaires génériques. "Review ce code sur la gestion des erreurs et la testabilité" donne des retours actionnables.
-
-### Variante : demander un audit de sécurité
-
-```markdown
-Tu es un expert en sécurité applicative (OWASP Top 10).
-
-Audite cet endpoint API qui gère l'authentification.
-Cherche spécifiquement :
-- Injection (SQL, NoSQL, LDAP)
-- Gestion des tokens (stockage, expiration, rotation)
-- Rate limiting
-- Information disclosure dans les messages d'erreur
-
-[votre code ici]
-```
-
-## Demander des alternatives et des trade-offs
-
-Quand vous avez une solution qui fonctionne, demandez à l'IA s'il existe mieux. Pas "améliore ce code", mais "quelles autres approches existent et pourquoi choisir l'une plutôt que l'autre ?"
-
-```markdown
-Voici comment je gère le cache dans mon API :
-[votre code]
-
-Propose 2 alternatives à cette approche.
-Pour chaque alternative, compare avec ma solution actuelle sur :
-- Performance
-- Complexité de maintenance
-- Comportement en cas de pic de charge
-- Facilité de debug
-
-Termine par une recommandation argumentée. Si ma solution actuelle
-est la meilleure, dis-le.
-```
-
-Ce prompt est puissant parce qu'il donne la permission à l'IA de valider votre solution existante. Sans cette dernière phrase, l'IA va toujours proposer quelque chose de différent (même si votre approche est la bonne), parce qu'elle veut "être utile".
-
-## Le pattern "show your work"
-
-Ce pattern consiste à demander à l'IA de montrer son raisonnement avant de produire du code. C'est le Chain of Thought appliqué au développement.
-
-```markdown
-Tu es un développeur senior TypeScript.
-
-Implémente un rate limiter pour une API Express.
-
-IMPORTANT : Avant d'écrire le code, explique :
-1. L'algorithme que tu vas utiliser et pourquoi (token bucket,
-   sliding window, fixed window, etc.)
-2. Les compromis de cet algorithme vs les alternatives
-3. Les cas limites à gérer
-4. La structure du code
-
-Ensuite seulement, écris l'implémentation.
-```
-
-L'intérêt : vous pouvez valider le raisonnement avant que le code soit écrit. Si l'IA choisit un algorithme inadapté à votre contexte, vous corrigez le tir avant d'avoir 200 lignes de code à jeter.
-
-### Quand utiliser "show your work"
-
-- Quand la tâche a plusieurs approches valides
-- Quand vous voulez comprendre, pas juste obtenir du code
-- Quand le code sera difficile à modifier après coup (architecture, schémas DB)
-- Quand vous allez devoir justifier le choix auprès de votre équipe
-
-## Itérer : premier jet, review, affinage
-
-Le workflow optimal pour du code généré par IA n'est pas un prompt unique. C'est une conversation en trois temps.
-
-### Temps 1 : Le premier jet
-
-Demandez une première version avec les contraintes de base.
-
-```markdown
-Implémente un middleware Express de validation de requêtes
-utilisant Zod. Le middleware doit valider body, query params
-et path params séparément.
-```
-
-### Temps 2 : La review
-
-Lisez le code généré. Identifiez ce qui ne colle pas avec votre contexte. Puis demandez des modifications spécifiques.
-
-```markdown
-Bonne base. Modifications :
-1. Le middleware doit retourner une 422 (pas une 400) avec le
-   détail des erreurs de validation au format RFC 7807
-2. Ajoute un mode "strict" qui rejette les champs non déclarés
-   dans le schema
-3. Le typage TypeScript doit inférer le type du body validé
-   (req.body doit être typé après validation)
-```
-
-### Temps 3 : L'affinage
-
-Derniers ajustements, cas limites, documentation.
-
-```markdown
-Ajoute :
-- La gestion du content-type (rejeter si ce n'est pas JSON)
-- Un test unitaire pour chaque cas d'erreur
-- Un JSDoc sur la fonction principale avec un exemple d'utilisation
-```
-
-### Pourquoi itérer fonctionne mieux qu'un mega-prompt
-
-Un prompt unique de 50 lignes a un problème : le modèle doit tout gérer en même temps. En itérant, chaque étape a un focus clair. Le modèle utilise le code déjà généré comme contexte, ce qui améliore la cohérence.
-
-L'autre avantage : vous restez maître du processus. Vous validez chaque étape avant de passer à la suivante. Le résultat final est du code que vous comprenez et que vous avez validé, pas une boîte noire générée en un coup.
-
-## Résumé : les 6 réflexes du dev qui prompte bien
-
-| Réflexe | Au lieu de... | Faites... |
-|---------|--------------|-----------|
-| Architecture d'abord | "Écris le code" | "Propose l'architecture, puis on code" |
-| Comprendre d'abord | "Implémente CQRS" | "Explique CQRS, puis implémente" |
-| Critique structurée | "C'est bien mon code ?" | "Critique sur sécurité, typage, testabilité" |
-| Alternatives | "Améliore ce code" | "Compare 3 approches avec trade-offs" |
-| Show your work | "Écris un rate limiter" | "Explique ton choix d'algorithme, puis code" |
-| Itération | Un mega-prompt | Draft, review, affinage |
+- [Google : revue du code, des tests et de la complexité](https://github.com/google/eng-practices/blob/master/review/reviewer/looking-for.md).
+- [RFC 9457 : Problem Details](https://www.rfc-editor.org/rfc/rfc9457.html).
+- [OpenAI Cookbook : instructions de développement](https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5_prompting_guide.ipynb).

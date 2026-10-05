@@ -1,255 +1,96 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Approche par sommaire"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "approche-sommaire"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "workflow-complet"
-  title: "Exemple de workflow complet"
-nextLesson: 
-  slug: "assistant-vs-agent"
-  title: "De l'assistant à l'agent"
+title: 'Approche par sommaire'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'approche-sommaire'
 ---
 
-## Approche par sommaire
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Un projet qui utilise l'IA de manière intensive finit vite avec des instructions éparpillées : des prompts dans des fichiers texte, des conventions dans un README, des règles implicites dans la tête du lead dev. L'approche par sommaire consiste à structurer ces instructions comme un livre, avec une table des matières et des chapitres ciblés.
+Une documentation d’instructions doit aider à trouver le bon contexte au bon moment. Un point d’entrée concis, relié à des documents spécialisés, peut être plus maintenable qu’un fichier qui répète toutes les conventions.
 
-### Le problème du monolithe de prompts
+## Objectifs de la leçon
 
-Le réflexe naturel est de tout mettre dans un seul fichier. Un `CLAUDE.md` ou un `AGENTS.md` de 500 lignes qui couvre tout : conventions de code, architecture, workflow de déploiement, règles de sécurité.
+- Organiser les instructions autour d’un point d’entrée.
+- Distinguer lien documentaire et chargement automatique.
+- Vérifier la cohérence des règles et leur portée.
 
-Le problème : un LLM traite ce fichier comme du contexte. Plus le fichier est long, plus le signal utile est dilué par le bruit. Quand l'IA travaille sur un endpoint API, elle n'a pas besoin des conventions CSS. Quand elle écrit un test, elle n'a pas besoin du workflow de déploiement.
+## Le problème n’est pas un nombre de lignes
 
-```text
-# Anti-pattern : le fichier monolithique
+Un fichier trop répétitif peut diluer l’information et coûter davantage à charger. Un fichier trop court peut omettre une contrainte essentielle. Il n’existe pas de limite universelle de cinquante ou soixante lignes qui garantisse la qualité.
 
-CLAUDE.md (487 lignes)
-├── Conventions de nommage
-├── Architecture du projet
-├── Règles de sécurité
-├── Guide de style CSS
-├── Workflow Git
-├── Configuration Docker
-├── Règles de test
-├── Documentation API
-└── ... tout le reste
-```
+Découpez lorsque cela améliore la pertinence, la recherche ou la maintenance. Conservez près du point d’entrée les contraintes importantes et les chemins vers les détails. Expliquez brièvement la raison d’une règle lorsqu’elle évite une mauvaise interprétation.
 
-### Découpage par use cases
+## Une structure portable
 
-Le principe : une règle = un contexte précis. Chaque fichier d'instructions couvre un cas d'usage spécifique et ne contient que ce qui est nécessaire pour ce cas.
+Exemple pédagogique pour un dépôt :
 
 ```text
-# Pattern : découpage par use case
-
-.claude/
-├── CLAUDE.md                  # Sommaire + règles globales (20-30 lignes)
-├── rules/
-│   ├── api-endpoints.md       # Conventions pour les endpoints API
-│   ├── database-migrations.md # Règles pour les migrations Prisma
-│   ├── testing.md             # Patterns de test, helpers disponibles
-│   ├── frontend-components.md # Conventions React, styling
-│   ├── error-handling.md      # Patterns de gestion d'erreur
-│   └── security.md            # Règles de sécurité non-négociables
+AGENTS.md
+README.md
+docs/
+  architecture.md
+  testing.md
+  design-system.md
+  operations.md
+src/
+  ...
 ```
 
-Le fichier `CLAUDE.md` racine sert de sommaire. Il décrit le projet en quelques lignes et référence les fichiers de règles spécialisés.
+`AGENTS.md` est un format ouvert pour guider des agents de code. D’autres outils utilisent notamment `CLAUDE.md` ou `.github/copilot-instructions.md`. Leur chargement, leur portée et la prise en compte de fichiers imbriqués dépendent de l’outil et de sa version.
 
-### CLAUDE.md, AGENTS.md, rules files : comment organiser
+Ne supposez pas qu’un lien Markdown est suivi automatiquement. Si le document spécialisé est nécessaire, demandez sa lecture et vérifiez qu’il a été consulté. Une arborescence n’est utile que si le mécanisme de chargement est compris.
 
-Chaque outil a ses conventions. Voici une structure qui fonctionne avec les principaux outils du marché :
-
-```text
-projet/
-├── CLAUDE.md              # Instructions globales pour Claude Code
-├── .claude/
-│   └── rules/             # Règles contextuelles (auto-chargées selon le fichier édité)
-│       ├── api.md
-│       ├── tests.md
-│       └── deploy.md
-├── AGENTS.md              # Instructions pour les agents (Copilot, Cursor, etc.)
-├── .cursorrules           # Règles spécifiques à Cursor
-└── .github/
-    └── copilot-instructions.md  # Instructions GitHub Copilot
-```
-
-Le contenu de ces fichiers suit le même principe : court, ciblé, actionnable.
-
-### Anatomie d'un bon fichier de règles
-
-Un fichier de règles efficace a trois propriétés : il est court (moins de 50 lignes), il est spécifique (un seul domaine), et il est actionnable (l'IA peut directement appliquer les instructions).
+## Écrire le point d’entrée
 
 ```markdown
-# Règles API Endpoints
+# Instructions du dépôt
 
-## Stack
-Express + TypeScript + Zod + Prisma
-
-## Structure d'un endpoint
-- Controller : validation + appel service + réponse HTTP
-- Service : logique métier, pas d'accès direct à la DB
-- Repository : requêtes Prisma uniquement
-
-## Conventions
-- Routes en kebab-case : /api/user-profiles
-- Réponses : { data: T } en succès, { error: string, message: string } en erreur
-- Toujours valider les entrées avec un schéma Zod
-- Toujours gérer les cas 400, 401, 403, 404, 500
-
-## Anti-patterns
-- Pas de logique métier dans les controllers
-- Pas de try/catch silencieux
-- Pas de any dans les types de réponse
+Projet : site de formation Astro/MDX.
+Avant modification : lire les fichiers concernés et les scripts du manifeste.
+Conventions visuelles : voir docs/design-system.md.
+Tests : voir docs/testing.md si ce document existe dans le dépôt.
+Livraison : décrire le comportement, les contrôles exécutés et leurs limites.
 ```
 
-Comparez avec une instruction vague comme "suivre les bonnes pratiques REST". Le fichier ci-dessus est directement applicable par l'IA.
+Cet extrait est un exemple, pas un fichier à copier sans adapter les chemins. Évitez de référencer un document absent. Les commandes, conventions et règles doivent correspondre au checkout réel.
 
-### Éviter le monolithe : la règle des 50 lignes
+## Éviter les contradictions
 
-Si un fichier de règles dépasse 50 lignes, il couvre probablement trop de sujets. Découpez-le.
+Si un document demande de ne pas ajouter de dépendance et qu’un autre impose une bibliothèque absente, clarifiez la règle applicable. La résolution des instructions peut dépendre de la hiérarchie propre à l’outil ; ne créez pas une priorité universelle de votre invention.
 
-| Fichier trop long | Découpage recommandé |
-|-------------------|----------------------|
-| `coding-standards.md` (150 lignes) | `naming.md` + `error-handling.md` + `typing.md` |
-| `architecture.md` (200 lignes) | `api-layer.md` + `data-layer.md` + `frontend-layer.md` |
-| `testing.md` (120 lignes) | `unit-tests.md` + `integration-tests.md` + `test-helpers.md` |
+Les instructions du dépôt ne doivent pas prétendre modifier les permissions ou supplanter une politique administrée. Les restrictions doivent être appliquées dans l’environnement. Un document externe utilisé comme référence reste une source de données, pas une autorité générale sur la mission.
 
-### Exemple complet : structure d'un projet SaaS
+## Cas concret : règles de design
 
-Voici une structure de fichiers de règles pour un projet SaaS typique :
+Une équipe maintient une palette et une typographie dans un document de design. Le point d’entrée indique où le lire. Une tâche de correction de contenu peut ne pas nécessiter tout le détail visuel ; une refonte de composant doit le consulter.
 
-```text
-.claude/
-├── CLAUDE.md
-│   # Contenu :
-│   # - Nom du projet, description en 2 phrases
-│   # - Stack : Node.js, Express, TypeScript, Prisma, React
-│   # - "Consulte les fichiers dans rules/ pour les conventions détaillées"
-│
-└── rules/
-    ├── api-endpoints.md      # 35 lignes - structure controller/service/repo
-    ├── database.md           # 30 lignes - conventions Prisma, migrations
-    ├── authentication.md     # 25 lignes - JWT, middleware, refresh tokens
-    ├── testing.md            # 40 lignes - Vitest, supertest, factories
-    ├── frontend-components.md # 35 lignes - React, Tailwind, composants
-    ├── error-handling.md     # 30 lignes - error classes, logging
-    └── git-workflow.md       # 20 lignes - branches, commits, PRs
-```
+Pour éviter les divergences, gardez une source principale et des adaptateurs courts pour les outils, plutôt que plusieurs copies complètes. Lors d’une modification, contrôlez aussi les liens et les exemples qui dépendent de la règle.
 
-Chaque fichier est auto-suffisant. Un agent qui travaille sur un endpoint API charge `api-endpoints.md`, `error-handling.md`, et peut-être `authentication.md`. Il ne voit jamais les conventions frontend, qui ne feraient qu'encombrer son contexte.
+## Évaluer l’organisation
 
-### Le sommaire comme point d'entrée
+Faites réaliser une tâche représentative, puis regardez les documents lus, les oublis et le contexte inutile. Comparez avec une autre organisation si le premier résultat est insuffisant. Un plan de fichiers élégant ne prouve pas que l’agent charge les bonnes instructions.
 
-Le fichier racine (`CLAUDE.md`) est le point d'entrée. Il doit répondre à trois questions :
+<LessonPractice
+  task="Organisez les règles d’un dépôt fictif en un point d’entrée et trois documents : design, tests et opérations."
+  deliverable="Une arborescence, les liens et deux tâches permettant de vérifier le chargement."
+  criteria={[
+    'Chaque chemin référencé existe dans l’exercice.',
+    'Les règles critiques ne sont pas cachées dans un document jamais chargé.',
+    'Les permissions effectives sont distinguées des consignes textuelles.',
+  ]}
+  solution="Pour une modification d’interface, vérifiez la lecture du guide de design et des tests pertinents. Pour une préparation de déploiement, vérifiez les préconditions et le point d’autorisation du guide d’opérations. Les adaptateurs peuvent pointer vers ces documents, mais leur lecture réelle doit être observée dans l’outil choisi."
+/>
 
-1. **C'est quoi ce projet ?** (2 phrases max)
-2. **Quelle est la stack ?** (une liste)
-3. **Où trouver les détails ?** (pointeurs vers les fichiers de règles)
+## À retenir
 
-```markdown
-# MonSaaS
+Un sommaire rend les règles trouvables. La qualité dépend des sources, de leur cohérence et du chargement réel, pas d’une limite arbitraire de lignes.
 
-Application de gestion de projets pour équipes techniques.
+## Sources et mise à jour
 
-## Stack
-Node.js, Express, TypeScript, Prisma, PostgreSQL, React, Tailwind
+Révision : **4 octobre 2026**.
 
-## Conventions
-Voir les fichiers dans `.claude/rules/` pour les règles détaillées
-par domaine.
-
-## Règle principale
-Toujours lire le fichier de règles pertinent avant de coder.
-Ne jamais inventer une convention si elle est documentée.
-```
-
-C'est court. C'est complet. L'IA sait immédiatement quoi faire et où chercher les détails.
-
-### En résumé
-
-L'approche par sommaire repose sur trois principes :
-
-- **Modulariser** : un fichier par domaine, moins de 50 lignes chacun
-- **Cibler** : chaque fichier ne contient que ce qui est utile pour un type de tâche précis
-- **Indexer** : un fichier racine qui sert de table des matières et de point d'entrée
-
-Le résultat : une IA qui reçoit le bon contexte au bon moment, sans bruit inutile.
+- [AGENTS.md : format ouvert](https://github.com/agentsmd/agents.md).
+- [Claude Code : mémoire et instructions de projet](https://code.claude.com/docs/en/memory).
+- [Claude Code : séparation entre instructions et permissions](https://code.claude.com/docs/en/permissions).

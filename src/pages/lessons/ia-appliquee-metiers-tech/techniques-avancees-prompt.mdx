@@ -1,273 +1,90 @@
 ---
 layout: ../../../layouts/LessonLayout.astro
-title: "Techniques avancées de prompting"
-courseSlug: "ia-appliquee-metiers-tech"
-courseTitle: "IA Appliquée aux Métiers Tech"
-lessonSlug: "techniques-avancees-prompt"
-modules:
-  - title: "Fondations et Mindset"
-    lessons:
-      - slug: "panorama-ia"
-        title: "Panorama IA 2026"
-      - slug: "niveaux-maturite"
-        title: "Les 5 niveaux de maturité IA"
-      - slug: "mindset-ia"
-        title: "L'IA comme co-pilote, pas comme remplaçant"
-      - slug: "bon-ingenieur-ia"
-        title: "Ce qui différencie un bon ingénieur IA"
-  - title: "Comprendre les LLMs"
-    lessons:
-      - slug: "fonctionnement-llm"
-        title: "Comment fonctionne un LLM"
-      - slug: "memoire-llm"
-        title: "La mémoire des LLMs — Fenêtre de contexte et Context Rot"
-      - slug: "hallucinations"
-        title: "Les hallucinations : causes, détection et réduction"
-  - title: "Prompt Engineering"
-    lessons:
-      - slug: "bases-prompt"
-        title: "Les bases du prompt"
-      - slug: "system-prompts"
-        title: "System Prompts"
-      - slug: "techniques-avancees-prompt"
-        title: "Techniques avancées de prompting"
-      - slug: "prompting-dev"
-        title: "L'art du prompting en développement"
-  - title: "Outils et Stack"
-    lessons:
-      - slug: "ecosysteme-outils"
-        title: "L'écosystème des outils IA"
-      - slug: "stack-retenue"
-        title: "La stack retenue pour ce projet"
-      - slug: "veille-technologique"
-        title: "Maintenir sa veille technologique"
-      - slug: "frameworks-agentiques"
-        title: "Frameworks agentiques — Vue d'ensemble"
-  - title: "Sécurité et Limites"
-    lessons:
-      - slug: "donnees-sensibles"
-        title: "Données sensibles — Ce qu'on ne met PAS dans un prompt"
-      - slug: "prompt-injection"
-        title: "Prompt Injection"
-      - slug: "hallucinations-critiques"
-        title: "Hallucinations dans un contexte critique"
-      - slug: "biais-limitations"
-        title: "Biais et limitations des modèles"
-      - slug: "responsabilite-legal"
-        title: "Responsabilité et cadre légal"
-  - title: "Approche Spec-Driven et Plan First"
-    lessons:
-      - slug: "plan-first"
-        title: "Le principe Plan First"
-      - slug: "spec-driven-dev"
-        title: "Spec-Driven Development avec l'IA"
-      - slug: "workflow-complet"
-        title: "Exemple de workflow complet"
-      - slug: "approche-sommaire"
-        title: "Approche par sommaire"
-  - title: "Développement Agentique Guidé"
-    lessons:
-      - slug: "assistant-vs-agent"
-        title: "De l'assistant à l'agent"
-      - slug: "concevoir-agent"
-        title: "Concevoir un bon agent"
-      - slug: "human-in-the-loop"
-        title: "Human in the Loop"
-  - title: "Projet : Construire son AGENT.md"
-    lessons:
-      - slug: "regles-agent-md"
-        title: "Règles de construction d'un AGENT.md efficace"
-      - slug: "structure-agent-md"
-        title: "Structure recommandée d'un AGENT.md"
-      - slug: "bonnes-pratiques-agent-md"
-        title: "Bonnes pratiques et exemples"
-prevLesson: 
-  slug: "system-prompts"
-  title: "System Prompts"
-nextLesson: 
-  slug: "prompting-dev"
-  title: "L'art du prompting en développement"
+title: 'Techniques avancées de prompting'
+courseSlug: 'ia-appliquee-metiers-tech'
+courseTitle: 'IA appliquée aux métiers tech'
+lessonSlug: 'techniques-avancees-prompt'
 ---
 
-## Chain of Thought : forcer le raisonnement
+import LessonPractice from '../../../components/LessonPractice.astro';
 
-Par défaut, un LLM répond directement. Il saute à la conclusion sans montrer son travail. Le problème : sur des tâches complexes (logique, calcul, analyse multi-critères), ça produit des erreurs.
+Les techniques avancées servent à stabiliser un résultat ou à décomposer une tâche difficile. Elles doivent être évaluées sur des cas représentatifs ; elles ne compensent pas automatiquement une source absente ou un besoin mal défini.
 
-Le **Chain of Thought** (CoT) consiste à demander au modèle de raisonner étape par étape avant de donner sa réponse finale. Ça force le modèle à décomposer le problème, ce qui améliore significativement la qualité sur les tâches qui demandent du raisonnement.
+## Objectifs de la leçon
 
-### Comment l'utiliser
+- Utiliser des exemples et des schémas de sortie à bon escient.
+- Décomposer une tâche en étapes contrôlables.
+- Demander des justifications vérifiables sans exiger le raisonnement interne.
 
-La version la plus simple : ajoutez "Raisonne étape par étape avant de répondre" à votre prompt.
+## Few-shot : montrer des exemples pertinents
 
-```markdown
-Analyse cette architecture et identifie les points de défaillance.
+Quelques exemples peuvent préciser le format, le ton ou la distinction entre des catégories. Choisissez des cas représentatifs, avec au moins un cas limite. Des exemples incohérents enseignent une règle incohérente.
 
-Raisonne étape par étape :
-1. Identifie chaque composant et ses dépendances
-2. Pour chaque composant, évalue ce qui se passe s'il tombe
-3. Identifie les SPOF (single points of failure)
-4. Propose des solutions par ordre de priorité
-
-Puis donne ta conclusion.
+```text
+Classer un retour client selon la règle fournie.
+Exemple : « le bouton ne répond pas » → bug
+Exemple : « je voudrais un export » → demande de fonctionnalité
+Cas ambigu : « l’export a disparu » → vérifier avant de classer
+Sortie : catégorie, justification courte, information manquante éventuelle.
 ```
 
-### Quand l'utiliser
+Gardez des cas d’évaluation qui n’ont pas servi d’exemples. Sinon, vous mesurez surtout la reproduction des exemples, pas la capacité à traiter une nouvelle demande.
 
-| Situation | CoT utile ? |
-|-----------|------------|
-| Question factuelle simple | Non |
-| Choix d'architecture avec trade-offs | Oui |
-| Debugging d'un problème complexe | Oui |
-| Génération de code simple | Non |
-| Analyse de performance / bottleneck | Oui |
-| Comparaison de plusieurs solutions | Oui |
+## Sorties structurées : format et sens
 
-Le CoT a un coût : des réponses plus longues et un peu plus de temps de génération. Ne l'utilisez pas pour des questions simples où la réponse directe suffit.
+Un schéma de sortie peut faciliter l’intégration à une application. Quand le fournisseur propose une sortie contrainte par un schéma, utilisez sa fonction documentée et validez le résultat côté application.
 
-## La température : créativité vs précision
-
-La **température** est un paramètre qui contrôle le caractère aléatoire des réponses du modèle. C'est un curseur entre "prévisible" et "créatif".
-
-| Température | Comportement | Cas d'usage |
-|------------|-------------|-------------|
-| 0 | Déterministe, toujours le même résultat | Code, SQL, données structurées |
-| 0.3 - 0.5 | Légèrement variable, reste factuel | Rédaction technique, analyse |
-| 0.7 - 0.9 | Créatif, explore des formulations différentes | Brainstorming, nommage, copy |
-| 1.0+ | Très aléatoire, peut devenir incohérent | Rarement utile en pratique |
-
-### Règles pratiques
-
-- **Code et données structurées** : température 0. Vous voulez de la précision, pas de la créativité.
-- **Rédaction technique** : température 0.3. Un peu de variation pour éviter le texte robotique, mais pas d'inventions.
-- **Brainstorming** : température 0.7-0.9. Vous voulez des idées inattendues.
-- **En cas de doute** : restez à 0 ou 0.3. Mieux vaut un résultat prévisible qu'une surprise.
-
-La température se configure dans les appels API (`temperature: 0.3`) ou dans les paramètres avancés des interfaces. Sur ChatGPT et Claude en mode conversation, vous ne la contrôlez pas directement, mais vous pouvez influencer le comportement en disant "sois créatif" ou "sois précis et factuel".
-
-## Itération de prompt : la méthode en 3 étapes
-
-Un prompt n'est presque jamais parfait du premier coup. Les meilleurs résultats viennent d'un processus d'itération en trois étapes.
-
-### Étape 1 : Le draft
-
-Écrivez un premier prompt avec les éléments de base (rôle, contexte, tâche). Ne cherchez pas la perfection. Envoyez-le.
-
-```markdown
-Tu es un développeur senior TypeScript.
-Écris une fonction de validation de formulaire d'inscription
-avec email, mot de passe et confirmation de mot de passe.
-```
-
-### Étape 2 : L'évaluation
-
-Analysez la réponse. Qu'est-ce qui manque ? Qu'est-ce qui est en trop ? Qu'est-ce qui n'est pas au bon niveau ?
-
-Questions à se poser :
-- Le format est-il celui que je voulais ?
-- Le niveau de détail est-il adapté ?
-- Y a-t-il des cas limites ignorés ?
-- Le code est-il dans le bon style / framework ?
-
-### Étape 3 : L'affinage
-
-Modifiez le prompt en fonction de votre évaluation. Ajoutez les contraintes manquantes, précisez le format, corrigez le tir.
-
-```markdown
-Tu es un développeur senior TypeScript/React.
-Écris une fonction de validation de formulaire d'inscription.
-
-Champs :
-- email (format valide, domaines jetables interdits)
-- password (min 8 chars, 1 majuscule, 1 chiffre, 1 caractère spécial)
-- confirmPassword (doit correspondre à password)
-
-Retourne un objet Record<string, string> où la clé est le nom du champ
-et la valeur est le message d'erreur. Objet vide = formulaire valide.
-
-N'utilise PAS de librairie externe. Pas de regex incompréhensible.
-Chaque règle de validation doit être une fonction séparée et testable.
-```
-
-Ce cycle draft / évaluation / affinage peut tourner 2-3 fois. C'est normal. Chaque itération rapproche le résultat de ce que vous voulez.
-
-## Prompting négatif : dire ce qu'il ne faut PAS faire
-
-Les LLMs ont des réflexes. Ils ajoutent des introductions inutiles, des disclaimers, des commentaires superflus dans le code. Le prompting négatif consiste à explicitement lister ce que vous ne voulez pas.
-
-### Pour du code
-
-```markdown
-Règles :
-- PAS d'introduction du type "Bien sûr, voici..."
-- PAS de disclaimers ou d'avertissements génériques
-- PAS de commentaires dans le code sauf si la logique est non-évidente
-- Ne répète PAS la question dans ta réponse
-- N'ajoute PAS d'explication après le code sauf si je la demande
-```
-
-### Pour de la rédaction
-
-```markdown
-Interdictions :
-- Pas de "il est important de noter que..."
-- Pas de listes de plus de 7 éléments (divise en sous-sections)
-- Pas de conclusions qui répètent l'introduction
-- Pas d'adverbes inutiles (simplement, facilement, évidemment)
-```
-
-Le prompting négatif est très efficace pour éliminer le "bruit" dans les réponses. Il est complémentaire du prompting positif (dire ce qu'on veut). Les deux ensemble donnent les meilleurs résultats.
-
-## Structured output : contrôler le format de sortie
-
-Quand vous intégrez l'IA dans un workflow ou un pipeline, la réponse doit être parseable. Le texte libre ne suffit plus. Il faut un format structuré.
-
-### JSON
-
-```markdown
-Analyse ce log d'erreur et retourne un JSON avec la structure suivante :
-
+```json
 {
-  "error_type": "string (RuntimeError, TypeError, etc.)",
-  "root_cause": "string (explication en une phrase)",
-  "file": "string (fichier concerné)",
-  "line": "number",
-  "suggested_fix": "string",
-  "confidence": "high | medium | low"
+  "category": "bug",
+  "summary": "Le bouton ne déclenche aucune action.",
+  "needs_clarification": false
 }
-
-Retourne UNIQUEMENT le JSON, sans texte avant ou après.
 ```
 
-### Markdown structuré
+Un JSON valide peut contenir une catégorie fausse. La conformité du format, la vérité du contenu et l’autorisation d’une action sont trois contrôles distincts. Prévoyez les refus, les sorties tronquées et les erreurs du service ; ne considérez pas chaque réponse comme une réussite exploitable.
 
-````markdown
-Documente cette fonction au format suivant :
+## Décomposer une tâche
 
-## `nomDeLaFonction`
+Pour une analyse longue, séparez extraction des faits, comparaison au contrat et restitution. Vérifiez les résultats intermédiaires importants. Une erreur d’extraction peut sinon contaminer toute la conclusion.
 
-**Signature** : `(param1: type, param2: type) => returnType`
+La décomposition ajoute des appels, donc du coût et de la latence. Elle se justifie lorsqu’elle améliore réellement la qualité ou la contrôlabilité. Pour une petite demande, un seul appel peut être préférable.
 
-**Description** : Une phrase.
+## Raisonnement et justification
 
-**Paramètres** :
-| Nom | Type | Requis | Description |
-|-----|------|--------|-------------|
+Certains modèles disposent d’un budget de raisonnement configurable. Consultez les options de la référence utilisée, car les paramètres ne sont pas universels.
 
-**Retour** : Description du retour.
+Demandez les hypothèses, les calculs utiles et une justification concise fondée sur des preuves. Il n’est pas nécessaire de demander la chaîne de pensée privée du modèle. Pour un calcul critique, un outil déterministe et une vérification indépendante apportent une meilleure preuve qu’un récit détaillé.
 
-**Exemple** :
-```ts
-// exemple d'utilisation
-```
+## Critique et comparaison de réponses
 
-**Erreurs possibles** : Liste des cas d'erreur.
-````
+Une passe de critique peut détecter des omissions, surtout si elle utilise une grille précise. Elle n’est pas une validation indépendante : le modèle peut conserver la même erreur ou en ajouter une.
 
-### Conseils pour le structured output
+Comparer plusieurs réponses peut aider à explorer les options. Leur majorité n’établit pas la vérité. Pour une API ou une règle juridique, retournez à la source applicable plutôt que de voter entre les réponses.
 
-- **Donnez un exemple concret** du format attendu, pas juste une description
-- **Précisez "UNIQUEMENT le JSON"** si vous ne voulez pas de texte autour
-- **Utilisez les schemas JSON** dans les appels API quand c'est supporté (OpenAI structured outputs, Anthropic tool use)
-- **Validez la sortie** côté code. Même avec un bon prompt, le LLM peut occasionnellement casser le format
+## Cas concret : classer des incidents
 
-Le structured output est la passerelle entre le prompting conversationnel et l'intégration dans du code. C'est ce qui transforme l'IA d'un outil de chat en un composant de votre architecture.
+Préparez un corpus fictif de tickets, avec la règle de classement validée par l’équipe. Mesurez erreurs de classification, cas ambigus signalés, conformité du format, coût et temps de traitement. Testez séparément des instructions malveillantes dans le texte des tickets : elles doivent rester des données à analyser.
+
+<LessonPractice
+  task="Construisez trois exemples de classement et cinq tickets fictifs d’évaluation, dont un ambigu et un contenant une instruction malveillante."
+  deliverable="Un prompt, un format de sortie et un tableau des résultats attendus/observés."
+  criteria={[
+    'Les tickets de test sont différents des exemples fournis.',
+    'L’ambiguïté peut être signalée au lieu de forcer une catégorie.',
+    'Format valide et classification correcte sont mesurés séparément.',
+  ]}
+  solution="Un ticket ‘l’export a disparu’ peut demander une clarification, contrairement à ‘ajouter un export’. Le ticket contenant ‘ignore les règles’ doit être classé selon son contenu métier sans remplacer la consigne. Si le JSON est valide mais la catégorie erronée, comptez un succès de format et un échec de classification."
+/>
+
+## À retenir
+
+Les exemples, les schémas et la décomposition sont des outils de conception. Leur efficacité se mesure sur des cas nouveaux et des erreurs observables.
+
+## Sources et mise à jour
+
+Révision : **4 octobre 2026**.
+
+- [OpenAI Cookbook : prompting et modèles de raisonnement](https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5_prompting_guide.ipynb).
+- [Google Gen AI : sorties structurées et configuration](https://github.com/googleapis/python-genai).
+- [OWASP : entrées externes non fiables](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.md).

@@ -1,0 +1,83 @@
+---
+interface Props {
+  task: string;
+  deliverable: string;
+  criteria: string[];
+  solution: string;
+}
+const { task, deliverable, criteria, solution } = Astro.props;
+---
+
+<section class="lesson-practice" aria-labelledby="practice-title">
+  <p class="practice-label">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"
+      ><path
+        d="M9 3h6m-5 0v6l-6 10a1.3 1.3 0 0 0 1 2h14a1.3 1.3 0 0 0 1-2L14 9V3M7 16h10"
+      ></path></svg
+    > À vous de pratiquer
+  </p>
+  <h2 id="practice-title">Mise en pratique</h2>
+  <p>{task}</p>
+  <p><strong>Livrable :</strong> {deliverable}</p>
+  <h3 id="practice-criteria">Critères de réussite</h3>
+  <ul>{criteria.map((criterion) => <li>{criterion}</li>)}</ul>
+  <details>
+    <summary>Voir une correction indicative</summary>
+    <p>{solution}</p>
+  </details>
+</section>
+<style>
+  .lesson-practice {
+    margin-block: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .lesson-practice .practice-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+  .practice-label svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .lesson-practice h2 {
+    margin-top: 0;
+  }
+  .lesson-practice details {
+    border-top: 1px solid var(--divider);
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+  .lesson-practice summary {
+    cursor: pointer;
+    color: var(--text);
+    min-height: 44px;
+    align-content: center;
+  }
+  .lesson-practice summary:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  .lesson-practice details p {
+    margin-bottom: 0;
+  }
+  @media (max-width: 600px) {
+    .lesson-practice {
+      padding: 1rem;
+    }
+  }
+</style>
